@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Resizer | Change Dimensions Online | Toolear</title>
+    <meta name="description" content="Free online Image Resizer. Resize JPEG, PNG, and WebP images to specific pixel dimensions or percentages. Lock aspect ratio for perfect scaling. Runs locally for privacy.">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Toolear Image Resizer",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does resizing affect image quality?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Scaling down (making smaller) usually preserves quality and sharpness. Scaling up (making larger) will result in pixelation or blurriness because the computer has to invent new pixels that didn't exist before." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is 'Aspect Ratio'?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Aspect Ratio is the proportional relationship between the width and height of an image (e.g., 16:9 or 4:3). Keeping this locked ensures your image doesn't look stretched or squashed when resizing." }
+        },
+        {
+          "@type": "Question",
+          "name": "Are my photos uploaded?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Toolear processes images using the HTML5 Canvas API directly in your browser. Your files never leave your computer, ensuring complete privacy." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the best size for Instagram?",
+          "acceptedAnswer": { "@type": "Answer", "text": "For Instagram posts (square), use 1080x1080 pixels. For portraits (vertical), use 1080x1350 pixels. For Stories, use 1080x1920 pixels." }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* --- Content & Typography Styles --- */
+        .content-section { width: 100%; max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 2.5rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15); 
+        }
+        .intro-text { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 1.5rem; }
+        .intro-text strong { color: #e879f9; font-weight: 600; }
+        .intro-text h3 { color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .feature-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); transform: translateY(-3px); }
+        .feature-icon { 
+            width: 48px; height: 48px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .feature-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Steps List */
+        .steps-list { list-style: none; counter-reset: step-counter; margin-top: 1.5rem; }
+        .steps-list li { 
+            counter-increment: step-counter; position: relative; padding-left: 3.5rem; 
+            margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; 
+        }
+        .steps-list li::before { 
+            content: counter(step-counter); position: absolute; left: 0; top: 0; 
+            width: 40px; height: 40px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: #fff; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); 
+        }
+
+        /* Example Box */
+        .example-box { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1.5rem; margin-top: 1rem; transition: all 0.3s ease;
+        }
+        .example-box:hover { border-color: rgba(168, 85, 247, 0.3); background: rgba(255, 255, 255, 0.02); }
+        .example-title { 
+            font-size: 1.1rem; font-weight: 600; color: #e879f9; margin-bottom: 0.8rem; 
+            display: flex; align-items: center; gap: 0.8rem; 
+        }
+        .example-icon { 
+            width: 36px; height: 36px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .example-icon svg { width: 20px; height: 20px; color: #e879f9; }
+        .example-desc { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        /* FAQ */
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.8rem; margin-bottom: 1.2rem; transition: all 0.3s ease;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); }
+        .faq-question { 
+            font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem; 
+            display: flex; align-items: flex-start; gap: 0.8rem; 
+        }
+        .faq-question::before { 
+            content: "Q"; display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px; font-size: 0.9rem; font-weight: 700; flex-shrink: 0; 
+        }
+        .faq-answer { font-size: 1rem; color: #cbd5e1; line-height: 1.7; padding-left: 2.3rem; }
+
+        /* Tool Specific Styles */
+        .dimension-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 1.5rem;
+        }
+        .dimension-input {
+            width: 100%; padding: 0.8rem; border-radius: 12px;
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+            color: white; outline: none; font-size: 1rem;
+        }
+        .dimension-input:focus { border-color: var(--primary-glow); }
+        
+        .ratio-lock {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem;
+            color: #94a3b8; font-size: 0.9rem; cursor: pointer;
+        }
+        .ratio-lock input { transform: scale(1.2); accent-color: var(--primary-glow); }
+
+        /* Footer Fixed */
+        .site-footer {
+            margin-top: 6rem; padding-top: 3rem; padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>Image <span class="gradient-text">Resizer</span></h1>
+        <p class="subtitle">Change image dimensions to specific pixels instantly.</p>
+        
+        <div class="tool-workspace">
+            <div class="tool-panel">
+                <div class="panel-header">Upload & Settings</div>
+                
+                <label class="file-drop-area" id="dropArea">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="#a855f7"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                    <span id="fileName" style="margin-top:10px; color:#94a3b8">Click to upload image</span>
+                    <input type="file" id="imgInput" accept="image/*" style="display:none">
+                </label>
+
+                <div class="dimension-grid" style="margin-top: 1.5rem;">
+                    <div>
+                        <label style="color:#94a3b8; font-size:0.9rem; margin-bottom:5px; display:block;">Width (px)</label>
+                        <input type="number" id="width" class="dimension-input" oninput="calculateHeight()">
+                    </div>
+                    <div>
+                        <label style="color:#94a3b8; font-size:0.9rem; margin-bottom:5px; display:block;">Height (px)</label>
+                        <input type="number" id="height" class="dimension-input" oninput="calculateWidth()">
+                    </div>
+                </div>
+
+                <label class="ratio-lock">
+                    <input type="checkbox" id="lockRatio" checked> Lock Aspect Ratio
+                </label>
+                
+                <button class="action-btn" onclick="resizeAndDownload()">Resize & Download</button>
+            </div>
+            
+            <div class="tool-panel">
+                <div class="panel-header">Preview</div>
+                <div class="preview-box" id="previewArea" style="height: 100%; min-height: 300px; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.3); border-radius:16px; overflow:hidden;">
+                    <img id="preview" style="max-width:100%; max-height:100%; display:none;">
+                    <p id="placeholderText" style="color:#666">No image selected</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    In the digital world, one size rarely fits all. A high-resolution photo taken on your iPhone might look amazing, but it is too large for a website header and the wrong dimensions for an Instagram Story. The <strong>Toolear Image Resizer</strong> is your quick, privacy-focused solution for adjusting image dimensions to fit any requirement.
+                </p>
+                <p class="intro-text">
+                    Whether you need to shrink a photo for an email signature, resize a banner for YouTube, or adjust product photos for an e-commerce store, this tool gives you precise control over pixels. Unlike cropping (which cuts parts of the image out), resizing scales the entire image down or up, preserving the content while changing the resolution.
+                </p>
+                <p class="intro-text">
+                    We know your photos are personal. That's why Toolear uses client-side processing. When you upload an image here, it isn't sent to a cloud server. Your browser handles the resizing logic using its built-in graphics engine. This means faster processing and zero risk of your data being stored by third parties.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg></div>
+                        <h4>Pixel Precision</h4>
+                        <p>Enter exact width and height values to get the perfect dimensions required by your platform.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></div>
+                        <h4>100% Private</h4>
+                        <p>No uploads. No waiting for servers. Your images stay securely on your device throughout the process.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></div>
+                        <h4>Lock Aspect Ratio</h4>
+                        <p>Automatically calculates the correct height when you change the width (and vice versa) to prevent stretching.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg></div>
+                        <h4>Supports PNG & JPG</h4>
+                        <p>Works seamlessly with common web formats, preserving transparency for PNG files where possible.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Why Aspect Ratio Matters</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    Aspect Ratio describes the proportional relationship between an image's width and height. Common ratios include 16:9 (standard widescreen TV), 4:3 (traditional photo print), and 1:1 (square).
+                </p>
+                <p class="intro-text">
+                    If you change the width of an image without changing the height proportionally, the image will look <strong>stretched or squashed</strong>. To avoid this distortion, keep the "Lock Aspect Ratio" checkbox checked. This way, if you type in a new width (e.g., 500px), our tool automatically calculates the exact height needed to keep the image looking natural.
+                </p>
+            </div>
+
+            <h2 class="section-title">Common Social Media Dimensions (2025)</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    Social platforms update their design frequently. Using the wrong size often results in your image being cropped awkwardly or pixelated. Here is a cheat sheet:
+                </p>
+                <ul style="list-style:disc; padding-left:1.5rem; color:#cbd5e1; margin-bottom:1.5rem;">
+                    <li style="margin-bottom:0.5rem;"><strong>Instagram Post:</strong> 1080 x 1080 px (Square) or 1080 x 1350 px (Portrait).</li>
+                    <li style="margin-bottom:0.5rem;"><strong>Instagram/TikTok Stories:</strong> 1080 x 1920 px (9:16 Aspect Ratio).</li>
+                    <li style="margin-bottom:0.5rem;"><strong>YouTube Thumbnail:</strong> 1280 x 720 px.</li>
+                    <li style="margin-bottom:0.5rem;"><strong>Twitter (X) Post:</strong> 1600 x 900 px is ideal.</li>
+                    <li style="margin-bottom:0.5rem;"><strong>LinkedIn Banner:</strong> 1584 x 396 px.</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">Use Case Examples</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg></div>
+                        Website Performance
+                    </div>
+                    <p class="example-desc">
+                        Uploading a 4000px wide photo to a blog where the content area is only 800px wide is wasteful. The browser still has to download the full image. Resizing it to 800px width before uploading saves bandwidth and makes your page load significantly faster.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg></div>
+                        Profile Pictures
+                    </div>
+                    <p class="example-desc">
+                        Many forums and employee portals have strict limits, like "Maximum dimensions 500x500". If you try to upload a raw selfie, it gets rejected. This tool lets you scale it down to the exact requirement in seconds.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg></div>
+                        Email Attachments
+                    </div>
+                    <p class="example-desc">
+                        Scanned documents are often huge. If you need to attach a scan to an email but the file is too large (dimension-wise), resizing it to a standard A4 equivalent (approx 1240 x 1754 px at 150 DPI) makes it manageable without losing readability.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">Does resizing affect image quality?</div>
+                    <div class="faq-answer">
+                        Scaling down (making smaller) generally preserves quality and makes the image sharper. However, scaling up (making an image larger than the original) will always result in some blurriness or pixelation, because the computer has to "guess" the new pixels.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is cropping the same as resizing?</div>
+                    <div class="faq-answer">
+                        No. <strong>Resizing</strong> changes the dimensions of the entire image, keeping all the content but making it smaller or larger. <strong>Cropping</strong> cuts off the edges of the image to change the shape or focus, losing parts of the original picture. This tool performs resizing.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can I resize multiple images at once?</div>
+                    <div class="faq-answer">
+                        Currently, this tool focuses on high-precision resizing for single images to ensure you get the exact result you want. We may add batch processing in a future update for bulk tasks.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What file formats are supported?</div>
+                    <div class="faq-answer">
+                        We support all major web formats that your browser can handle, primarily JPEG (.jpg), PNG (.png), and WebP (.webp). The output is typically generated as a PNG to preserve quality and transparency.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        const input = document.getElementById('imgInput');
+        const preview = document.getElementById('preview');
+        const wInput = document.getElementById('width');
+        const hInput = document.getElementById('height');
+        const lockRatio = document.getElementById('lockRatio');
+        let originalRatio = 0;
+
+        document.getElementById('dropArea').addEventListener('click', () => input.click());
+
+        input.addEventListener('change', function() {
+            if(this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    document.getElementById('placeholderText').style.display = 'none';
+                    
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        wInput.value = img.width;
+                        hInput.value = img.height;
+                        originalRatio = img.width / img.height;
+                    }
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        function calculateHeight() {
+            if(lockRatio.checked && originalRatio > 0) {
+                hInput.value = Math.round(wInput.value / originalRatio);
+            }
+        }
+
+        function calculateWidth() {
+            if(lockRatio.checked && originalRatio > 0) {
+                wInput.value = Math.round(hInput.value * originalRatio);
+            }
+        }
+
+        function resizeAndDownload() {
+            if(!input.files[0]) { alert('Select an image!'); return; }
+            if(!wInput.value || !hInput.value) { alert('Enter dimensions!'); return; }
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            img.src = preview.src;
+            
+            img.onload = function() {
+                canvas.width = wInput.value;
+                canvas.height = hInput.value;
+                
+                // Use better interpolation if available
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+                
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                
+                const dataUrl = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = `resized-${wInput.value}x${hInput.value}.png`;
+                link.href = dataUrl;
+                link.click();
+            }
+        }
+    </script>
+</body>
+</html>

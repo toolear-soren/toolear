@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UUID Generator | Bulk v4 UUIDs | Toolear</title>
+    <meta name="description" content="Free online UUID Generator. Create single or bulk version 4 UUIDs (Universally Unique Identifiers) instantly. Secure, cryptographically strong, and locally generated.">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Toolear UUID Generator",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a UUID?",
+          "acceptedAnswer": { "@type": "Answer", "text": "UUID stands for Universally Unique Identifier. It is a 128-bit number used to identify information in computer systems. It is guaranteed to be unique across space and time without a central coordination authority." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can UUIDs collide (repeat)?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Theoretically yes, but practically no. The probability of generating two identical v4 UUIDs is so astronomically low that it is considered impossible in human timelines. You would need to generate billions per second for years to have even a 50% chance of a collision." }
+        },
+        {
+          "@type": "Question",
+          "name": "Which version is this?",
+          "acceptedAnswer": { "@type": "Answer", "text": "This tool generates UUID Version 4 (v4). This is the most common version, based on random numbers. It does not use your MAC address or time, making it better for privacy." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is it safe for database keys?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. UUIDs are widely used as Primary Keys in databases (PostgreSQL, MongoDB, SQL Server) because they allow you to generate IDs on the client-side or across distributed servers without worrying about duplicates." }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* --- Content & Typography Styles --- */
+        .content-section { width: 100%; max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 2.5rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15); 
+        }
+        .intro-text { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 1.5rem; }
+        .intro-text strong { color: #e879f9; font-weight: 600; }
+        .intro-text h3 { color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .feature-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); transform: translateY(-3px); }
+        .feature-icon { 
+            width: 48px; height: 48px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .feature-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Steps List */
+        .steps-list { list-style: none; counter-reset: step-counter; margin-top: 1.5rem; }
+        .steps-list li { 
+            counter-increment: step-counter; position: relative; padding-left: 3.5rem; 
+            margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; 
+        }
+        .steps-list li::before { 
+            content: counter(step-counter); position: absolute; left: 0; top: 0; 
+            width: 40px; height: 40px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: #fff; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); 
+        }
+
+        /* Example Box */
+        .example-box { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1.5rem; margin-top: 1rem; transition: all 0.3s ease;
+        }
+        .example-box:hover { border-color: rgba(168, 85, 247, 0.3); background: rgba(255, 255, 255, 0.02); }
+        .example-title { 
+            font-size: 1.1rem; font-weight: 600; color: #e879f9; margin-bottom: 0.8rem; 
+            display: flex; align-items: center; gap: 0.8rem; 
+        }
+        .example-icon { 
+            width: 36px; height: 36px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .example-icon svg { width: 20px; height: 20px; color: #e879f9; }
+        .example-desc { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        /* FAQ */
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.8rem; margin-bottom: 1.2rem; transition: all 0.3s ease;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); }
+        .faq-question { 
+            font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem; 
+            display: flex; align-items: flex-start; gap: 0.8rem; 
+        }
+        .faq-question::before { 
+            content: "Q"; display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px; font-size: 0.9rem; font-weight: 700; flex-shrink: 0; 
+        }
+        .faq-answer { font-size: 1rem; color: #cbd5e1; line-height: 1.7; padding-left: 2.3rem; }
+
+        /* Tool Specific Styles */
+        .count-selector {
+            display: flex; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap;
+        }
+        .count-btn {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            color: #ccc; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .count-btn:hover, .count-btn.active {
+            background: rgba(168, 85, 247, 0.2); border-color: var(--primary-glow); color: #fff;
+        }
+        .uuid-textarea {
+            font-family: 'Monaco', monospace; font-size: 1.1rem; line-height: 1.6;
+            color: #a855f7; height: 400px;
+        }
+
+        /* Footer Fixed */
+        .site-footer {
+            margin-top: 6rem; padding-top: 3rem; padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>UUID <span class="gradient-text">Generator</span></h1>
+        <p class="subtitle">Generate unique UUID v4 identifiers securely.</p>
+        
+        <div class="tool-workspace">
+            <div class="tool-panel" style="grid-column: 1 / -1;">
+                <div class="panel-header">Settings</div>
+                <div class="count-selector">
+                    <button class="count-btn active" onclick="setCount(1)">Generate 1</button>
+                    <button class="count-btn" onclick="setCount(5)">Generate 5</button>
+                    <button class="count-btn" onclick="setCount(10)">Generate 10</button>
+                    <button class="count-btn" onclick="setCount(50)">Generate 50</button>
+                </div>
+
+                <textarea id="uuidOut" class="uuid-textarea" readonly></textarea>
+                
+                <div style="display:flex; justify-content:center; gap:15px; margin-top:2rem;">
+                    <button class="action-btn" onclick="genUUID()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display:inline; margin-bottom:-4px; margin-right:5px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                        Refresh
+                    </button>
+                    <button class="action-btn" style="background:rgba(255,255,255,0.1);" onclick="copyUUIDs()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display:inline; margin-bottom:-4px; margin-right:5px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        <span id="copyText">Copy All</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    In the vast landscape of software development and database design, identifying items uniquely is a critical challenge. Simple integers (1, 2, 3...) work for small lists, but when you have millions of users distributed across different servers around the world, you need something better. You need a <strong>UUID (Universally Unique Identifier)</strong>.
+                </p>
+                <p class="intro-text">
+                    The <strong>Toolear UUID Generator</strong> creates industry-standard Version 4 UUIDs instantly. Whether you are seeding a database, creating API tokens, or assigning session IDs for users, our tool provides a fast and secure way to generate these identifiers without leaving your browser.
+                </p>
+                <p class="intro-text">
+                    Unlike sequential IDs (like Auto-Increment in SQL), UUIDs are random. This means you can generate them on the client-side (in a mobile app or browser) before even sending data to the server, and be confident that the ID won't clash with another ID generated halfway across the world.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg></div>
+                        <h4>Bulk Generation</h4>
+                        <p>Generate up to 50 UUIDs at once. Perfect for populating test databases or creating mock data.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></div>
+                        <h4>Cryptographically Secure</h4>
+                        <p>We use the <code>crypto.randomUUID()</code> API, ensuring true randomness suitable for security contexts.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
+                        <h4>RFC 4122 Compliant</h4>
+                        <p>Our output strictly follows the official standard format: 8-4-4-4-12 hex digits.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg></div>
+                        <h4>No Collisions</h4>
+                        <p>The math guarantees uniqueness. You are more likely to be hit by a meteorite than to generate a duplicate.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Anatomy of a UUID</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    A UUID looks like this: <code>123e4567-e89b-12d3-a456-426614174000</code>. It consists of 32 hexadecimal characters (digits 0-9 and letters a-f), displayed in five groups separated by hyphens.
+                </p>
+                
+                <h3>Understanding the Structure</h3>
+                <p class="intro-text">
+                    The format is 8-4-4-4-12. But not all characters are random.
+                    <br>In a Version 4 UUID (which we generate), the 13th character (the first digit of the third group) is always <strong>4</strong>. This indicates the version.
+                    <br>The 17th character (first digit of the fourth group) is always one of <strong>8, 9, A, or B</strong>. This is the "variant" indicator.
+                    <br>Everything else is purely random bits generated by your system's entropy source.
+                </p>
+
+                <h3>Why Version 4?</h3>
+                <p class="intro-text">
+                    There are 5 main versions of UUIDs.
+                    <br><strong>v1:</strong> Based on current time and your computer's MAC address. (Bad for privacy).
+                    <br><strong>v3 & v5:</strong> Generated from a namespace and a name (like hashing a URL).
+                    <br><strong>v4:</strong> Completely random. This is the gold standard for web applications because it doesn't reveal any information about who created it or when.
+                </p>
+            </div>
+
+            <h2 class="section-title">Use Case Examples</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg></div>
+                        Database Primary Keys
+                    </div>
+                    <p class="example-desc">
+                        Developers using NoSQL databases like MongoDB or Cassandra often rely on UUIDs as primary keys for documents. Unlike auto-incrementing integers (1, 2, 3...), UUIDs allow you to merge data from different servers without conflict.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg></div>
+                        Session Tokens & API Keys
+                    </div>
+                    <p class="example-desc">
+                        When a user logs in, the server generates a session ID to track them. Using a UUID ensures that a hacker cannot guess another user's session ID by simply adding +1 to their own ID. It provides a baseline of security through unpredictability.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg></div>
+                        Unique Filenames
+                    </div>
+                    <p class="example-desc">
+                        When users upload files to a website, they might upload "image.jpg". If another user uploads "image.jpg", the first one gets overwritten. By renaming the file to <code>{UUID}.jpg</code>, you ensure every file has a unique home on your server storage.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">Can UUIDs collide (repeat)?</div>
+                    <div class="faq-answer">
+                        Theoretically yes, but practically no. A UUID has 128 bits. The total number of possible UUIDs is 2^122 (after accounting for version bits). This number is so large (undecillions) that you would need to generate billions of UUIDs per second for 100 years to have even a tiny chance of a collision. It is safe to assume they are unique.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What is a GUID vs UUID?</div>
+                    <div class="faq-answer">
+                        They are effectively the same thing. <strong>UUID</strong> (Universally Unique Identifier) is the industry standard term defined by RFC 4122. <strong>GUID</strong> (Globally Unique Identifier) is the term used by Microsoft in the Windows ecosystem. A GUID is just Microsoft's implementation of a UUID.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Are UUIDs secure?</div>
+                    <div class="faq-answer">
+                        Version 4 UUIDs are random, so they are not predictable. However, they are not meant to replace passwords or cryptographic keys. They are identifiers, not secrets. Anyone who sees a UUID doesn't gain access to your system, they just know the "name" of a resource.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Do these contain my MAC address?</div>
+                    <div class="faq-answer">
+                        No. Older versions (v1) used the computer's MAC address to ensure uniqueness, which was a privacy concern. The standard v4 UUIDs generated by this tool are purely random and contain no personal or hardware information.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        let currentCount = 1;
+
+        function setCount(n) {
+            currentCount = n;
+            // Update active button state
+            document.querySelectorAll('.count-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            genUUID();
+        }
+
+        function genUUID() {
+            const out = document.getElementById('uuidOut');
+            let result = "";
+            
+            for(let i=0; i<currentCount; i++) {
+                result += crypto.randomUUID() + "\n";
+            }
+            
+            out.value = result.trim();
+        }
+
+        function copyUUIDs() {
+            const out = document.getElementById('uuidOut');
+            const btnText = document.getElementById('copyText');
+            
+            if(!out.value) return;
+            
+            out.select();
+            document.execCommand('copy');
+            
+            btnText.innerText = 'Copied!';
+            setTimeout(() => btnText.innerText = 'Copy All', 2000);
+        }
+
+        // Init
+        genUUID();
+    </script>
+</body>
+</html>

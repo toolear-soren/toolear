@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Counter & Character Count | Toolear</title>
+    <meta name="description" content="Free online Word Counter and Character Counter. Check text length for social media posts, essays, and SEO meta descriptions in real-time. Private and secure.">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Toolear Word Counter",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does this tool count spaces as characters?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes, the main 'Characters' count includes spaces, punctuation, and line breaks. This is the standard metric for social media limits like Twitter (X) or SMS." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my text saved or uploaded?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Toolear operates entirely in your browser. The text you type or paste is processed locally by JavaScript and is never sent to our servers or stored in any database." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is there a limit to how much text I can check?",
+          "acceptedAnswer": { "@type": "Answer", "text": "There is no hard limit imposed by our tool. You can paste entire books or thesis papers. The only limit is your computer's memory (RAM), but modern devices can handle hundreds of thousands of words instantly." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is word count different from Google Docs?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Different platforms use slightly different algorithms to define a 'word'. For example, some count hyphens (one-word) as two words. Our tool uses a standard regex pattern that aligns closely with major writing platforms." }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* --- Content & Typography Styles --- */
+        .content-section { width: 100%; max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 2.5rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15); 
+        }
+        .intro-text { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 1.5rem; }
+        .intro-text strong { color: #e879f9; font-weight: 600; }
+        .intro-text h3 { color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .feature-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); transform: translateY(-3px); }
+        .feature-icon { 
+            width: 48px; height: 48px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .feature-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Steps List */
+        .steps-list { list-style: none; counter-reset: step-counter; margin-top: 1.5rem; }
+        .steps-list li { 
+            counter-increment: step-counter; position: relative; padding-left: 3.5rem; 
+            margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; 
+        }
+        .steps-list li::before { 
+            content: counter(step-counter); position: absolute; left: 0; top: 0; 
+            width: 40px; height: 40px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: #fff; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); 
+        }
+
+        /* Example Box */
+        .example-box { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1.5rem; margin-top: 1rem; transition: all 0.3s ease;
+        }
+        .example-box:hover { border-color: rgba(168, 85, 247, 0.3); background: rgba(255, 255, 255, 0.02); }
+        .example-title { 
+            font-size: 1.1rem; font-weight: 600; color: #e879f9; margin-bottom: 0.8rem; 
+            display: flex; align-items: center; gap: 0.8rem; 
+        }
+        .example-icon { 
+            width: 36px; height: 36px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .example-icon svg { width: 20px; height: 20px; color: #e879f9; }
+        .example-desc { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        /* FAQ */
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.8rem; margin-bottom: 1.2rem; transition: all 0.3s ease;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); }
+        .faq-question { 
+            font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem; 
+            display: flex; align-items: flex-start; gap: 0.8rem; 
+        }
+        .faq-question::before { 
+            content: "Q"; display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px; font-size: 0.9rem; font-weight: 700; flex-shrink: 0; 
+        }
+        .faq-answer { font-size: 1rem; color: #cbd5e1; line-height: 1.7; padding-left: 2.3rem; }
+
+        /* Tool specific: Dashboard Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 1.2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover { transform: translateY(-3px); border-color: var(--primary-glow); }
+        .stat-label { color: #94a3b8; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .stat-value { font-size: 2rem; font-weight: 800; color: #fff; }
+        
+        .action-bar { display: flex; justify-content: space-between; margin-top: 15px; }
+        .clear-btn {
+            background: rgba(255,255,255,0.05); color: #94a3b8; border: none; padding: 0.5rem 1rem;
+            border-radius: 8px; cursor: pointer; transition: all 0.3s;
+        }
+        .clear-btn:hover { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+
+        /* Footer Fixed */
+        .site-footer {
+            margin-top: 6rem; padding-top: 3rem; padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>Word <span class="gradient-text">Counter</span></h1>
+        <p class="subtitle">Count words, characters, and lines in real-time.</p>
+        
+        <div class="tool-workspace">
+            <div class="tool-panel" style="grid-column: 1 / -1;">
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-label">Words</div>
+                        <div class="stat-value" id="wCount" style="color:#a855f7">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Characters</div>
+                        <div class="stat-value" id="cCount" style="color:#3b82f6">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Lines</div>
+                        <div class="stat-value" id="lCount" style="color:#06b6d4">0</div>
+                    </div>
+                </div>
+
+                <textarea id="inputText" oninput="countStats()" placeholder="Start typing or paste your text here..." style="min-height: 300px;"></textarea>
+                
+                <div class="action-bar">
+                    <button class="clear-btn" onclick="clearText()">Clear Text</button>
+                    </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    Whether you are a student writing an essay, a social media manager crafting the perfect tweet, or an SEO specialist optimizing a meta description, knowing your <strong>word and character count</strong> is essential. The Toolear Word Counter is a free, powerful, and private utility designed to help you hit your targets with precision.
+                </p>
+                <p class="intro-text">
+                    Unlike simple counters found in word processors like Microsoft Word or Google Docs, our tool is built for the web. It provides instant, real-time feedback as you type. There is no need to click a "Count" button; the numbers update with every keystroke. This makes it incredibly efficient for editing and trimming text to fit strict character limits.
+                </p>
+                <p class="intro-text">
+                    Privacy is a core feature of Toolear. Many online writing tools upload your drafts to a server for analysis, which poses a security risk for confidential documents. Our Word Counter runs <strong>locally in your browser</strong>. Your text remains on your device, ensuring that your essays, emails, or creative writing are never exposed to third parties.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
+                        <h4>Real-Time Counting</h4>
+                        <p>Metrics update instantly as you type or paste content. No waiting, no reloading.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></div>
+                        <h4>100% Private</h4>
+                        <p>Your text is processed locally via JavaScript. We do not store or read your content.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg></div>
+                        <h4>Multi-Metric</h4>
+                        <p>Track Words, Characters, and Lines simultaneously to get a complete picture of your text.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></div>
+                        <h4>Works Offline</h4>
+                        <p>Once loaded, the tool works without an internet connection. Ideal for focused writing.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Character Limits Guide (2025)</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    Staying within character limits is crucial for effective digital communication. If you exceed the limit, your message gets cut off or rejected. Here is a quick reference guide for popular platforms:
+                </p>
+                
+                <h3>Social Media</h3>
+                <ul style="list-style:disc; padding-left:1.5rem; color:#cbd5e1; margin-bottom:1.5rem;">
+                    <li style="margin-bottom:0.5rem;"><strong>X (Twitter):</strong> 280 characters per tweet. (Premium users get more, but brevity is still key for engagement).</li>
+                    <li style="margin-bottom:0.5rem;"><strong>Instagram Bio:</strong> 150 characters. Every letter counts to make a first impression.</li>
+                    <li style="margin-bottom:0.5rem;"><strong>Instagram Captions:</strong> 2,200 characters (but truncates after ~125 characters).</li>
+                    <li style="margin-bottom:0.5rem;"><strong>LinkedIn Posts:</strong> 3,000 characters. Perfect for micro-blogging.</li>
+                </ul>
+
+                <h3>SEO & Web</h3>
+                <ul style="list-style:disc; padding-left:1.5rem; color:#cbd5e1; margin-bottom:1.5rem;">
+                    <li style="margin-bottom:0.5rem;"><strong>Google Title Tag:</strong> ~60 characters. Anything longer gets cut off with ellipsis (...).</li>
+                    <li style="margin-bottom:0.5rem;"><strong>Meta Description:</strong> ~160 characters. This is your "ad copy" in search results.</li>
+                    <li style="margin-bottom:0.5rem;"><strong>Blog Post Headline:</strong> 6-12 words is considered the "sweet spot" for click-through rates.</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">How It Works</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    While counting looks simple, computers see text as a string of data. Here is how our algorithm calculates the metrics:
+                </p>
+                <ol class="steps-list">
+                    <li><strong>Character Count:</strong> The tool counts every single keystroke, including letters, numbers, symbols, and spaces. This is the metric used by Twitter and SMS.</li>
+                    <li><strong>Word Count:</strong> The tool detects "words" by looking for spaces and line breaks. It intelligently ignores multiple spaces in a row, so hitting the spacebar five times won't register as five words.</li>
+                    <li><strong>Line Count:</strong> This metric calculates the number of physical lines (paragraphs) by detecting "newline" characters (where you pressed Enter). It helps in structuring poetry, code, or listicles.</li>
+                </ol>
+            </div>
+
+            <h2 class="section-title">Use Case Examples</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></div>
+                        Academic Writing
+                    </div>
+                    <p class="example-desc">
+                        Students often have strict requirements like "Write a 500-word abstract" or "Do not exceed 1000 words." Submitting too little or too much can affect grades. Using Toolear ensures you land exactly within the required range before submitting your assignment.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg></div>
+                        Content Marketing & SEO
+                    </div>
+                    <p class="example-desc">
+                        SEO experts know that "thin content" (pages with fewer than 300 words) often struggle to rank on Google. Writers use this tool to ensure blog posts have sufficient depth (usually 1,500+ words) to signal authority to search engines.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg></div>
+                        Translation Services
+                    </div>
+                    <p class="example-desc">
+                        Professional translators often charge by the word. Before sending a document for translation, freelancers and clients use word counters to estimate the cost of the project accurately, ensuring transparency in billing.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">Does this tool count spaces as characters?</div>
+                    <div class="faq-answer">
+                        Yes. In our main "Characters" metric, every space, tab, and punctuation mark counts as a character. This is important because platform limits (like Twitter's 280 limit) count everything you type, including spaces.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is my text saved or uploaded?</div>
+                    <div class="faq-answer">
+                        No. Privacy is our priority. Toolear runs completely client-side. The text you paste into the box is processed by your own browser's engine. We do not store, log, or transmit your writing to any external server.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is there a limit to how much text I can check?</div>
+                    <div class="faq-answer">
+                        Unlike some tools that cap you at 1,000 words, Toolear has no artificial limits. You can paste entire chapters, thesis papers, or legal contracts. The only limitation is your device's memory, but modern browsers handle huge texts with ease.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Why is the word count different from Google Docs/Word?</div>
+                    <div class="faq-answer">
+                        Counting words is surprisingly complex. Different software uses different rules. For example, some tools count "hyphenated-words" as one word, while others count them as two. Our tool uses a standardized regex approach that aligns closely with most major platforms, but minor discrepancies of 1-2% are normal between different software.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        function countStats() {
+            const txt = document.getElementById('inputText').value;
+            // Count Chars (length includes spaces)
+            document.getElementById('cCount').innerText = txt.length.toLocaleString();
+            
+            // Count Words (split by whitespace, filter empty)
+            const words = txt.trim().split(/\s+/);
+            const wordCount = txt.trim() === '' ? 0 : words.length;
+            document.getElementById('wCount').innerText = wordCount.toLocaleString();
+            
+            // Count Lines
+            const lines = txt.split(/\r\n|\r|\n/);
+            // Filter out empty lines if desired, but usually total lines includes empty ones in editors
+            // Let's count non-empty lines for better utility or total lines? 
+            // Standard approach: Total lines.
+            const lineCount = txt.length === 0 ? 0 : lines.length;
+            document.getElementById('lCount').innerText = lineCount.toLocaleString();
+        }
+
+        function clearText() {
+            document.getElementById('inputText').value = '';
+            countStats(); // Reset counters
+            document.getElementById('inputText').focus();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image to Base64 Converter | Online Data URI Tool | Toolear</title>
+    <meta name="description" content="Free online Image to Base64 Converter. Convert JPG, PNG, SVG, and GIF images into Data URI strings for use in HTML and CSS. Runs locally for privacy.">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Toolear Image to Base64",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does Base64 reduce image size?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. In fact, Base64 encoding increases the file size by approximately 33%. It is used for transport convenience (text-only protocols) and reducing HTTP requests, not for compression." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my image uploaded?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. The conversion happens entirely within your browser using the FileReader API. Your images never leave your computer." }
+        },
+        {
+          "@type": "Question",
+          "name": "When should I use Base64 images?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Use it for tiny images like logos, icons, or placeholders (under 2KB-5KB) to avoid extra server requests. Do not use it for large photos as it will slow down your page rendering." }
+        },
+        {
+          "@type": "Question",
+          "name": "What formats are supported?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The tool supports any image format compatible with your browser, including PNG, JPEG, GIF, SVG, WEBP, and BMP." }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* --- Content & Typography Styles --- */
+        .content-section { width: 100%; max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 2.5rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15); 
+        }
+        .intro-text { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 1.5rem; }
+        .intro-text strong { color: #e879f9; font-weight: 600; }
+        .intro-text h3 { color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .feature-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); transform: translateY(-3px); }
+        .feature-icon { 
+            width: 48px; height: 48px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .feature-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Steps List */
+        .steps-list { list-style: none; counter-reset: step-counter; margin-top: 1.5rem; }
+        .steps-list li { 
+            counter-increment: step-counter; position: relative; padding-left: 3.5rem; 
+            margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; 
+        }
+        .steps-list li::before { 
+            content: counter(step-counter); position: absolute; left: 0; top: 0; 
+            width: 40px; height: 40px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: #fff; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); 
+        }
+
+        /* Example Box */
+        .example-box { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1.5rem; margin-top: 1rem; transition: all 0.3s ease;
+        }
+        .example-box:hover { border-color: rgba(168, 85, 247, 0.3); background: rgba(255, 255, 255, 0.02); }
+        .example-title { 
+            font-size: 1.1rem; font-weight: 600; color: #e879f9; margin-bottom: 0.8rem; 
+            display: flex; align-items: center; gap: 0.8rem; 
+        }
+        .example-icon { 
+            width: 36px; height: 36px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .example-icon svg { width: 20px; height: 20px; color: #e879f9; }
+        .example-desc { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        /* FAQ */
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.8rem; margin-bottom: 1.2rem; transition: all 0.3s ease;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); }
+        .faq-question { 
+            font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem; 
+            display: flex; align-items: flex-start; gap: 0.8rem; 
+        }
+        .faq-question::before { 
+            content: "Q"; display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px; font-size: 0.9rem; font-weight: 700; flex-shrink: 0; 
+        }
+        .faq-answer { font-size: 1rem; color: #cbd5e1; line-height: 1.7; padding-left: 2.3rem; }
+
+        /* Tool Specific Styles */
+        .preview-img-container {
+            width: 100%; height: 200px; 
+            background: rgba(0,0,0,0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 1rem; overflow: hidden;
+            border: 1px dashed rgba(255,255,255,0.1);
+        }
+        .preview-img-container img { max-width: 100%; max-height: 100%; }
+        
+        .output-actions { margin-top: 15px; display: flex; justify-content: flex-end; gap: 10px; }
+        .copy-btn {
+            padding: 0.6rem 1.2rem; border-radius: 12px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.4); color: white;
+            cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: all 0.3s ease; font-weight: 500;
+        }
+        .copy-btn:hover { background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.3)); }
+        .copy-btn svg { width: 18px; height: 18px; }
+
+        /* Footer Fixed */
+        .site-footer {
+            margin-top: 6rem; padding-top: 3rem; padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>Image to <span class="gradient-text">Base64</span></h1>
+        <p class="subtitle">Convert images to Data URI strings for HTML & CSS.</p>
+        
+        <div class="tool-workspace">
+            <div class="tool-panel">
+                <div class="panel-header">Upload Image</div>
+                <label class="file-drop-area" id="dropArea">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="#a855f7"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                    <span id="fileName" style="margin-top:10px; color:#94a3b8">Drag & Drop or Click to Upload</span>
+                    <input type="file" id="imgInput" accept="image/*" style="display:none">
+                </label>
+                
+                <div class="preview-img-container" id="previewContainer" style="display:none; margin-top:1.5rem;">
+                    <img id="preview">
+                </div>
+            </div>
+            
+            <div class="tool-panel">
+                <div class="panel-header">Base64 Output</div>
+                <textarea id="output" readonly placeholder="data:image/png;base64..." style="height: 100%;"></textarea>
+                <div class="output-actions">
+                    <button class="copy-btn" onclick="copyResult()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        <span id="copyBtnText">Copy String</span>
+                    </button>
+                </div>
+                <div id="stats" style="margin-top:10px; font-size:0.9rem; color:#666; text-align:right;"></div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    In web development, images are usually handled as separate files referenced by a URL (e.g., <code>&lt;img src="logo.png"&gt;</code>). However, sometimes it is more efficient to embed the image data directly into the code itself. This is done using a format called <strong>Base64</strong> or <strong>Data URI</strong>.
+                </p>
+                <p class="intro-text">
+                    The <strong>Toolear Image to Base64 Converter</strong> is a utility that transforms any binary image file (JPG, PNG, GIF, SVG) into a long string of text characters. This string can be pasted directly into HTML or CSS files, eliminating the need for a separate HTTP request to the server.
+                </p>
+                <p class="intro-text">
+                    This tool is particularly popular among frontend developers for optimizing "above-the-fold" content, email marketers who need to send self-contained HTML templates, and database administrators who need to store small user avatars directly in a database row rather than on a file system.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></div>
+                        <h4>Instant Encoding</h4>
+                        <p>Drag and drop your image, and get the Base64 string instantly. No server uploads required.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></div>
+                        <h4>100% Private</h4>
+                        <p>Processing happens via the FileReader API in your browser. Your images are never saved to our cloud.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg></div>
+                        <h4>Supports All Formats</h4>
+                        <p>Works with PNG, JPEG, GIF, SVG, BMP, and WebP. Automatically adds the correct MIME type prefix.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        <h4>Ready to Paste</h4>
+                        <p>Generates the full <code>data:image/...;base64,</code> string ready to be pasted into <code>src=""</code> attributes.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">The Trade-off: HTTP Requests vs. File Size</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    Using Base64 is not always the best solution. It is important to understand the pros and cons to use it effectively for web performance optimization (WPO).
+                </p>
+                
+                <h3>The 33% Overhead Rule</h3>
+                <p class="intro-text">
+                    Base64 encoding uses 4 ASCII characters to represent every 3 bytes of binary data. This results in a file size increase of approximately <strong>33%</strong>. For example, a 100KB image becomes a ~133KB text string. For large images, this is detrimental to page speed.
+                </p>
+
+                <h3>When to Use Base64</h3>
+                <p class="intro-text">
+                    <strong>Use it for tiny images</strong> (icons, logos, small patterns) usually under 2KB-5KB. By embedding them, you save the browser from making a separate network request (TCP handshake, DNS lookup), which can be faster than downloading a tiny separate file.
+                </p>
+
+                <h3>When NOT to Use It</h3>
+                <p class="intro-text">
+                    <strong>Do not use it for photos or large graphics.</strong> The 33% size penalty outweighs the benefit of saving a request. Also, Base64 strings embedded in HTML/CSS cannot be cached by the browser as effectively as separate image files.
+                </p>
+            </div>
+
+            <h2 class="section-title">Use Case Examples</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg></div>
+                        Email Templates
+                    </div>
+                    <p class="example-desc">
+                        Email clients (like Outlook or Gmail) often block external images by default for privacy reasons. However, if you embed the image as Base64 directly in the email HTML, it often displays immediately without requiring the user to click "Download Pictures". This is great for small logos or signatures.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        Single-File Websites
+                    </div>
+                    <p class="example-desc">
+                        Sometimes you need to distribute a webpage as a single standalone HTML file (e.g., a report, a resume, or a dashboard). By converting all images to Base64 and embedding them, you ensure the file works perfectly offline without needing a folder of accompanying assets.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg></div>
+                        Storing Images in JSON/Databases
+                    </div>
+                    <p class="example-desc">
+                        If you are building a simple API that needs to return user profile data including an avatar, sending the avatar as a Base64 string inside the JSON response can simplify the architecture, avoiding the need for a separate file storage service (like AWS S3) for small projects.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">Does Base64 reduce image size?</div>
+                    <div class="faq-answer">
+                        No. It increases the file size by roughly 33%. Base64 is an encoding format, not a compression method. It translates binary data (8-bit bytes) into ASCII text (6-bit characters), which inherently requires more space.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How do I use the result in HTML?</div>
+                    <div class="faq-answer">
+                        Copy the generated string and paste it into the <code>src</code> attribute of an image tag: 
+                        <br><code>&lt;img src="data:image/png;base64,iVBORw0KGgoAAA..." /&gt;</code>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How do I use the result in CSS?</div>
+                    <div class="faq-answer">
+                        You can use it as a background image:
+                        <br><code>.icon { background-image: url('data:image/png;base64,iVBORw0KGgoAAA...'); }</code>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is there a file size limit?</div>
+                    <div class="faq-answer">
+                        The tool processes files in your browser's memory. While you can technically convert a 10MB image, the resulting string will be massive (13MB+) and might freeze your browser tab or text editor. We recommend using this tool for images under 1MB.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        const dropArea = document.getElementById('dropArea');
+        const input = document.getElementById('imgInput');
+        const fileNameSpan = document.getElementById('fileName');
+        const previewContainer = document.getElementById('previewContainer');
+        const preview = document.getElementById('preview');
+        const output = document.getElementById('output');
+        const stats = document.getElementById('stats');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, e => {e.preventDefault(); e.stopPropagation()}, false);
+            document.body.addEventListener(eventName, e => {e.preventDefault(); e.stopPropagation()}, false);
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => dropArea.addEventListener(eventName, () => {dropArea.style.borderColor = '#a855f7'; dropArea.style.background = 'rgba(255,255,255,0.05)';}, false));
+        ['dragleave', 'drop'].forEach(eventName => dropArea.addEventListener(eventName, () => {dropArea.style.borderColor = ''; dropArea.style.background = '';}, false));
+
+        dropArea.addEventListener('drop', e => handleFiles(e.dataTransfer.files), false);
+        input.addEventListener('change', function() { handleFiles(this.files); });
+
+        document.getElementById('dropArea').addEventListener('click', () => input.click());
+
+        function handleFiles(files) {
+            if(files[0]) {
+                const file = files[0];
+                fileNameSpan.innerText = file.name;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const result = e.target.result;
+                    output.value = result;
+                    preview.src = result;
+                    previewContainer.style.display = 'flex';
+                    
+                    // Stats
+                    const originalSize = file.size;
+                    const base64Size = result.length;
+                    const increase = Math.round(((base64Size - originalSize) / originalSize) * 100);
+                    
+                    stats.innerHTML = `Original: ${(originalSize/1024).toFixed(2)} KB | Base64: ${(base64Size/1024).toFixed(2)} KB (+${increase}%)`;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function copyResult() {
+            if(!output.value) { alert('Upload an image first!'); return; }
+            output.select();
+            document.execCommand('copy');
+            
+            const btnText = document.getElementById('copyBtnText');
+            btnText.innerText = 'Copied!';
+            setTimeout(() => btnText.innerText = 'Copy String', 2000);
+        }
+    </script>
+</body>
+</html>

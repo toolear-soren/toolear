@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Encoder & Decoder | Online Tool | Toolear</title>
+    <meta name="description" content="Securely encode text to Base64 or decode Base64 strings back to text. Free online tool running locally in your browser. Perfect for developers debugging data APIs.">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Toolear Base64 Converter",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is Base64 the same as encryption?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Base64 is an encoding scheme designed to represent binary data as text. It does not secure data; anyone can decode it. Encryption transforms data to keep it secret using a key." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my data sent to a server?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. This tool runs entirely in your browser using JavaScript. Your strings never leave your device." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does the output end with '='?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The equals sign '=' is a padding character. Base64 encodes data in 4-character blocks. If the source data doesn't fit perfectly into these blocks, padding is added to complete the sequence." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I convert images to Base64?",
+          "acceptedAnswer": { "@type": "Answer", "text": "This specific tool is for text strings. For images, please use our dedicated 'Image to Base64' tool available in the main menu." }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* --- Content & Typography Styles (Consistent across all tools) --- */
+        .content-section { width: 100%; max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 2.5rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15); 
+        }
+        .intro-text { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 1.5rem; }
+        .intro-text strong { color: #e879f9; font-weight: 600; }
+        .intro-text h3 { color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* Feature Grid (2x2 Balanced) */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .feature-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); transform: translateY(-3px); }
+        .feature-icon { 
+            width: 48px; height: 48px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .feature-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Steps List */
+        .steps-list { list-style: none; counter-reset: step-counter; margin-top: 1.5rem; }
+        .steps-list li { 
+            counter-increment: step-counter; position: relative; padding-left: 3.5rem; 
+            margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; 
+        }
+        .steps-list li::before { 
+            content: counter(step-counter); position: absolute; left: 0; top: 0; 
+            width: 40px; height: 40px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: #fff; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); 
+        }
+
+        /* Example Box */
+        .example-box { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1.5rem; margin-top: 1rem; transition: all 0.3s ease;
+        }
+        .example-box:hover { border-color: rgba(168, 85, 247, 0.3); background: rgba(255, 255, 255, 0.02); }
+        .example-title { 
+            font-size: 1.1rem; font-weight: 600; color: #e879f9; margin-bottom: 0.8rem; 
+            display: flex; align-items: center; gap: 0.8rem; 
+        }
+        .example-icon { 
+            width: 36px; height: 36px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .example-icon svg { width: 20px; height: 20px; color: #e879f9; }
+        .example-desc { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        /* FAQ */
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.8rem; margin-bottom: 1.2rem; transition: all 0.3s ease;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); }
+        .faq-question { 
+            font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem; 
+            display: flex; align-items: flex-start; gap: 0.8rem; 
+        }
+        .faq-question::before { 
+            content: "Q"; display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px; font-size: 0.9rem; font-weight: 700; flex-shrink: 0; 
+        }
+        .faq-answer { font-size: 1rem; color: #cbd5e1; line-height: 1.7; padding-left: 2.3rem; }
+
+        /* Tool specific: Output Actions */
+        .output-actions { margin-top: 15px; display: flex; justify-content: flex-end; }
+        .copy-btn {
+            padding: 0.6rem 1.2rem; border-radius: 12px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.4); color: white;
+            cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: all 0.3s ease; font-weight: 500;
+        }
+        .copy-btn:hover { background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.3)); }
+        .copy-btn svg { width: 18px; height: 18px; }
+
+        /* Footer Fixed */
+        .site-footer {
+            margin-top: 6rem; padding-top: 3rem; padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>Base64 <span class="gradient-text">Encoder</span></h1>
+        <p class="subtitle">Convert text to Base64 strings and back securely.</p>
+        
+        <div class="tool-workspace">
+            <div class="tool-panel">
+                <div class="panel-header">Input Text</div>
+                <textarea id="b64Input" placeholder="Type something here..."></textarea>
+                <div style="display:flex; gap:10px; margin-top: 10px;">
+                    <button class="action-btn" onclick="encode64()">Encode</button>
+                    <button class="action-btn" onclick="decode64()" style="background:linear-gradient(135deg, #3b82f6, #06b6d4);">Decode</button>
+                </div>
+            </div>
+            <div class="tool-panel">
+                <div class="panel-header">Result</div>
+                <textarea id="b64Output" readonly placeholder="Result..."></textarea>
+                <div class="output-actions">
+                    <button class="copy-btn" onclick="copyResult()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        <span id="copyBtnText">Copy Result</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    In the world of computer science and web development, data portability is a constant challenge. Different systems handle binary data differently, which often leads to corrupted files during transfer. <strong>Base64 encoding</strong> is the universal solution to this problem. It is a binary-to-text encoding scheme that represents binary data in an ASCII string format.
+                </p>
+                <p class="intro-text">
+                    The <strong>Toolear Base64 Encoder/Decoder</strong> provides a fast, simple, and private way to translate strings. Whether you are a developer debugging an API authentication header, a data analyst decoding a payload, or just curious about how computers talk to each other, this tool is built for you.
+                </p>
+                <p class="intro-text">
+                    Most importantly, we respect your data. Unlike many server-side converters, our tool runs <strong>100% locally in your browser</strong>. This means you can decode sensitive strings, tokens, or configuration keys without them ever traveling over the internet to our servers.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg></div>
+                        <h4>Bi-Directional</h4>
+                        <p>Seamlessly switch between encoding text to Base64 and decoding Base64 strings back to readable text.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></div>
+                        <h4>Secure & Private</h4>
+                        <p>All operations are performed using JavaScript on your device. No data is sent to the cloud.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></div>
+                        <h4>Instant Results</h4>
+                        <p>No page reloads or waiting times. Conversion happens instantly as you click.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        <h4>Developer Ready</h4>
+                        <p>Generate headers or debug API payloads quickly without leaving your browser tab.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Base64 vs. Encryption: What's the Difference?</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    A common misconception among beginners is that Base64 is a way to encrypt or hide data. <strong>This is false.</strong> It is crucial to understand the difference between Encoding and Encryption.
+                </p>
+                
+                <h3>Encoding (Base64)</h3>
+                <p class="intro-text">
+                    Encoding is designed to transform data into a new format so it can be readable by different systems. It uses a publicly available algorithm (standardized in RFC 4648) and does not require a key. <strong>Anyone can decode Base64</strong> if they have the string. It provides zero security. Think of it like translating a sentence from English to Spanish; anyone who knows Spanish can read it.
+                </p>
+
+                <h3>Encryption</h3>
+                <p class="intro-text">
+                    Encryption is designed to keep data secret. It transforms data using a complex algorithm and a secret key (password). Without the key, the data is unreadable garbage. If you need to secure passwords or credit card numbers, you must use encryption (like AES or RSA), not Base64.
+                </p>
+
+                <h3>When to use Base64?</h3>
+                <p class="intro-text">
+                    Use Base64 when you need to send binary data (like an image or a PDF file) through a channel that only supports text (like JSON APIs, HTML, or Email bodies). It ensures the binary data doesn't get corrupted during transmission.
+                </p>
+            </div>
+
+            <h2 class="section-title">How It Works</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    Base64 works by breaking binary data into groups of 6 bits. Since 2^6 is 64, each group can be represented by one of 64 characters from a printable subset of ASCII characters:
+                </p>
+                <ol class="steps-list">
+                    <li><strong>The Alphabet:</strong> It uses <code>A-Z</code>, <code>a-z</code>, <code>0-9</code>, and two symbols usually <code>+</code> and <code>/</code>.</li>
+                    <li><strong>The Process:</strong> The input text is converted to its binary representation. These bits are grouped into 6-bit chunks. Each chunk is mapped to a character in the Base64 alphabet.</li>
+                    <li><strong>Padding:</strong> Base64 output is always a multiple of 4 characters. If the binary data doesn't divide perfectly by 3 bytes (24 bits), padding characters (<code>=</code>) are added to the end of the string to complete the block.</li>
+                    <li><strong>The Ratio:</strong> Base64 encoding increases the size of the data by approximately 33%. For every 3 bytes of input data, you get 4 bytes of output text.</li>
+                </ol>
+            </div>
+
+            <h2 class="section-title">Real-World Use Cases</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg></div>
+                        Basic Authentication
+                    </div>
+                    <p class="example-desc">
+                        When making HTTP requests, the simplest form of authentication (Basic Auth) requires sending a username and password. The standard requires combining them as <code>username:password</code> and then encoding that string in Base64 before adding it to the HTTP <code>Authorization</code> header.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg></div>
+                        Embedding Images (Data URIs)
+                    </div>
+                    <p class="example-desc">
+                        Web developers can embed small images (like icons or logos) directly into HTML or CSS files to reduce the number of HTTP requests. This is done by converting the image file into a Base64 string and using it as the source: <code>&lt;img src="data:image/png;base64,..." /&gt;</code>.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg></div>
+                        Email Attachments (MIME)
+                    </div>
+                    <p class="example-desc">
+                        Email systems were originally designed to handle only plain text. To send binary files like PDFs or photos as attachments, email protocols (MIME) encode the file data into Base64 blocks. This ensures the attachment travels safely through various mail servers without getting corrupted.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">Is Base64 the same as encryption?</div>
+                    <div class="faq-answer">
+                        No. Base64 is an encoding scheme, not encryption. It is designed to represent binary data as text so it can be transmitted safely. It provides no confidentiality; anyone can decode the data. Encryption, on the other hand, scrambles data using a key to keep it secret.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is my data sent to a server?</div>
+                    <div class="faq-answer">
+                        No. Toolear prioritizes privacy. This tool runs entirely in your web browser using JavaScript. The text you paste never leaves your device, so you can safely decode internal tokens or keys without fear of them being logged.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Why does the output end with '='?</div>
+                    <div class="faq-answer">
+                        The equals sign <code>=</code> is a padding character. Base64 encodes data in blocks of 4 characters. If the original data doesn't divide perfectly into these blocks, one or two <code>=</code> signs are added to the end to complete the sequence.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can I convert images to Base64 with this?</div>
+                    <div class="faq-answer">
+                        This specific tool is optimized for text strings. While you technically can paste image data string here, it might be slow. For converting actual image files (JPG, PNG), please use our dedicated <strong>Image to Base64</strong> tool which handles file uploads and generates the correct Data URI format.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Does Base64 increase file size?</div>
+                    <div class="faq-answer">
+                        Yes. Because Base64 uses 4 ASCII characters to represent every 3 bytes of binary data, the resulting string is approximately 33% larger than the original data. This overhead is usually acceptable for the benefit of safe transmission.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        function encode64() {
+            const input = document.getElementById('b64Input').value;
+            try { 
+                document.getElementById('b64Output').value = btoa(input); 
+            } catch(e) { 
+                alert('Error encoding. Note: This tool supports standard ASCII characters.'); 
+            }
+        }
+        function decode64() {
+            const input = document.getElementById('b64Input').value;
+            try { 
+                document.getElementById('b64Output').value = atob(input); 
+            } catch(e) { 
+                alert('Invalid Base64 string'); 
+            }
+        }
+        function copyResult() {
+            const output = document.getElementById('b64Output');
+            const btnText = document.getElementById('copyBtnText');
+            
+            if(!output.value) { alert('Nothing to copy!'); return; }
+            
+            output.select();
+            document.execCommand('copy');
+            
+            // Visual feedback
+            btnText.innerText = 'Copied!';
+            setTimeout(() => {
+                btnText.innerText = 'Copy Result';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

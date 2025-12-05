@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unix Timestamp Converter | Epoch to Date | Toolear</title>
+    <meta name="description" content="Free online Unix Timestamp Converter. Convert Epoch seconds/milliseconds to human-readable dates and vice versa. View current timestamp and learn about the Year 2038 problem.">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Toolear Timestamp Converter",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a Unix Timestamp?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A Unix Timestamp (or Epoch time) counts the total number of seconds that have elapsed since January 1, 1970, at 00:00:00 UTC. It is widely used in computing to track time independent of time zones." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this handle milliseconds?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. While standard Unix timestamps are in seconds (10 digits), JavaScript often uses milliseconds (13 digits). Our tool automatically detects the format and converts it correctly." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the Year 2038 problem?",
+          "acceptedAnswer": { "@type": "Answer", "text": "On January 19, 2038, standard 32-bit systems will run out of numbers to store the timestamp (reaching 2,147,483,647). This overflow could cause computers to interpret the date as 1901. Modern 64-bit systems have already solved this." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the conversion accurate for my time zone?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The tool displays both the absolute UTC time (universal) and your 'Local Time', which is calculated based on your browser's time zone settings." }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* --- Content & Typography Styles --- */
+        .content-section { width: 100%; max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 2.5rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15); 
+        }
+        .intro-text { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 1.5rem; }
+        .intro-text strong { color: #e879f9; font-weight: 600; }
+        .intro-text h3 { color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .feature-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); transform: translateY(-3px); }
+        .feature-icon { 
+            width: 48px; height: 48px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .feature-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Steps List */
+        .steps-list { list-style: none; counter-reset: step-counter; margin-top: 1.5rem; }
+        .steps-list li { 
+            counter-increment: step-counter; position: relative; padding-left: 3.5rem; 
+            margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; 
+        }
+        .steps-list li::before { 
+            content: counter(step-counter); position: absolute; left: 0; top: 0; 
+            width: 40px; height: 40px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: #fff; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); 
+        }
+
+        /* Example Box */
+        .example-box { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1.5rem; margin-top: 1rem; transition: all 0.3s ease;
+        }
+        .example-box:hover { border-color: rgba(168, 85, 247, 0.3); background: rgba(255, 255, 255, 0.02); }
+        .example-title { 
+            font-size: 1.1rem; font-weight: 600; color: #e879f9; margin-bottom: 0.8rem; 
+            display: flex; align-items: center; gap: 0.8rem; 
+        }
+        .example-icon { 
+            width: 36px; height: 36px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .example-icon svg { width: 20px; height: 20px; color: #e879f9; }
+        .example-desc { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        /* FAQ */
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.8rem; margin-bottom: 1.2rem; transition: all 0.3s ease;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); }
+        .faq-question { 
+            font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem; 
+            display: flex; align-items: flex-start; gap: 0.8rem; 
+        }
+        .faq-question::before { 
+            content: "Q"; display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px; font-size: 0.9rem; font-weight: 700; flex-shrink: 0; 
+        }
+        .faq-answer { font-size: 1rem; color: #cbd5e1; line-height: 1.7; padding-left: 2.3rem; }
+
+        /* Tool Specific Styles */
+        .live-timer {
+            text-align: center; margin-bottom: 2rem;
+        }
+        .live-timer-label { color: #94a3b8; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
+        .live-timer-val {
+            font-size: 3rem; font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #a855f7 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-family: 'Monaco', monospace;
+        }
+        
+        .result-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .result-row:last-child { border-bottom: none; }
+        .res-label { color: #94a3b8; font-size: 0.9rem; }
+        .res-val { color: #fff; font-family: 'Monaco', monospace; text-align: right; }
+
+        /* Footer Fixed */
+        .site-footer {
+            margin-top: 6rem; padding-top: 3rem; padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>Unix <span class="gradient-text">Timestamp</span></h1>
+        <p class="subtitle">Convert between Epoch Timestamp and Human Date.</p>
+        
+        <div class="tool-workspace">
+            <div class="tool-panel" style="grid-column: 1 / -1;">
+                <div class="live-timer">
+                    <div class="live-timer-label">Current Unix Epoch Time</div>
+                    <div id="now" class="live-timer-val">...</div>
+                </div>
+            </div>
+
+            <div class="tool-panel">
+                <div class="panel-header">Convert Timestamp to Date</div>
+                <div style="position: relative;">
+                    <input type="number" id="tsInput" placeholder="e.g. 1609459200" style="width:100%; padding:1rem; padding-right:80px; border-radius:12px; background:rgba(0,0,0,0.3); border:1px solid #333; color:white; margin-bottom:1rem;">
+                    <button onclick="setInputToNow()" style="position:absolute; right:10px; top:10px; background:rgba(255,255,255,0.1); border:none; color:#a855f7; padding:5px 10px; border-radius:6px; cursor:pointer; font-size:0.8rem;">Now</button>
+                </div>
+                <button class="action-btn" onclick="convertToDate()">Convert to Human Date</button>
+            </div>
+            
+            <div class="tool-panel">
+                <div class="panel-header">Result</div>
+                <div id="resultsBox" style="background:rgba(0,0,0,0.3); border-radius:12px; border:1px solid rgba(255,255,255,0.1); padding:1rem;">
+                    <div class="result-row">
+                        <span class="res-label">GMT / UTC</span>
+                        <span class="res-val" id="resUTC">-</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="res-label">Your Local Time</span>
+                        <span class="res-val" id="resLocal">-</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="res-label">Relative</span>
+                        <span class="res-val" id="resRel">-</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="res-label">ISO 8601</span>
+                        <span class="res-val" id="resISO">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    Time is relative, but computers need precision. To solve the problem of time zones and different calendar formats, computer systems use the <strong>Unix Timestamp</strong> (also known as Epoch Time). It is a simple integer that counts the number of seconds that have passed since the "Unix Epoch".
+                </p>
+                <p class="intro-text">
+                    The <strong>Toolear Timestamp Converter</strong> is an essential utility for developers, system administrators, and database engineers. It allows you to instantly translate these cryptic 10-digit numbers into readable human dates (like "Mon, 01 Jan 2024") and vice versa. It handles time zone conversions automatically, showing you both the Universal Time (UTC) and your local time.
+                </p>
+                <p class="intro-text">
+                    Unlike server-side tools that might lag, our converter runs <strong>locally in your browser</strong>. This ensures millisecond precision and guarantees that your data conversion is private. Whether you are debugging a database log, setting a cron job, or analyzing API responses, this tool provides the clarity you need.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
+                        <h4>Live Clock</h4>
+                        <p>Shows the current Unix timestamp in real-time, updating every second so you never miss a beat.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" /></svg></div>
+                        <h4>Dual Timezones</h4>
+                        <p>Instantly converts the timestamp to both UTC (Greenwich Mean Time) and your browser's local time zone.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg></div>
+                        <h4>Auto-Detect</h4>
+                        <p>Smartly handles both standard Seconds (10 digits) and JavaScript Milliseconds (13 digits) inputs.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg></div>
+                        <h4>ISO 8601</h4>
+                        <p>Provides the standardized ISO format (YYYY-MM-DDTHH:mm:ss.sssZ) used in modern APIs and databases.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">What is the "Unix Epoch"?</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    The Unix Epoch is the "Day Zero" of computer time. It corresponds to <strong>00:00:00 UTC on Thursday, 1 January 1970</strong>. Why this date? When the Unix operating system was being developed in the early 70s, engineers needed a simple reference point to calculate time.
+                </p>
+                <p class="intro-text">
+                    Instead of storing complex strings like "January 1st", computers store a single integer. For example, the timestamp <code>1609459200</code> represents exactly 1,609,459,200 seconds after the Epoch, which translates to January 1, 2021. This method makes calculating time differences (duration) incredibly fast—just basic subtraction.
+                </p>
+
+                <h3>The Year 2038 Problem (Y2K38)</h3>
+                <p class="intro-text">
+                    Similar to the Y2K bug, there is a looming deadline for 32-bit systems. The maximum number a standard 32-bit signed integer can hold is <strong>2,147,483,647</strong>. This corresponds to <strong>03:14:07 UTC on 19 January 2038</strong>.
+                </p>
+                <p class="intro-text">
+                    One second later, the counter will overflow to a negative number (-2,147,483,648), causing computers to think the date is Friday, 13 December 1901. While most modern 64-bit systems are immune (they can count for billions of years), legacy embedded systems and older databases still need to be patched before this date.
+                </p>
+            </div>
+
+            <h2 class="section-title">Use Case Examples</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg></div>
+                        Database Management
+                    </div>
+                    <p class="example-desc">
+                        Databases like MySQL or PostgreSQL often store creation times as integers to save space and speed up indexing. When a developer queries the database and sees <code>created_at: 1672531200</code>, they use this tool to quickly verify what actual date that represents without writing a script.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        API Debugging
+                    </div>
+                    <p class="example-desc">
+                        Many REST APIs return expiration times for authentication tokens (JWT) as Unix timestamps. A frontend developer can paste the <code>exp</code> field value here to know exactly when a user's session will time out, helping them test refresh token logic.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg></div>
+                        Event Planning Across Zones
+                    </div>
+                    <p class="example-desc">
+                        When coordinating a global server maintenance window, teams use UTC timestamps to avoid confusion like "is that 5 PM EST or PST?". Sending a timestamp like <code>1704067200</code> ensures every engineer in the world knows the exact moment to start, regardless of their local clock.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">What is a Unix Timestamp?</div>
+                    <div class="faq-answer">
+                        A Unix Timestamp (or Epoch time) is a system for tracking time as a running total of seconds. The count starts at the "Unix Epoch" on January 1, 1970, at 00:00:00 UTC. It does not count leap seconds.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Does this handle milliseconds?</div>
+                    <div class="faq-answer">
+                        Yes. Standard Unix timestamps are in seconds (usually 10 digits). However, JavaScript and Java often use milliseconds (13 digits). Toolear automatically detects the length. If you input a 13-digit number, it treats it as milliseconds; if 10 digits, as seconds.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is the conversion accurate for my time zone?</div>
+                    <div class="faq-answer">
+                        Yes. The tool provides two outputs: "GMT / UTC" (Universal Time) and "Local Time". The Local Time is calculated using your specific browser's time zone settings, so it reflects exactly when that moment occurred in your region.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Why is 1970 the starting year?</div>
+                    <div class="faq-answer">
+                        The year 1970 was arbitrarily chosen by Unix engineers as a convenient round number close to the start of the era of modern computing. It serves as a universal reference point (anchor) for calculating time forwards and backwards.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        // Live Clock
+        setInterval(() => {
+            const now = Math.floor(Date.now() / 1000);
+            document.getElementById('now').innerText = now;
+        }, 1000);
+
+        function setInputToNow() {
+            document.getElementById('tsInput').value = Math.floor(Date.now() / 1000);
+            convertToDate();
+        }
+
+        function convertToDate() {
+            let val = document.getElementById('tsInput').value;
+            if(!val) return;
+
+            // Simple heuristic: if likely seconds (less than year 3000 in seconds), multiply by 1000
+            // If length is 13, assume millis. If length <= 10, assume seconds.
+            // 32503680000 is year 3000 in seconds.
+            let timestamp = parseInt(val);
+            if(val.length <= 10) {
+                timestamp = timestamp * 1000;
+            }
+
+            const date = new Date(timestamp);
+
+            document.getElementById('resUTC').innerText = date.toUTCString();
+            document.getElementById('resLocal').innerText = date.toLocaleString();
+            document.getElementById('resISO').innerText = date.toISOString();
+            
+            // Relative time logic (basic)
+            const nowMs = Date.now();
+            const diffMs = timestamp - nowMs;
+            const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+            
+            let relText = "";
+            const diffSec = Math.round(diffMs / 1000);
+            const diffMin = Math.round(diffMs / (1000 * 60));
+            const diffHour = Math.round(diffMs / (1000 * 60 * 60));
+            const diffDay = Math.round(diffMs / (1000 * 60 * 60 * 24));
+            const diffYear = Math.round(diffMs / (1000 * 60 * 60 * 24 * 365));
+
+            if (Math.abs(diffSec) < 60) relText = rtf.format(diffSec, 'second');
+            else if (Math.abs(diffMin) < 60) relText = rtf.format(diffMin, 'minute');
+            else if (Math.abs(diffHour) < 24) relText = rtf.format(diffHour, 'hour');
+            else if (Math.abs(diffDay) < 365) relText = rtf.format(diffDay, 'day');
+            else relText = rtf.format(diffYear, 'year');
+
+            document.getElementById('resRel').innerText = relText;
+        }
+        
+        // Run once on load with current time? Or wait? 
+        // Better wait to not annoy user, but set Now value in placeholder logic is enough.
+        // Actually, let's init with current time for utility
+        setInputToNow();
+    </script>
+</body>
+</html>

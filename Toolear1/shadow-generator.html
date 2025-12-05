@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Box Shadow Generator | CSS Shadow Tool | Toolear</title>
+    <meta name="description" content="Free online Box Shadow Generator. Create soft, hard, or inset CSS box-shadows visually. Adjust X, Y, Blur, Spread, and Opacity in real-time.">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Toolear Box Shadow Generator",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the difference between Blur and Spread?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Blur determines how soft the shadow edges are (diffusion radius). Spread increases or decreases the overall size of the shadow uniformly, before blur is applied." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is 'Inset' shadow?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Inset (internal) shadows make the element look pressed down or carved into the background, often used in Neumorphism design. By default, shadows are outset (external)." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does using shadows slow down my website?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Modern browsers handle basic shadows very efficiently using the GPU (Graphics Processing Unit). Complex, multi-layered shadows might require more resources, but simple shadows have negligible performance impact." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use multiple shadows?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. CSS allows comma-separating multiple shadow rules. This tool generates a single clean shadow, which you can duplicate and modify manually for advanced effects." }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* --- Content & Typography Styles --- */
+        .content-section { width: 100%; max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 2.5rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15); 
+        }
+        .intro-text { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 1.5rem; }
+        .intro-text strong { color: #e879f9; font-weight: 600; }
+        .intro-text h3 { color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .feature-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); transform: translateY(-3px); }
+        .feature-icon { 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+            width: 48px; height: 48px; 
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .feature-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Steps List */
+        .steps-list { list-style: none; counter-reset: step-counter; margin-top: 1.5rem; }
+        .steps-list li { 
+            counter-increment: step-counter; position: relative; padding-left: 3.5rem; 
+            margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; 
+        }
+        .steps-list li::before { 
+            content: counter(step-counter); position: absolute; left: 0; top: 0; 
+            width: 40px; height: 40px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: #fff; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); 
+        }
+
+        /* Example Box */
+        .example-box { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1.5rem; margin-top: 1rem; transition: all 0.3s ease;
+        }
+        .example-box:hover { border-color: rgba(168, 85, 247, 0.3); background: rgba(255, 255, 255, 0.02); }
+        .example-title { 
+            font-size: 1.1rem; font-weight: 600; color: #e879f9; margin-bottom: 0.8rem; 
+            display: flex; align-items: center; gap: 0.8rem; 
+        }
+        .example-icon { 
+            width: 36px; height: 36px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .example-icon svg { width: 20px; height: 20px; color: #e879f9; }
+        .example-desc { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        /* FAQ */
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.8rem; margin-bottom: 1.2rem; transition: all 0.3s ease;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); }
+        .faq-question { 
+            font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem; 
+            display: flex; align-items: flex-start; gap: 0.8rem; 
+        }
+        .faq-question::before { 
+            content: "Q"; display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px; font-size: 0.9rem; font-weight: 700; flex-shrink: 0; 
+        }
+        .faq-answer { font-size: 1rem; color: #cbd5e1; line-height: 1.7; padding-left: 2.3rem; }
+
+        /* Tool Specific Styles */
+        input[type="range"] { accent-color: var(--primary-glow); }
+        .range-label { display: flex; justify-content: space-between; color: #94a3b8; font-size: 0.9rem; margin-top: 10px; }
+        .range-label span { color: #fff; font-weight: bold; }
+        .settings-container {
+            padding: 1.5rem 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex; flex-direction: column; gap: 15px;
+        }
+
+        /* Preview Container - DARK BACKGROUND RESTORED */
+        .preview-box-container {
+            width: 100%; height: 350px; display:flex; align-items:center; justify-content:center;
+            background: rgba(0, 0, 0, 0.3); /* DARK */
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+        }
+
+        .shadow-preview { 
+            width: 150px; height: 150px; 
+            background: #a855f7; /* User Requested Purple */
+            border-radius: 16px;
+            transition: box-shadow 0.1s ease;
+        }
+
+        /* Color Picker Mask */
+        .color-row {
+            display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
+        }
+        .color-label { color: #fff; font-size: 0.9rem; }
+        .picker-wrapper {
+            position: relative; width: 40px; height: 40px; border-radius: 50%;
+            overflow: hidden; border: 2px solid rgba(255,255,255,0.2);
+        }
+        .picker-wrapper input[type="color"] {
+            position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            padding: 0; margin: 0; border: none; cursor: pointer;
+        }
+
+        /* Footer Fixed */
+        .site-footer {
+            margin-top: 6rem; padding-top: 3rem; padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>Box Shadow <span class="gradient-text">Generator</span></h1>
+        <p class="subtitle">Create realistic soft, hard, or inset CSS shadows visually.</p>
+        
+        <div class="tool-workspace">
+            <div class="tool-panel">
+                <div class="panel-header">Controls</div>
+
+                <label class="range-label">Horizontal (X): <span id="xVal">10</span>px</label>
+                <input type="range" id="x" min="-50" max="50" value="10" oninput="updateShadow()">
+                
+                <label class="range-label">Vertical (Y): <span id="yVal">10</span>px</label>
+                <input type="range" id="y" min="-50" max="50" value="10" oninput="updateShadow()">
+                
+                <label class="range-label">Blur Radius: <span id="blurVal">30</span>px</label>
+                <input type="range" id="blur" min="0" max="100" value="30" oninput="updateShadow()">
+                
+                <label class="range-label">Spread Radius: <span id="spreadVal">-5</span>px</label>
+                <input type="range" id="spread" min="-20" max="50" value="-5" oninput="updateShadow()">
+                
+                <label class="range-label">Color Opacity: <span id="opacityVal">0.75</span></label>
+                <input type="range" id="opacity" min="0" max="1" step="0.01" value="0.75" oninput="updateShadow()">
+
+                <div class="settings-container">
+                    <div class="color-row">
+                        <span class="color-label">Shadow Color</span>
+                        <div class="picker-wrapper">
+                            <input type="color" id="shadowColor" value="#e879f9" oninput="updateShadow()">
+                        </div>
+                    </div>
+                    <div class="color-row">
+                        <span class="color-label">Box Color</span>
+                        <div class="picker-wrapper">
+                            <input type="color" id="boxColor" value="#a855f7" oninput="updateShadow()">
+                        </div>
+                    </div>
+
+                    <label style="display:flex; align-items:center; color:#fff; cursor:pointer; margin-top:10px;">
+                        <input type="checkbox" id="insetToggle" onchange="updateShadow()" style="margin-right:10px; transform:scale(1.2); accent-color:var(--primary-glow);">
+                        Use INSET Shadow (Internal)
+                    </label>
+                </div>
+            </div>
+            
+            <div class="tool-panel">
+                <div class="panel-header">Preview</div>
+                <div class="preview-box-container">
+                    <div id="box" class="shadow-preview"></div>
+                </div>
+                
+                <div class="panel-header" style="margin-top:1.5rem;">CSS Code</div>
+                <textarea id="cssOutput" readonly style="height:100px; font-family:'Monaco', monospace; color:#a855f7;"></textarea>
+                
+                <div style="display:flex; justify-content:flex-end;">
+                    <button class="action-btn" onclick="copyResult()" style="padding: 0.6rem 1.2rem; font-size: 0.9rem; margin-top: 10px;">Copy CSS</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    Adding depth to a flat interface is essential for user experience (UX). A **CSS Box Shadow** transforms a simple 2D element into a seemingly floating object, guiding the user's attention and communicating hierarchy. It is one of the most powerful and performance-friendly tools available to web designers.
+                </p>
+                <p class="intro-text">
+                    The **Toolear Box Shadow Generator** provides precise, real-time visual control over all five essential shadow properties: Horizontal Position (X), Vertical Position (Y), Blur Radius, Spread Distance, and Color Opacity. You can design anything from subtle, soft shadows (for card depth) to harsh, sharp outlines (for Neumorphism or retro effects).
+                </p>
+                <p class="intro-text">
+                    Best of all, CSS shadows are handled by the browser's **GPU (Graphics Processing Unit)**. This means they are extremely fast and have almost no negative impact on website loading speed, making them superior to relying on heavy image files for visual effects.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></div>
+                        <h4>5-Axis Control</h4>
+                        <p>Adjust X, Y, Blur, Spread, and Opacity independently for total control over the shadow's appearance and realism.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg></div>
+                        <h4>Inset / Outset</h4>
+                        <p>Toggle between external (outset, default) shadows and internal (inset) shadows, useful for creating "pressed" buttons.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
+                        <h4>Performance Optimized</h4>
+                        <p>Generates simple CSS that browsers can render using hardware acceleration (GPU), ensuring fast loading.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        <h4>Real-time Preview</h4>
+                        <p>Adjust the sliders and see the precise result immediately on the target element.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Mastering the Shadow Parameters</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    A box shadow requires five values (excluding color) to fully define its appearance. Understanding what each value controls is the key to creating realistic depth.
+                </p>
+                
+                <h3>Horizontal and Vertical Offset (X and Y)</h3>
+                <p class="intro-text">
+                    These values define where the shadow falls, simulating the direction of light. A positive **X value** moves the shadow to the right; a positive **Y value** moves it down. The rule of thumb for realism is to use a positive X and positive Y value (e.g., 5px 5px), simulating a light source from the top-left.
+                </p>
+
+                <h3>Blur Radius</h3>
+                <p class="intro-text">
+                    This value determines the softness of the shadow's edges. A value of **0** produces a hard, sharp edge (like a shadow cast by the sun at high noon). A higher value (e.g., 20px) produces a soft, diffuse shadow, mimicking soft, ambient light.
+                </p>
+
+                <h3>Spread Distance</h3>
+                <p class="intro-text">
+                    Spread is the most misunderstood value. It dictates how far the shadow **expands or contracts** before the blur is applied. A positive spread increases the size of the shadow uniformly (making it larger than the element). A negative spread shrinks the shadow before it blurs.
+                </p>
+            </div>
+
+            <h2 class="section-title">Use Case Examples</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></div>
+                        Card and Panel Depth
+                    </div>
+                    <p class="example-desc">
+                        Creating a floating card effect is the most common use of `box-shadow`. Use small X/Y values (2px 4px) with a generous blur (10px) and low opacity (0.2) to make the card appear slightly elevated above the background.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        Neumorphism Design
+                    </div>
+                    <p class="example-desc">
+                        Neumorphism (or soft UI) uses two shadows: a light shadow from the top-left and a dark inset shadow from the bottom-right. You can use the `inset` toggle and duplicate the CSS rule to achieve this concave/convex 3D effect.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343l2.829 2.829m-2.829 2.828l2.829-2.828m7.071 7.071l-2.829-2.829m2.829 2.829L12 21.036m7.657-19.429a8 8 0 00-11.314 0" /></svg></div>
+                        Highlighting CTA Buttons
+                    </div>
+                    <p class="example-desc">
+                        For Call-to-Action buttons, a sharp, colored shadow (zero blur, positive spread) can draw the user's eye and make the button stand out against the page background. This is often used for sale banners or subscription buttons.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">What is the difference between Blur and Spread?</div>
+                    <div class="faq-answer">
+                        **Blur** controls the diffusion—how soft and blurry the edges are. **Spread** controls the size—a positive value expands the size of the shadow before it starts blurring, making the shadow larger than the element itself.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What is 'Inset' shadow?</div>
+                    <div class="faq-answer">
+                        An `inset` shadow falls *inside* the borders of the element, making the element look like it has been pressed into the screen or carved out. The default shadow is `outset` (external).
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Does using shadows slow down my website?</div>
+                    <div class="faq-answer">
+                        For simple, single-layered shadows, no. Modern browsers use your computer's Graphics Processing Unit (GPU) to render `box-shadow` very quickly. Only complex combinations of multiple shadows can sometimes impact performance on very old or low-power devices.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can I use this for Text Shadow?</div>
+                    <div class="faq-answer">
+                        No. This tool generates the `box-shadow` property, which applies to entire rectangular elements. For text, you need the `text-shadow` property, which follows a similar syntax but applies only to the letters themselves.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        function updateShadow() {
+            const x = document.getElementById('x').value;
+            const y = document.getElementById('y').value;
+            const blurVal = document.getElementById('blur').value;
+            const spreadVal = document.getElementById('spread').value;
+            const opacity = document.getElementById('opacity').value;
+            const inset = document.getElementById('insetToggle').checked ? 'inset ' : '';
+            
+            // Colors
+            const shadowHex = document.getElementById('shadowColor').value;
+            const boxHex = document.getElementById('boxColor').value;
+            
+            // Update Box Color
+            document.getElementById('box').style.background = boxHex;
+
+            // Update Labels
+            document.getElementById('xVal').innerText = x;
+            document.getElementById('yVal').innerText = y;
+            document.getElementById('blurVal').innerText = blurVal;
+            document.getElementById('spreadVal').innerText = spreadVal;
+            document.getElementById('opacityVal').innerText = opacity;
+
+            // Convert HEX to RGB for opacity
+            const r = parseInt(shadowHex.substr(1,2),16);
+            const g = parseInt(shadowHex.substr(3,2),16);
+            const b = parseInt(shadowHex.substr(5,2),16);
+
+            // CRITICAL FIX: Separate value from property string
+            const shadowValue = `${inset}${x}px ${y}px ${blurVal}px ${spreadVal}px rgba(${r}, ${g}, ${b}, ${opacity})`;
+            const cssString = `box-shadow: ${shadowValue};`;
+            
+            // Apply only the value to the element style
+            document.getElementById('box').style.boxShadow = shadowValue;
+            
+            // Show full CSS in textarea
+            document.getElementById('cssOutput').value = cssString;
+        }
+
+        function copyResult() {
+            const output = document.getElementById('cssOutput');
+            if(!output.value) return;
+            output.select();
+            document.execCommand('copy');
+            alert('CSS Copied!');
+        }
+
+        // Init
+        updateShadow();
+    </script>
+</body>
+</html>

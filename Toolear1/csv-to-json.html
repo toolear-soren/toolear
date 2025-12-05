@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV to JSON Converter | Excel to API | Toolear</title>
+    <meta name="description" content="Free online CSV to JSON converter. Transform Excel data (CSV) into JavaScript Objects or JSON arrays instantly. Runs locally in your browser for secure data migration.">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Toolear CSV to JSON Converter",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does it handle headers?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The tool assumes the first row of your CSV contains the headers (column names). These headers automatically become the 'keys' in the resulting JSON objects." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my data private?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Whether you are converting customer lists or financial data, processing happens strictly within your browser using JavaScript. No data is sent to our servers." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can it convert Excel files?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Directly, no. You must first 'Save As' CSV (Comma Delimited) in Excel, then copy the text or upload that file here. Excel's native .xlsx format is binary and cannot be pasted as text." }
+        },
+        {
+          "@type": "Question",
+          "name": "What about commas inside quotes?",
+          "acceptedAnswer": { "@type": "Answer", "text": "This is a simple converter. It splits by commas. If your data contains commas within text fields (e.g., 'New York, NY'), ensure they are properly escaped or use a standard CSV parser logic. Basic splitting might break on complex quoted strings." }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* --- Content & Typography Styles --- */
+        .content-section { width: 100%; max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 2.5rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15); 
+        }
+        .intro-text { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 1.5rem; }
+        .intro-text strong { color: #e879f9; font-weight: 600; }
+        .intro-text h3 { color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .feature-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); transform: translateY(-3px); }
+        .feature-icon { 
+            width: 48px; height: 48px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .feature-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Steps List */
+        .steps-list { list-style: none; counter-reset: step-counter; margin-top: 1.5rem; }
+        .steps-list li { 
+            counter-increment: step-counter; position: relative; padding-left: 3.5rem; 
+            margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; 
+        }
+        .steps-list li::before { 
+            content: counter(step-counter); position: absolute; left: 0; top: 0; 
+            width: 40px; height: 40px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: #fff; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); 
+        }
+
+        /* Example Box */
+        .example-box { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1.5rem; margin-top: 1rem; transition: all 0.3s ease;
+        }
+        .example-box:hover { border-color: rgba(168, 85, 247, 0.3); background: rgba(255, 255, 255, 0.02); }
+        .example-title { 
+            font-size: 1.1rem; font-weight: 600; color: #e879f9; margin-bottom: 0.8rem; 
+            display: flex; align-items: center; gap: 0.8rem; 
+        }
+        .example-icon { 
+            width: 36px; height: 36px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .example-icon svg { width: 20px; height: 20px; color: #e879f9; }
+        .example-desc { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        /* FAQ */
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.8rem; margin-bottom: 1.2rem; transition: all 0.3s ease;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); }
+        .faq-question { 
+            font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem; 
+            display: flex; align-items: flex-start; gap: 0.8rem; 
+        }
+        .faq-question::before { 
+            content: "Q"; display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px; font-size: 0.9rem; font-weight: 700; flex-shrink: 0; 
+        }
+        .faq-answer { font-size: 1rem; color: #cbd5e1; line-height: 1.7; padding-left: 2.3rem; }
+
+        /* Output Actions */
+        .output-actions { margin-top: 15px; display: flex; justify-content: flex-end; gap: 10px; }
+        .copy-btn {
+            padding: 0.6rem 1.2rem; border-radius: 12px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.4); color: white;
+            cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: all 0.3s ease; font-weight: 500;
+        }
+        .copy-btn:hover { background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.3)); }
+        .copy-btn svg { width: 18px; height: 18px; }
+
+        /* Footer Fixed */
+        .site-footer {
+            margin-top: 6rem; padding-top: 3rem; padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>CSV to <span class="gradient-text">JSON</span></h1>
+        <p class="subtitle">Convert CSV table data to JSON objects.</p>
+        
+        <div class="tool-workspace">
+            <div class="tool-panel">
+                <div class="panel-header">Input CSV</div>
+                <textarea id="csvInput" placeholder="name,age&#10;John,25&#10;Alice,30"></textarea>
+                <button class="action-btn" onclick="csvToJson()">Convert to JSON</button>
+            </div>
+            <div class="tool-panel">
+                <div class="panel-header">Output JSON</div>
+                <textarea id="jsonOutput" readonly placeholder="Result..."></textarea>
+                <div class="output-actions">
+                    <button class="copy-btn" onclick="copyResult()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        <span id="copyBtnText">Copy JSON</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    Data comes in many shapes and sizes, but two formats rule the world of information exchange: <strong>CSV (Comma Separated Values)</strong> and <strong>JSON (JavaScript Object Notation)</strong>. While CSV is the king of spreadsheets (like Excel and Google Sheets), JSON is the native language of the web and modern APIs.
+                </p>
+                <p class="intro-text">
+                    The <strong>Toolear CSV to JSON Converter</strong> bridges this gap. It allows developers, data scientists, and analysts to instantly transform rows and columns into structured data objects. This is essential for migrating data from legacy systems to modern databases (like MongoDB), populating website content from a spreadsheet, or preparing datasets for visualization libraries like D3.js.
+                </p>
+                <p class="intro-text">
+                    Security is paramount when handling data. Whether you are converting a list of customer emails or financial records, you need to know your data is safe. Unlike server-side converters that upload your files to the cloud, Toolear processes everything <strong>locally in your browser</strong>. Your CSV data is parsed by JavaScript on your own device and never leaves it.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg></div>
+                        <h4>Smart Parsing</h4>
+                        <p>Automatically detects the first row as headers and creates key-value pairs for all subsequent data rows.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></div>
+                        <h4>100% Private</h4>
+                        <p>No file uploads. No server logs. Your sensitive spreadsheets remain strictly on your computer.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        <h4>Formatted Output</h4>
+                        <p>Generates beautified JSON with proper indentation (4 spaces), making it easy to read and debug.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></div>
+                        <h4>Works Offline</h4>
+                        <p>The tool is a lightweight client-side script. Once loaded, it works perfectly without an internet connection.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">CSV vs. JSON: Why Convert?</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    <strong>CSV</strong> is a flat format. It represents a 2D table where every row has the same number of columns. It's compact and great for humans to read in Excel, but it lacks structure. It cannot represent hierarchy (like a user having multiple addresses).
+                </p>
+                <p class="intro-text">
+                    <strong>JSON</strong> is a hierarchical format. It supports nested arrays and objects, making it much more flexible for describing complex real-world data. Modern web applications (React, Vue, Angular) and REST APIs consume JSON natively. Converting CSV to JSON is often the first step in "modernizing" legacy data for web use.
+                </p>
+            </div>
+
+            <h2 class="section-title">How It Works</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    Our converter uses a straightforward algorithm to parse your text. Here is the logic flow:
+                </p>
+                <ol class="steps-list">
+                    <li><strong>Line Splitting:</strong> The tool takes your input and splits it into individual lines based on newline characters.</li>
+                    <li><strong>Header Extraction:</strong> It assumes the very first line contains the headers (e.g., "Name, Email, Phone"). These will become the property keys in the JSON object.</li>
+                    <li><strong>Data Iteration:</strong> It loops through every remaining line. Each line is split by commas to get the values.</li>
+                    <li><strong>Object Construction:</strong> For every value, it maps it to the corresponding header key. For example, the first value goes to the "Name" key, the second to "Email", etc.</li>
+                    <li><strong>JSON Generation:</strong> Finally, the array of objects is converted into a string using <code>JSON.stringify()</code> with pretty formatting.</li>
+                </ol>
+            </div>
+
+            <h2 class="section-title">Use Case Examples</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg></div>
+                        Database Seeding
+                    </div>
+                    <p class="example-desc">
+                        Developers often receive initial data from clients in Excel spreadsheets. To import this into a NoSQL database like MongoDB or Firebase, it needs to be JSON. This tool allows for a quick copy-paste conversion to populate the database in seconds.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg></div>
+                        Data Visualization
+                    </div>
+                    <p class="example-desc">
+                        Libraries like Chart.js or D3.js usually expect data in JSON format. If you have a CSV report of sales figures, you can convert it here and plug the resulting JSON array directly into your charting code to visualize the trends.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        Configuration via Spreadsheets
+                    </div>
+                    <p class="example-desc">
+                        Some non-technical teams prefer managing game configs or app settings in Google Sheets. Developers can export that sheet to CSV, run it through this tool, and paste the JSON directly into the application's config file.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">How does it handle headers?</div>
+                    <div class="faq-answer">
+                        The tool assumes the first row of your CSV contains the headers (column names). These headers automatically become the "keys" in the resulting JSON objects. If your CSV doesn't have headers, the first row of data will be incorrectly used as keys.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is my data private?</div>
+                    <div class="faq-answer">
+                        Yes. Privacy is our core feature. Whether you are converting customer lists or financial data, processing happens strictly within your browser using JavaScript. No data is sent to our servers.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can it convert Excel files directly?</div>
+                    <div class="faq-answer">
+                        No. You must first open your Excel file and "Save As" > "CSV (Comma delimited)". Then, you can open that file with a text editor (Notepad) and copy-paste the text here. Excel's native .xlsx format is binary and cannot be pasted as text.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What about commas inside quotes?</div>
+                    <div class="faq-answer">
+                        This is a simple converter that splits lines by commas. If your data contains commas within text fields (e.g., "New York, NY"), ensure they are properly handled. For complex CSVs with escaped characters and mixed quotes, a more advanced parser might be needed, but this tool handles standard clean CSVs perfectly.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        function csvToJson() {
+            const csv = document.getElementById('csvInput').value.trim();
+            if(!csv) return;
+            
+            try {
+                const lines = csv.split("\n");
+                const result = [];
+                // Use first row as headers
+                const headers = lines[0].split(",");
+                
+                for(let i=1; i<lines.length; i++){
+                    if(!lines[i]) continue;
+                    const obj = {};
+                    const currentline = lines[i].split(",");
+                    
+                    for(let j=0; j<headers.length; j++){
+                        // Safe assignment even if row is shorter than headers
+                        obj[headers[j].trim()] = currentline[j] ? currentline[j].trim() : "";
+                    }
+                    result.push(obj);
+                }
+                document.getElementById('jsonOutput').value = JSON.stringify(result, null, 4);
+                document.getElementById('jsonOutput').style.borderColor = '#10b981';
+            } catch(e) {
+                alert("Error parsing CSV. Please ensure format is correct.");
+            }
+        }
+
+        function copyResult() {
+            const output = document.getElementById('jsonOutput');
+            const btnText = document.getElementById('copyBtnText');
+            
+            if(!output.value) { alert('Nothing to copy!'); return; }
+            
+            output.select();
+            document.execCommand('copy');
+            
+            // Visual feedback
+            btnText.innerText = 'Copied!';
+            setTimeout(() => {
+                btnText.innerText = 'Copy JSON';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

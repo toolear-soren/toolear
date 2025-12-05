@@ -1,0 +1,886 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --primary-glow: #a855f7;
+    --secondary-glow: #d8b4fe;
+    --blue-glow: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --bg-dark: #000000;
+    --card-bg: rgba(10, 10, 15, 0.6);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --text-main: #ffffff;
+    --text-muted: #94a3b8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+    position: relative;
+    opacity: 0; 
+    transition: opacity 0.5s ease-in-out;
+}
+
+body.loaded { opacity: 1; }
+
+/* --- Backgrounds --- */
+.cosmic-bg {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -5;
+    background: radial-gradient(circle at 50% 0%, #1a0b2e 0%, #000000 80%);
+}
+
+.grid-bg {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -4;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: linear-gradient(to bottom, black 20%, transparent 95%);
+    -webkit-mask-image: linear-gradient(to bottom, black 20%, transparent 95%);
+}
+
+.orb-container {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -3; pointer-events: none; overflow: hidden;
+}
+.orb {
+    position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.5;
+    animation: floatOrb 10s ease-in-out infinite alternate; mix-blend-mode: screen;
+}
+.orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, var(--primary-glow), transparent 70%); top: -150px; left: -100px; animation-duration: 12s; }
+.orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, var(--blue-glow), transparent 70%); bottom: -50px; right: -100px; animation-duration: 15s; animation-delay: -2s; }
+
+@keyframes floatOrb { 0% { transform: translateY(0); } 100% { transform: translateY(-30px); } }
+
+/* --- Layout --- */
+.container {
+    width: 100%; max-width: 1200px; padding: 5rem 2rem;
+    display: flex; flex-direction: column; align-items: center;
+    position: relative; z-index: 10;
+}
+
+/* --- Улучшенный Logo --- */
+.logo-wrapper { 
+    position: relative; 
+    margin-bottom: 2.5rem; 
+    transition: transform 0.3s ease;
+}
+.logo-wrapper:hover { 
+    transform: scale(1.05);
+    animation: logoFloat 2s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+    0%, 100% { transform: translateY(0) scale(1.05); }
+    50% { transform: translateY(-8px) scale(1.05); }
+}
+
+.logo-circle {
+    width: 90px; height: 90px; border-radius: 50%; 
+    background: linear-gradient(135deg, rgba(0,0,0,0.9), rgba(20,10,30,0.9));
+    border: 2px solid rgba(168, 85, 247, 0.6); 
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 
+        0 0 60px rgba(168, 85, 247, 0.3),
+        inset 0 0 30px rgba(168, 85, 247, 0.1); 
+    backdrop-filter: blur(10px); 
+    position: relative; 
+    z-index: 2;
+}
+
+.logo-text { 
+    font-size: 2.8rem; 
+    font-weight: 800; 
+    background: linear-gradient(135deg, #fff 0%, #c084fc 50%, #60a5fa 100%); 
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.5));
+}
+
+.logo-glow-ring { 
+    position: absolute; 
+    top: -4px; left: -4px; right: -4px; bottom: -4px; 
+    border-radius: 50%; 
+    background: conic-gradient(
+        from 0deg, 
+        var(--primary-glow), 
+        var(--blue-glow), 
+        var(--accent-cyan),
+        var(--primary-glow)
+    ); 
+    animation: spin 4s linear infinite; 
+    filter: blur(8px);
+    opacity: 0.8;
+}
+
+/* Новый sparkle эффект */
+.logo-sparkle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, rgba(255,255,255,0.9), transparent);
+    border-radius: 50%;
+    animation: sparkle 2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+h1 { 
+    font-size: 4rem; 
+    font-weight: 800; 
+    text-align: center; 
+    margin-bottom: 1rem; 
+    letter-spacing: -2px; 
+    line-height: 1.1; 
+    text-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.gradient-text { 
+    background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%); 
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 3s ease infinite;
+    background-size: 200% 200%;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.subtitle { 
+    font-size: 1.2rem; 
+    color: var(--text-muted); 
+    text-align: center; 
+    margin-bottom: 3.5rem; 
+    max-width: 550px; 
+    font-weight: 300;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+/* --- Search --- */
+.search-container { 
+    width: 100%; 
+    max-width: 640px; 
+    position: relative; 
+    margin-bottom: 5rem;
+    animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+
+.search-input { 
+    width: 100%; 
+    padding: 1.4rem 2rem 1.4rem 3.5rem; 
+    background: rgba(255, 255, 255, 0.02); 
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+    border-radius: 24px; 
+    color: white; 
+    font-size: 1.1rem; 
+    outline: none; 
+    transition: all 0.3s ease; 
+    backdrop-filter: blur(10px);
+}
+
+.search-input:focus { 
+    background: rgba(255, 255, 255, 0.05); 
+    border-color: rgba(168, 85, 247, 0.5); 
+    box-shadow: 
+        0 0 40px rgba(168, 85, 247, 0.15),
+        0 0 0 3px rgba(168, 85, 247, 0.1);
+    transform: translateY(-2px);
+}
+
+.search-icon { 
+    position: absolute; 
+    left: 1.4rem; 
+    top: 50%; 
+    transform: translateY(-50%); 
+    color: #ffffff; 
+    width: 22px; 
+    height: 22px; 
+    z-index: 5; 
+    pointer-events: none;
+    transition: color 0.3s ease;
+}
+
+.search-input:focus ~ .search-icon {
+    color: var(--primary-glow);
+}
+
+/* --- Cards с улучшенными эффектами --- */
+.tools-grid { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 24px; 
+    width: 100%;
+}
+
+.card {
+    background: var(--card-bg); 
+    border: 1px solid var(--card-border); 
+    border-radius: 24px; 
+    padding: 2.5rem 2rem;
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-start; 
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+    cursor: pointer;
+    position: relative; 
+    overflow: hidden; 
+    backdrop-filter: blur(15px); 
+    text-decoration: none;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* Анимация появления карточек */
+.card[data-animate] {
+    animation: cardFadeIn 0.6s ease-out forwards;
+}
+
+@keyframes cardFadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Задержки для каждой карточки */
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.15s; }
+.card:nth-child(3) { animation-delay: 0.2s; }
+.card:nth-child(4) { animation-delay: 0.25s; }
+.card:nth-child(5) { animation-delay: 0.3s; }
+.card:nth-child(6) { animation-delay: 0.35s; }
+.card:nth-child(7) { animation-delay: 0.4s; }
+.card:nth-child(8) { animation-delay: 0.45s; }
+
+.card:hover { 
+    transform: translateY(-12px) scale(1.02); 
+    background: rgba(255, 255, 255, 0.09); 
+    border-color: rgba(168, 85, 247, 0.5); 
+    box-shadow: 
+        0 25px 60px -15px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(168, 85, 247, 0.2),
+        0 0 40px rgba(168, 85, 247, 0.2);
+}
+
+/* Градиентная подсветка при наведении */
+.card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+        from 0deg at 50% 50%,
+        transparent 0deg,
+        rgba(168, 85, 247, 0.1) 90deg,
+        transparent 180deg
+    );
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+}
+
+.card:hover::before {
+    opacity: 1;
+    transform: rotate(45deg);
+}
+
+/* Свечение курсора */
+.card::after { 
+    content: ''; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: radial-gradient(
+        600px circle at var(--mouse-x) var(--mouse-y), 
+        rgba(168, 85, 247, 0.06), 
+        transparent 40%
+    ); 
+    opacity: 0; 
+    transition: opacity 0.5s; 
+    pointer-events: none;
+}
+
+.card:hover::after { opacity: 1; }
+
+/* Улучшенный ICON-BOX */
+.icon-box { 
+    width: 56px; 
+    height: 56px; 
+    border-radius: 16px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    margin-bottom: 1.5rem; 
+    background: rgba(255, 255, 255, 0.03); 
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+    color: #ffffff; 
+    font-weight: 800;
+    font-size: 1.4rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Градиентный фон иконки при hover */
+.icon-box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card:hover .icon-box { 
+    transform: scale(1.15) rotate(5deg); 
+    border-color: rgba(168, 85, 247, 0.4); 
+    box-shadow: 
+        0 0 30px rgba(168, 85, 247, 0.3),
+        inset 0 0 20px rgba(168, 85, 247, 0.1);
+}
+
+.card:hover .icon-box::before {
+    opacity: 1;
+}
+
+.card svg { 
+    width: 28px; 
+    height: 28px; 
+    color: #ffffff;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+
+.card:hover svg {
+    transform: scale(1.1);
+}
+
+.card h3 { 
+    font-size: 1.3rem; 
+    font-weight: 600; 
+    margin-bottom: 0.8rem; 
+    color: white;
+    transition: color 0.3s ease;
+}
+
+.card:hover h3 {
+    background: linear-gradient(135deg, #fff, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.card p { 
+    font-size: 0.9rem; 
+    color: var(--text-muted); 
+    line-height: 1.6;
+    transition: color 0.3s ease;
+}
+
+.card:hover p {
+    color: #cbd5e1;
+}
+
+/* Класс для скрытия карточек при поиске */
+.card.hidden { display: none !important; }
+
+/* Сообщение "Ничего не найдено" */
+.no-results {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    padding: 2rem;
+    display: none;
+}
+
+/* --- Workspaces --- */
+.back-btn {
+    align-self: flex-start; 
+    margin-bottom: 2rem; 
+    padding: 0.8rem 1.5rem; 
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05); 
+    color: white; 
+    text-decoration: none; 
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.3s ease; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    font-weight: 500;
+}
+
+.back-btn:hover { 
+    background: rgba(255,255,255,0.1); 
+    border-color: var(--primary-glow); 
+    transform: translateX(-5px);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+}
+
+.tool-workspace {
+    width: 100%; 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 2rem;
+    background: var(--card-bg); 
+    border: 1px solid var(--card-border); 
+    border-radius: 24px; 
+    padding: 2rem; 
+    backdrop-filter: blur(20px);
+}
+
+.tool-panel { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 1rem;
+}
+
+.panel-header { 
+    font-size: 1.1rem; 
+    font-weight: 600; 
+    color: var(--secondary-glow); 
+    margin-bottom: 0.5rem;
+}
+
+textarea, .file-drop-area {
+    width: 100%; 
+    height: 400px; 
+    background: rgba(0,0,0,0.3); 
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px; 
+    padding: 1.5rem; 
+    color: #eee; 
+    font-family: 'Monaco', monospace; 
+    font-size: 0.9rem; 
+    resize: none; 
+    outline: none; 
+    transition: border 0.3s;
+}
+
+textarea:focus { 
+    border-color: var(--primary-glow);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.1);
+}
+
+.file-drop-area {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    border-style: dashed;
+}
+
+.file-drop-area:hover { 
+    border-color: var(--primary-glow); 
+    background: rgba(255,255,255,0.02);
+}
+
+.action-btn {
+    padding: 1rem 2rem; 
+    border-radius: 16px; 
+    background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+    color: white; 
+    border: none; 
+    font-weight: 600; 
+    cursor: pointer; 
+    transition: all 0.3s; 
+    margin-top: 1rem; 
+    font-size: 1rem;
+    box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
+}
+
+.action-btn:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 8px 30px rgba(168, 85, 247, 0.6);
+}
+
+/* --- Рамка фото --- */
+.preview-box {
+    width: 100%; 
+    height: 400px; 
+    background: rgba(0,0,0,0.3); 
+    border: 1px solid rgba(255,255,255,0.1); 
+    border-radius: 16px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    overflow: hidden; 
+    transition: all 0.5s ease; 
+    position: relative;
+}
+
+.preview-box.active {
+    border: 3px solid transparent;
+    background-image: linear-gradient(#0a0a0f, #0a0a0f), linear-gradient(135deg, #a855f7, #3b82f6);
+    background-origin: border-box; 
+    background-clip: padding-box, border-box;
+    box-shadow: 0 0 50px rgba(168, 85, 247, 0.3);
+}
+
+.preview-box img { 
+    max-width: 95%; 
+    max-height: 95%; 
+    border-radius: 12px; 
+    display: none; 
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+}
+
+/* Responsive (Планшеты) */
+@media (max-width: 1024px) { 
+    .tools-grid { grid-template-columns: repeat(2, 1fr); } 
+    h1 { font-size: 3rem; } 
+    .tool-workspace { grid-template-columns: 1fr; }
+}
+
+/* Responsive (Мобильные устройства) - Существующий блок */
+@media (max-width: 640px) { 
+    .tools-grid { grid-template-columns: 1fr; } 
+    h1 { font-size: 2.5rem; }
+    .container { padding: 3rem 1.5rem; }
+}
+
+
+/* =========================================
+   ИСПРАВЛЕНИЯ МОБИЛЬНОЙ ВЕРСИИ (Max-width 768px)
+   Не влияет на ПК версию. Добавлено для главной страницы.
+   ========================================= */
+@media (max-width: 768px) {
+    /* Глобальные отступы для новых секций */
+    .content-section { 
+        margin: 4rem auto 0 !important;
+        padding: 0 1.5rem !important;
+    }
+    .content-card { 
+        padding: 2rem 1.5rem !important;
+        border-radius: 24px !important;
+    }
+    .section-title { 
+        font-size: 1.75rem !important;
+        margin-bottom: 1.5rem !important; 
+    }
+    
+    /* Главный заголовок на главной */
+    h1 { font-size: 2.5rem !important; }
+    .subtitle { font-size: 1rem !important; padding: 0 1rem !important; }
+
+    /* Вводный текст */
+    .intro-text { font-size: 1rem !important; line-height: 1.6 !important; margin-bottom: 1.5rem !important; }
+
+    /* Сетки преимуществ и сценариев -> в 1 колонку */
+    .feature-grid, .use-case-grid { 
+        grid-template-columns: 1fr !important; 
+        gap: 1.5rem !important; 
+        margin-top: 2rem !important; 
+    }
+    
+    .feature-item, .use-case-box { 
+        padding: 2rem 1.5rem !important; 
+    }
+
+    /* ВАЖНО: Запрет на сплющивание иконок */
+    .feature-icon, .use-case-icon { 
+        flex-shrink: 0 !important; 
+    } 
+
+    /* Финальная плашка */
+    .closing-section { padding-top: 1.5rem !important; }
+    .closing-text { 
+        font-size: 0.95rem !important; 
+        padding: 0.7rem 1.2rem !important; 
+        width: 100%; max-width: 300px;
+    }
+
+    /* Отступы футера */
+    .site-footer { 
+        margin-top: 4rem !important; 
+        padding-top: 2rem !important; 
+        padding-bottom: 2rem !important; 
+    }
+    .footer-nav { gap: 20px !important; }
+}
+
+/* =========================================
+   Дополнительные мобильные правки (max-width: 768px)
+   Только для телефонов, не влияет на десктоп
+   ========================================= */
+@media (max-width: 768px) {
+
+    /* Глобально убираем любые горизонтальные скроллы */
+    html, body {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+    }
+
+    /* Контейнер всегда на всю ширину экрана */
+    .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 1.25rem !important;
+        padding-right: 1.25rem !important;
+    }
+
+    /* Карточки инструментов: одна колонка, одинаковая ширина */
+    .tools-grid {
+        grid-template-columns: 1fr !important;
+        width: 100% !important;
+    }
+
+    .card {
+        width: 100% !important;
+    }
+
+    /* Текст внутри карточек и секций не вываливается */
+    .card h3,
+    .card p,
+    .subtitle,
+    .intro-text,
+    .section-title,
+    .use-case-desc {
+        word-wrap: break-word;
+        overflow-wrap: anywhere;
+    }
+
+    /* Рабочая область инструментов в одну колонку */
+    .tool-workspace {
+        grid-template-columns: 1fr !important;
+        padding: 1.5rem !important;
+        width: 100% !important;
+    }
+
+    /* Кнопки фильтров всегда помещаются по ширине */
+    .category-filters {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    .category-btn {
+        flex: 1 1 calc(50% - 0.5rem);
+        text-align: center;
+    }
+
+    /* Футер на всю ширину и без переполнения */
+    .site-footer,
+    .footer-nav {
+        width: 100% !important;
+    }
+
+    .footer-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+
+/* =========================================
+   Доп. правки для мобильных версий инструментов
+   (layout JSON, Base64, Image, и т.д.)
+   ========================================= */
+@media (max-width: 768px) {
+
+    /* Основной контейнер инструментов */
+    main.container {
+        padding-left: 1.25rem !important;
+        padding-right: 1.25rem !important;
+    }
+
+    /* Заголовок и подзаголовок инструментов */
+    h1 {
+        font-size: 2.2rem !important;
+        text-align: center;
+    }
+
+    .subtitle {
+        font-size: 1rem !important;
+        text-align: center;
+        margin-bottom: 1.5rem !important;
+    }
+
+    /* Workspace с textarea/панелями */
+    .tool-workspace {
+        grid-template-columns: 1fr !important;
+        width: 100% !important;
+        gap: 1.5rem !important;
+        padding: 1.5rem !important;
+    }
+
+    .tool-panel {
+        width: 100% !important;
+    }
+
+    textarea,
+    .file-drop-area {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: 220px;
+    }
+
+    /* Карточки контента и примеры ниже workspace */
+    .content-card,
+    .example-box,
+    .faq-item {
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    /* Подстраховка от переполнения текста в этих блоках */
+    .content-card p,
+    .example-desc,
+    .faq-answer {
+        word-wrap: break-word;
+        overflow-wrap: anywhere;
+    }
+}
+
+/* Глобальная подстраховка для изображений/иконок */
+img, svg {
+    max-width: 100%;
+    height: auto;
+}
+
+
+/* =========================================
+   Мобильные правки для текстовых блоков под инструментами
+   (FAQ, примеры, описания и т.д.)
+   ========================================= */
+@media (max-width: 768px) {
+
+    /* Секции под инструментами на всю ширину и с мягкими отступами */
+    .content-section {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-top: 2.5rem !important;
+        padding-left: 1.25rem !important;
+        padding-right: 1.25rem !important;
+        box-sizing: border-box;
+    }
+
+    .content-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 1.75rem 1.25rem !important;
+        margin-bottom: 2rem !important;
+        border-radius: 20px !important;
+        box-sizing: border-box;
+    }
+
+    .section-title {
+        font-size: 1.6rem !important;
+        line-height: 1.25 !important;
+        margin-bottom: 1.25rem !important;
+        text-align: center !important;
+    }
+
+    .intro-text {
+        font-size: 0.95rem !important;
+        line-height: 1.6 !important;
+        margin-bottom: 1.25rem !important;
+    }
+
+    /* Сетки преимуществ / кейсов всегда в одну колонку */
+    .feature-grid,
+    .use-case-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+        margin-top: 1.75rem !important;
+    }
+
+    .feature-item,
+    .use-case-box {
+        padding: 1.5rem 1.25rem !important;
+    }
+
+    .feature-icon,
+    .use-case-icon,
+    .example-icon {
+        flex-shrink: 0 !important;
+    }
+
+    /* Список шагов */
+    .steps-list {
+        margin-top: 1.2rem !important;
+    }
+
+    .steps-list li {
+        padding-left: 2.5rem !important;
+        font-size: 0.95rem !important;
+        line-height: 1.6 !important;
+    }
+
+    .steps-list li::before {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 0.9rem !important;
+        margin-top: 0.15rem;
+    }
+
+    /* Примеры использования и FAQ */
+    .example-box {
+        padding: 1.5rem 1.25rem !important;
+        margin-top: 1rem !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    .example-title {
+        font-size: 1rem !important;
+    }
+
+    .example-desc {
+        font-size: 0.95rem !important;
+    }
+
+    .faq-item {
+        padding: 1.5rem 1.25rem !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    .faq-question {
+        font-size: 1rem !important;
+    }
+
+    .faq-answer {
+        font-size: 0.95rem !important;
+    }
+
+    /* Без вылезания текста за карточки */
+    .content-card p,
+    .example-desc,
+    .faq-answer {
+        word-wrap: break-word;
+        overflow-wrap: anywhere;
+    }
+}

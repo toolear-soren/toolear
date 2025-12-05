@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Case Converter | Uppercase, Lowercase & Title Case | Toolear</title>
+    <meta name="description" content="Free online Text Case Converter. Instantly convert text to Uppercase, Lowercase, Title Case, Sentence Case, or Alternating Case. Fix accidental Caps Lock and format titles locally.">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Toolear Text Case Converter",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Title Case?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Title Case is a capitalization style used for headlines where the first letter of major words is capitalized, while minor words like 'and', 'the', 'of' remain lowercase (e.g., 'The Lord of the Rings')." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I fix accidental CAPS LOCK?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. If you accidentally typed a whole paragraph with Caps Lock on, simply paste it here and select 'Sentence Case'. It will convert the text to standard sentence formatting instantly." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my text saved?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Like all Toolear tools, this runs locally in your browser. We do not store, log, or read your text content. It is 100% private." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is Alternating Case used for?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Alternating Case (e.g., 'LiKe ThIs') is often used in internet culture to convey sarcasm or mockery (the SpongeBob meme format). It randomly or sequentially changes letter cases." }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* --- Content & Typography Styles --- */
+        .content-section { width: 100%; max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 2.5rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15); 
+        }
+        .intro-text { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 1.5rem; }
+        .intro-text strong { color: #e879f9; font-weight: 600; }
+        .intro-text h3 { color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .feature-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); transform: translateY(-3px); }
+        .feature-icon { 
+            width: 48px; height: 48px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .feature-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Steps List */
+        .steps-list { list-style: none; counter-reset: step-counter; margin-top: 1.5rem; }
+        .steps-list li { 
+            counter-increment: step-counter; position: relative; padding-left: 3.5rem; 
+            margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; 
+        }
+        .steps-list li::before { 
+            content: counter(step-counter); position: absolute; left: 0; top: 0; 
+            width: 40px; height: 40px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: #fff; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); 
+        }
+
+        /* Example Box */
+        .example-box { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1.5rem; margin-top: 1rem; transition: all 0.3s ease;
+        }
+        .example-box:hover { border-color: rgba(168, 85, 247, 0.3); background: rgba(255, 255, 255, 0.02); }
+        .example-title { 
+            font-size: 1.1rem; font-weight: 600; color: #e879f9; margin-bottom: 0.8rem; 
+            display: flex; align-items: center; gap: 0.8rem; 
+        }
+        .example-icon { 
+            width: 36px; height: 36px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .example-icon svg { width: 20px; height: 20px; color: #e879f9; }
+        .example-desc { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        /* FAQ */
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.8rem; margin-bottom: 1.2rem; transition: all 0.3s ease;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); }
+        .faq-question { 
+            font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem; 
+            display: flex; align-items: flex-start; gap: 0.8rem; 
+        }
+        .faq-question::before { 
+            content: "Q"; display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px; font-size: 0.9rem; font-weight: 700; flex-shrink: 0; 
+        }
+        .faq-answer { font-size: 1rem; color: #cbd5e1; line-height: 1.7; padding-left: 2.3rem; }
+
+        /* Tool specific: Button Grid */
+        .button-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .output-actions { margin-top: 15px; display: flex; justify-content: flex-end; gap: 10px; }
+        .copy-btn {
+            padding: 0.6rem 1.2rem; border-radius: 12px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.4); color: white;
+            cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: all 0.3s ease; font-weight: 500;
+        }
+        .copy-btn:hover { background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.3)); }
+        .copy-btn svg { width: 18px; height: 18px; }
+
+        /* Footer Fixed */
+        .site-footer {
+            margin-top: 6rem; padding-top: 3rem; padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>Text Case <span class="gradient-text">Converter</span></h1>
+        <p class="subtitle">Instantly change text to Uppercase, Lowercase, or Title Case.</p>
+        
+        <div class="tool-workspace">
+            <div class="tool-panel">
+                <div class="panel-header">Input Text</div>
+                <textarea id="inputText" placeholder="Type or paste your text here..." style="height: 300px;"></textarea>
+                
+                <div class="button-grid">
+                    <button class="action-btn" onclick="transformText('upper')">UPPERCASE</button>
+                    <button class="action-btn" onclick="transformText('lower')">lowercase</button>
+                    <button class="action-btn" onclick="transformText('sentence')">Sentence case</button>
+                    <button class="action-btn" onclick="transformText('title')">Title Case</button>
+                    <button class="action-btn" onclick="transformText('alt')">aLtErNaTiNg</button>
+                    <button class="action-btn" onclick="transformText('inverse')">InVeRsE cAsE</button>
+                </div>
+            </div>
+            
+            <div class="tool-panel">
+                <div class="panel-header">Converted Result</div>
+                <textarea id="outputText" readonly placeholder="Result will appear here..." style="height: 100%;"></textarea>
+                <div class="output-actions">
+                    <button class="copy-btn" onclick="copyResult()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        <span id="copyBtnText">Copy Result</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    Have you ever accidentally left the <strong>Caps Lock</strong> key on and typed an entire paragraph, only to realize later that it looks like you're shouting? Or perhaps you are a content creator struggling to format headlines consistently for your blog?
+                </p>
+                <p class="intro-text">
+                    The <strong>Toolear Text Case Converter</strong> is your instant fix for these common formatting errors. It is a powerful online utility designed to transform any block of text into your desired letter case format. Whether you need to normalize messy user input, prepare a clean title for a report, or just have fun with "sponge-bob meme" text, this tool handles it all.
+                </p>
+                <p class="intro-text">
+                    We prioritize your privacy. Unlike many online converters that process your text on a remote server (where it could potentially be logged), Toolear operates <strong>locally in your browser</strong>. This means you can safely reformat sensitive emails, legal drafts, or private messages without the data ever leaving your computer.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg></div>
+                        <h4>Sentence Case</h4>
+                        <p>Automatically capitalizes the first letter of each sentence and lowercases the rest. Perfect for fixing Caps Lock accidents.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></div>
+                        <h4>100% Private</h4>
+                        <p>Processing happens via client-side JavaScript. Your text is never stored, tracked, or sent to a cloud server.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></div>
+                        <h4>Title Case</h4>
+                        <p>Capitalizes the first letter of major words while keeping minor words (and, the, of) lowercase. Ideal for blog headers.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></div>
+                        <h4>Instant & Offline</h4>
+                        <p>Works immediately as you click. Once the page is loaded, you can use the tool without an internet connection.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">The Psychology of Typography</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    The way you format text dramatically changes how it is perceived by the reader. Understanding "Letter Case" is essential for effective communication in the digital age.
+                </p>
+                
+                <h3>1. UPPERCASE (The Shout)</h3>
+                <p class="intro-text">
+                    In internet etiquette (Netiquette), writing in ALL CAPS is widely interpreted as <strong>shouting</strong>. It creates a sense of urgency or aggression. While useful for warnings ("DANGER") or acronyms ("NASA"), using it for regular body text reduces readability by about 10-15% because the letters lose their distinct shapes.
+                </p>
+
+                <h3>2. lowercase (The Whisper)</h3>
+                <p class="intro-text">
+                    Writing entirely in lowercase (often stylised as "e.e. cummings style") conveys a casual, minimalist, or artistic tone. It is popular in modern branding and poetic messaging but can look unprofessional in business emails or formal documents.
+                </p>
+
+                <h3>3. Title Case vs. Sentence Case</h3>
+                <p class="intro-text">
+                    <strong>Title Case</strong> ("The Quick Brown Fox") is standard for book titles, movie names, and headlines in English. It signals importance.
+                    <br><strong>Sentence Case</strong> ("The quick brown fox") is standard for body text and is increasingly becoming the norm for UI design (buttons, menus) because it feels more conversational and friendly than Title Case.
+                </p>
+            </div>
+
+            <h2 class="section-title">How It Works</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    Toolear uses JavaScript string manipulation methods to instantly transform your input. Here is what happens behind the scenes for each mode:
+                </p>
+                <ol class="steps-list">
+                    <li><strong>UPPERCASE:</strong> Uses <code>string.toUpperCase()</code>. Converts every character 'a-z' to 'A-Z'.</li>
+                    <li><strong>lowercase:</strong> Uses <code>string.toLowerCase()</code>. Converts every character 'A-Z' to 'a-z'.</li>
+                    <li><strong>Sentence case:</strong> First converts everything to lowercase. Then, it uses a regular expression (Regex) to find the first letter of the text and the first letter after every punctuation mark (.?!) and capitalizes it.</li>
+                    <li><strong>Title Case:</strong> This is more complex. It splits the text into words. It capitalizes the first letter of every word <em>except</em> for a predefined list of "stop words" (a, an, the, at, by, for, in, of, on, to, up, and, as, but, or, nor).</li>
+                    <li><strong>Alternating Case:</strong> Iterates through the string character by character. Even indexes are lowercased, odd indexes are uppercased.</li>
+                </ol>
+            </div>
+
+            <h2 class="section-title">Use Case Examples</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></div>
+                        Content Marketing
+                    </div>
+                    <p class="example-desc">
+                        A blogger writes a draft and realizes their H1 and H2 headers are inconsistent—some are Sentence case, others are Title Case. By pasting them into Toolear and clicking "Title Case," they ensure perfect consistency across the article, improving professional appearance.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        Data Cleaning
+                    </div>
+                    <p class="example-desc">
+                        A developer receives a CSV file of user names where users entered data chaotically (e.g., "jOhN", "ALICE", "bob"). Before importing this into a database, the developer uses Toolear to convert the entire list to "Title Case" (John, Alice, Bob) or "lowercase" for email addresses.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
+                        Social Media Fun
+                    </div>
+                    <p class="example-desc">
+                        For Discord, Twitter, or gaming chats, users often want to convey sarcasm using the "Mocking SpongeBob" text style. Instead of manually hitting Shift for every other letter, the "Alternating Case" button generates "wHaT aRe yOu dOiNg" instantly.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">What is Title Case?</div>
+                    <div class="faq-answer">
+                        Title Case is a specific capitalization style used for headlines, book titles, and movie names. The general rule is to capitalize the first letter of major words (Nouns, Verbs, Adjectives) while keeping minor words (Prepositions, Articles, Conjunctions like 'and', 'the', 'of') lowercase, unless they are the first word of the sentence.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can I fix accidental CAPS LOCK?</div>
+                    <div class="faq-answer">
+                        Yes! This is the most common use case. If you accidentally left Caps Lock on and typed a whole paragraph, don't delete it. Copy the shouting text, paste it into Toolear, and click "Sentence case". It will intelligently convert it back to normal, readable text.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is my text saved or uploaded?</div>
+                    <div class="faq-answer">
+                        No. Toolear respects your privacy. All text transformations happen locally in your web browser using JavaScript. We do not have a backend database that stores your input. Your data vanishes from memory as soon as you close the tab.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What is Inverse Case?</div>
+                    <div class="faq-answer">
+                        Inverse Case flips the capitalization of every letter. If a letter is uppercase, it becomes lowercase, and vice-versa. For example, "Hello World" becomes "hELLO wORLD". This is useful if you typed with Shift held down while Caps Lock was on.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        function transformText(type) {
+            const input = document.getElementById('inputText').value;
+            let result = "";
+
+            if (!input) return;
+
+            switch(type) {
+                case 'upper':
+                    result = input.toUpperCase();
+                    break;
+                case 'lower':
+                    result = input.toLowerCase();
+                    break;
+                case 'sentence':
+                    // Lowercase everything first
+                    result = input.toLowerCase().replace(/(^\s*\w|[\.\!\?]\s*\w)/g, function(c) {
+                        return c.toUpperCase();
+                    });
+                    break;
+                case 'title':
+                    // Simple title case logic (ignoring small words)
+                    const minorWords = ['a', 'an', 'the', 'and', 'but', 'or', 'nor', 'at', 'by', 'for', 'from', 'in', 'into', 'of', 'off', 'on', 'onto', 'out', 'over', 'up', 'with', 'to', 'as'];
+                    result = input.toLowerCase().replace(/\w\S*/g, function(txt, offset) {
+                        if (offset !== 0 && minorWords.includes(txt)) {
+                            return txt;
+                        }
+                        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                    });
+                    break;
+                case 'alt':
+                    result = input.split('').map((c, i) => i % 2 === 0 ? c.toLowerCase() : c.toUpperCase()).join('');
+                    break;
+                case 'inverse':
+                    result = input.split('').map(c => c === c.toUpperCase() ? c.toLowerCase() : c.toUpperCase()).join('');
+                    break;
+            }
+
+            document.getElementById('outputText').value = result;
+        }
+
+        function copyResult() {
+            const output = document.getElementById('outputText');
+            const btnText = document.getElementById('copyBtnText');
+            
+            if(!output.value) { alert('Nothing to copy!'); return; }
+            
+            output.select();
+            document.execCommand('copy');
+            
+            // Visual feedback
+            btnText.innerText = 'Copied!';
+            setTimeout(() => {
+                btnText.innerText = 'Copy Result';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

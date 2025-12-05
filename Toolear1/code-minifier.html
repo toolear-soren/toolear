@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Minifier | Compress CSS & JavaScript Online | Toolear</title>
+    <meta name="description" content="Free online Code Minifier. Instantly compress CSS and JavaScript files by removing comments and whitespace. Boost your website loading speed and SEO score safely in your browser.">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Toolear Code Minifier",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is minification reversible?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Minification is a destructive process because it removes formatting (newlines, spaces) and comments. While you can use a 'Beautifier' tool to restore the structure, the original comments and developer notes are lost forever." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this tool rename variables (Obfuscation)?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. This tool performs 'Safe Minification'. It removes whitespace and comments but preserves your variable names and logic structure. This ensures your code remains functional without the risk of breaking dependencies." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my code safe?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The minification process runs entirely in your browser using JavaScript regular expressions. Your proprietary code is never sent to our servers or stored anywhere." }
+        },
+        {
+          "@type": "Question",
+          "name": "Should I use Minification or Gzip?",
+          "acceptedAnswer": { "@type": "Answer", "text": "You should use both. Minification removes unnecessary characters from the source code. Gzip (or Brotli) compresses the file for transfer over the network. Using them together provides the maximum performance benefit." }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* --- Content & Typography Styles --- */
+        .content-section { width: 100%; max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 2.5rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15); 
+        }
+        .intro-text { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 1.5rem; }
+        .intro-text strong { color: #e879f9; font-weight: 600; }
+        .intro-text h3 { color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .feature-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); transform: translateY(-3px); }
+        .feature-icon { 
+            width: 48px; height: 48px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .feature-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Steps List */
+        .steps-list { list-style: none; counter-reset: step-counter; margin-top: 1.5rem; }
+        .steps-list li { 
+            counter-increment: step-counter; position: relative; padding-left: 3.5rem; 
+            margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; 
+        }
+        .steps-list li::before { 
+            content: counter(step-counter); position: absolute; left: 0; top: 0; 
+            width: 40px; height: 40px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: #fff; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); 
+        }
+
+        /* Example Box */
+        .example-box { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1.5rem; margin-top: 1rem; transition: all 0.3s ease;
+        }
+        .example-box:hover { border-color: rgba(168, 85, 247, 0.3); background: rgba(255, 255, 255, 0.02); }
+        .example-title { 
+            font-size: 1.1rem; font-weight: 600; color: #e879f9; margin-bottom: 0.8rem; 
+            display: flex; align-items: center; gap: 0.8rem; 
+        }
+        .example-icon { 
+            width: 36px; height: 36px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .example-icon svg { width: 20px; height: 20px; color: #e879f9; }
+        .example-desc { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        /* FAQ */
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.8rem; margin-bottom: 1.2rem; transition: all 0.3s ease;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); }
+        .faq-question { 
+            font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem; 
+            display: flex; align-items: flex-start; gap: 0.8rem; 
+        }
+        .faq-question::before { 
+            content: "Q"; display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px; font-size: 0.9rem; font-weight: 700; flex-shrink: 0; 
+        }
+        .faq-answer { font-size: 1rem; color: #cbd5e1; line-height: 1.7; padding-left: 2.3rem; }
+
+        /* Tool specific: Output Actions */
+        .output-actions { margin-top: 15px; display: flex; justify-content: flex-end; gap: 10px; }
+        .copy-btn {
+            padding: 0.6rem 1.2rem; border-radius: 12px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.4); color: white;
+            cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: all 0.3s ease; font-weight: 500;
+        }
+        .copy-btn:hover { background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.3)); }
+        .copy-btn svg { width: 18px; height: 18px; }
+
+        /* Footer Fixed */
+        .site-footer {
+            margin-top: 6rem; padding-top: 3rem; padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>Code <span class="gradient-text">Minifier</span></h1>
+        <p class="subtitle">Minify CSS or JS code by removing spaces, breaks and comments.</p>
+        
+        <div class="tool-workspace">
+            <div class="tool-panel">
+                <div class="panel-header">Input Code</div>
+                <textarea id="input" placeholder="Paste CSS or JS here..."></textarea>
+                <button class="action-btn" onclick="minify()">Minify Code</button>
+            </div>
+            <div class="tool-panel">
+                <div class="panel-header">Minified Output</div>
+                <textarea id="output" readonly placeholder="Result will appear here..."></textarea>
+                <div class="output-actions">
+                    <div id="stats" style="color:#aaa; font-size:0.9rem; align-self:center; margin-right:auto;"></div>
+                    <button class="copy-btn" onclick="copyResult()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        <span id="copyBtnText">Copy Result</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    In modern web development, <strong>website speed is everything</strong>. Every millisecond counts when it comes to retaining users and ranking high on search engines like Google. One of the most effective ways to speed up your site is by <strong>minifying your code</strong>.
+                </p>
+                <p class="intro-text">
+                    The <strong>Toolear Code Minifier</strong> is a powerful utility designed to reduce the size of your CSS and JavaScript files. By intelligently stripping out unnecessary characters—such as comments, newlines, and extra whitespace—it creates a compact version of your code that browsers can download and parse significantly faster.
+                </p>
+                <p class="intro-text">
+                    This process is safe and does not alter the functionality of your code. Unlike aggressive obfuscators that rename variables and can break logic, our tool focuses purely on "safe minification," ensuring compatibility while maximizing savings. Best of all, it works <strong>locally in your browser</strong>, so your proprietary code never leaves your computer.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></div>
+                        <h4>Boost Performance</h4>
+                        <p>Reduced file sizes mean faster download times, lower bandwidth usage, and quicker page rendering.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></div>
+                        <h4>100% Private</h4>
+                        <p>Your code is processed locally via JavaScript regular expressions. It is never uploaded to any server.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></div>
+                        <h4>Removes Comments</h4>
+                        <p>Automatically strips out block comments (/*...*/) and line comments (//...) to save maximum space.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        <h4>CSS & JS Support</h4>
+                        <p>Versatile algorithms handle both Cascading Style Sheets (CSS) and JavaScript (JS) logic effectively.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Why Minification Matters for SEO</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    Google uses "Core Web Vitals" as a key ranking factor. One of the metrics, <strong>Largest Contentful Paint (LCP)</strong>, measures how long it takes for the main content of your page to load. Heavy, unminified CSS and JS files are "render-blocking resources"—the browser has to stop and download them before it can show the page.
+                </p>
+                
+                <h3>Minification vs. Obfuscation</h3>
+                <p class="intro-text">
+                    It is important to distinguish between the two. <strong>Minification</strong> simply removes whitespace and comments. It makes the code hard for humans to read but easy for machines. <strong>Obfuscation</strong> actively changes variable names (e.g., changing <code>userName</code> to <code>a</code>) to hide the logic. Our tool performs Minification, which is safer for production environments as it reduces the risk of breaking code dependencies.
+                </p>
+
+                <h3>Minification vs. Gzip/Brotli</h3>
+                <p class="intro-text">
+                    You might ask, "If my server uses Gzip compression, do I still need to minify?" The answer is <strong>Yes</strong>. Minification and Gzip work best together. Minification removes unnecessary characters from the source code, while Gzip compresses the resulting file for network transfer. Combining both techniques can reduce file sizes by up to 80-90%.
+                </p>
+            </div>
+
+            <h2 class="section-title">How It Works</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    The Toolear Code Minifier uses advanced Regular Expressions (Regex) running in your browser's JavaScript engine to clean your code. Here is the process:
+                </p>
+                <ol class="steps-list">
+                    <li><strong>Comment Removal:</strong> The tool first scans for multi-line comments (<code>/* ... */</code>) and single-line comments (<code>// ...</code>) and removes them completely. These are for developers, not browsers.</li>
+                    <li><strong>Whitespace Collapse:</strong> It replaces sequences of multiple spaces, tabs, and newlines with a single space or removes them entirely where safe.</li>
+                    <li><strong>Syntax Optimization:</strong> For CSS, it removes spaces around separators like colons (<code>:</code>), semicolons (<code>;</code>), and braces (<code>{}</code>). For example, <code>color: red;</code> becomes <code>color:red;</code>.</li>
+                    <li><strong>Safety Check:</strong> The algorithm is tuned to be "conservative," meaning it avoids aggressive changes that might break complex JavaScript logic, ensuring your code remains functional.</li>
+                </ol>
+            </div>
+
+            <h2 class="section-title">Use Case Examples</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        Deploying to Production
+                    </div>
+                    <p class="example-desc">
+                        Before uploading your website to a live server, run your <code>style.css</code> and <code>script.js</code> files through the minifier. This simple step can shave off kilobytes of data, which translates to faster loading times for users on 3G or 4G mobile networks.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg></div>
+                        HTML Email Templates
+                    </div>
+                    <p class="example-desc">
+                        Email clients (like Gmail or Outlook) have strict limits on the size of HTML emails (often clipping messages over 102KB). Minifying your HTML and inline CSS ensures your entire newsletter renders correctly without being cut off.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg></div>
+                        Quick Fixes & Snippets
+                    </div>
+                    <p class="example-desc">
+                        Sometimes you need to patch a script on a live site or embed a small widget code provided by a third party. Minifying these snippets keeps your source code clean and reduces the performance impact of external scripts.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">Is minification reversible?</div>
+                    <div class="faq-answer">
+                        Technically, minification is a "destructive" process because it permanently removes the formatting (newlines, spaces) and comments. While you can use a "Beautifier" tool to restore the indentation and make it readable again, the original comments and developer notes are lost forever. Always keep a backup of your source code!
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Does this tool support HTML?</div>
+                    <div class="faq-answer">
+                        While optimized for CSS and JavaScript logic (handling block comments and syntax specific to those languages), the tool can perform basic whitespace removal on HTML code. However, for best results with HTML, we recommend using a dedicated HTML minifier if you have complex inline tags.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Why did my code break after minification?</div>
+                    <div class="faq-answer">
+                        The most common reason is missing semicolons in JavaScript. If you write <code>var a = 1</code> without a semicolon, and the next line starts with code, minification merges them into <code>var a=1...</code> which might cause errors. Ensure your JS code is syntactically correct (using semicolons) before minifying.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is there a file size limit?</div>
+                    <div class="faq-answer">
+                        Since the tool runs in your browser, it depends on your computer's RAM. Generally, it handles files up to 5-10MB (which is huge for code) without issues. For massive library bundles, the browser interface might freeze momentarily during processing.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        function minify() {
+            let code = document.getElementById('input').value;
+            const stats = document.getElementById('stats');
+            const originalSize = code.length;
+            
+            if(!code) {
+                stats.innerText = '';
+                return;
+            }
+
+            try {
+                // 1. Убираем комментарии /* ... */
+                code = code.replace(/\/\*[\s\S]*?\*\//g, '');
+                // 2. Убираем строчные комментарии // (Осторожно: может задеть URL в CSS, но для JS ок)
+                // Улучшенный regex для JS комментариев, игнорируя URL http://
+                code = code.replace(/([^:]|^)\/\/[^\n]*/g, '$1');
+                
+                // 3. Превращаем переносы строк и табуляцию в пробелы
+                code = code.replace(/\s+/g, ' ');
+                
+                // 4. Убираем пробелы вокруг спецсимволов { } : ; ,
+                code = code.replace(/\s*([{}:;,])\s*/g, '$1');
+                
+                // 5. Убираем пробелы в конце
+                code = code.trim();
+
+                // 6. Восстанавливаем пробелы для media queries (and (min-width...)) - простой фикс
+                code = code.replace(/and\(/g, 'and (');
+
+                document.getElementById('output').value = code;
+                
+                // Расчет статистики
+                const newSize = code.length;
+                const savings = Math.round((1 - (newSize / originalSize)) * 100);
+                stats.innerText = `Saved: ${savings}% (${originalSize}B → ${newSize}B)`;
+                stats.style.color = '#10b981';
+
+            } catch(e) {
+                alert('Error minimizing code. Please check input.');
+            }
+        }
+
+        function copyResult() {
+            const output = document.getElementById('output');
+            const btnText = document.getElementById('copyBtnText');
+            
+            if(!output.value) { alert('Nothing to copy!'); return; }
+            
+            output.select();
+            document.execCommand('copy');
+            
+            // Visual feedback
+            btnText.innerText = 'Copied!';
+            setTimeout(() => {
+                btnText.innerText = 'Copy Result';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

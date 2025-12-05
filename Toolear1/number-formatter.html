@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Formatter | Decimal & Currency Formatter | Toolear</title>
+    <meta name="description" content="Free online Number Formatter. Convert raw numbers into readable strings with commas, decimals, currency symbols, or compact notation (1k, 1M). Supports US, EU, and Indian formats.">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Toolear Number Formatter",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why do some countries use dots instead of commas?",
+          "acceptedAnswer": { "@type": "Answer", "text": "It depends on the region. The US and UK use a comma for thousands (1,000) and a dot for decimals (.). Many European and South American countries do the opposite (1.000,00). Our tool lets you switch locales instantly." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is 'Compact Notation'?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Compact notation shortens large numbers for easier reading. For example, 1,500,000 becomes '1.5M' and 25,000 becomes '25K'. This is widely used in dashboards and social media analytics." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this support crypto currencies?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. While we have presets for major fiat currencies (USD, EUR), the tool uses the standard Intl.NumberFormat API, which supports formatting for almost any currency code if you configure it manually or select standard accounting formats." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my financial data safe?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. All calculations happen locally in your browser. We do not store or transmit the numbers you type, making it safe for formatting financial reports or salary data." }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* --- Content & Typography Styles --- */
+        .content-section { width: 100%; max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 2.5rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15); 
+        }
+        .intro-text { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 1.5rem; }
+        .intro-text strong { color: #e879f9; font-weight: 600; }
+        .intro-text h3 { color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .feature-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); transform: translateY(-3px); }
+        .feature-icon { 
+            width: 48px; height: 48px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .feature-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Steps List */
+        .steps-list { list-style: none; counter-reset: step-counter; margin-top: 1.5rem; }
+        .steps-list li { 
+            counter-increment: step-counter; position: relative; padding-left: 3.5rem; 
+            margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; 
+        }
+        .steps-list li::before { 
+            content: counter(step-counter); position: absolute; left: 0; top: 0; 
+            width: 40px; height: 40px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: #fff; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); 
+        }
+
+        /* Example Box */
+        .example-box { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1.5rem; margin-top: 1rem; transition: all 0.3s ease;
+        }
+        .example-box:hover { border-color: rgba(168, 85, 247, 0.3); background: rgba(255, 255, 255, 0.02); }
+        .example-title { 
+            font-size: 1.1rem; font-weight: 600; color: #e879f9; margin-bottom: 0.8rem; 
+            display: flex; align-items: center; gap: 0.8rem; 
+        }
+        .example-icon { 
+            width: 36px; height: 36px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .example-icon svg { width: 20px; height: 20px; color: #e879f9; }
+        .example-desc { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        /* FAQ */
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.8rem; margin-bottom: 1.2rem; transition: all 0.3s ease;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); }
+        .faq-question { 
+            font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem; 
+            display: flex; align-items: flex-start; gap: 0.8rem; 
+        }
+        .faq-question::before { 
+            content: "Q"; display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px; font-size: 0.9rem; font-weight: 700; flex-shrink: 0; 
+        }
+        .faq-answer { font-size: 1rem; color: #cbd5e1; line-height: 1.7; padding-left: 2.3rem; }
+
+        /* Tool Specific Styles */
+        .settings-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 1.5rem;
+        }
+        select, input[type="number"] {
+            width: 100%; padding: 0.8rem; border-radius: 12px;
+            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
+            color: white; outline: none; font-size: 0.9rem;
+        }
+        select:focus, input:focus { border-color: var(--primary-glow); }
+        label { display: block; color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px; }
+
+        .result-display {
+            font-size: 2.5rem; font-weight: 800; text-align: center;
+            padding: 3rem 1rem;
+            color: #fff; word-break: break-all;
+            display: flex; align-items: center; justify-content: center;
+            min-height: 200px;
+        }
+
+        /* Footer Fixed */
+        .site-footer {
+            margin-top: 6rem; padding-top: 3rem; padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>Number <span class="gradient-text">Formatter</span></h1>
+        <p class="subtitle">Format numbers with commas, currencies, and compact notation.</p>
+        
+        <div class="tool-workspace">
+            <div class="tool-panel">
+                <div class="panel-header">Settings</div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <label>Input Number</label>
+                    <input type="number" id="inputNum" placeholder="e.g. 1234567.89" oninput="formatNumber()" step="any">
+                </div>
+
+                <div class="settings-grid">
+                    <div>
+                        <label>Locale (Format)</label>
+                        <select id="locale" onchange="formatNumber()">
+                            <option value="en-US">🇺🇸 US (1,000.00)</option>
+                            <option value="de-DE">🇩🇪 DE (1.000,00)</option>
+                            <option value="en-IN">🇮🇳 IN (1,00,000)</option>
+                            <option value="fr-FR">🇫🇷 FR (1 000,00)</option>
+                            <option value="zh-CN">🇨🇳 CN (1,000.00)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Style</label>
+                        <select id="style" onchange="formatNumber()">
+                            <option value="decimal">Standard (1,000)</option>
+                            <option value="currency">Currency ($1,000)</option>
+                            <option value="percent">Percent (10%)</option>
+                            <option value="compact">Compact (1K, 1M)</option>
+                        </select>
+                    </div>
+                    <div id="currencyBox" style="display:none;">
+                        <label>Currency</label>
+                        <select id="currency" onchange="formatNumber()">
+                            <option value="USD">USD ($)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="JPY">JPY (¥)</option>
+                            <option value="INR">INR (₹)</option>
+                            <option value="BTC">Bitcoin (₿)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Decimals</label>
+                        <input type="number" id="decimals" value="2" min="0" max="20" oninput="formatNumber()">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tool-panel">
+                <div class="panel-header">Result</div>
+                <div class="result-display" id="output">0</div>
+                <div style="display:flex; justify-content:flex-end;">
+                    <button class="action-btn" onclick="copyResult()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Copy Result</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    Raw numbers are hard to read. A string like <code>10000000</code> forces the brain to count zeros to understand if it's ten million or one hundred million. Proper formatting—adding separators like commas or dots—instantly makes data comprehensible.
+                </p>
+                <p class="intro-text">
+                    The <strong>Toolear Number Formatter</strong> is a versatile utility designed to beautify raw numeric data. Whether you are a frontend developer working on a dashboard, a financial analyst preparing a report, or a student solving math problems, this tool handles the complexity of international standards for you.
+                </p>
+                <p class="intro-text">
+                    It goes beyond simple commas. Our tool supports <strong>Internationalization (i18n)</strong>, allowing you to format numbers according to the rules of different countries (e.g., USA vs. Germany). It also handles currency formatting, percentages, and "compact notation" (like 1.5M for 1.5 Million), which is essential for modern UI design.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" /></svg></div>
+                        <h4>Global Locales</h4>
+                        <p>Switch between US (1,000.00), European (1.000,00), and Indian (1,00,000) formats instantly.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
+                        <h4>Currency Mode</h4>
+                        <p>Format numbers as prices with correct symbols ($ € £ ¥) and placement for any major currency.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
+                        <h4>Compact View</h4>
+                        <p>Turn long numbers into short, readable strings like "1.2K", "5M", or "3B". Ideal for charts and graphs.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg></div>
+                        <h4>Precision Control</h4>
+                        <p>Customize the number of decimal places (0-20) to suit your specific accuracy requirements.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">The "Decimal Separator War": Dot vs. Comma</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    Did you know that half the world writes numbers differently than the other half? This often causes confusion in international business and software development.
+                </p>
+                
+                <h3>The Anglosphere (US, UK, Australia)</h3>
+                <p class="intro-text">
+                    In English-speaking countries, a <strong>dot (.)</strong> is used as the decimal separator, and a <strong>comma (,)</strong> is used to group thousands.
+                    <br><em>Example:</em> <code>12,345.67</code>
+                </p>
+
+                <h3>Europe & South America</h3>
+                <p class="intro-text">
+                    In Germany, Brazil, France, and many other countries, the roles are reversed. A <strong>comma (,)</strong> separates decimals, and a <strong>dot (.)</strong> or a space groups thousands.
+                    <br><em>Example:</em> <code>12.345,67</code>
+                </p>
+
+                <h3>The Indian Numbering System</h3>
+                <p class="intro-text">
+                    India uses a unique system. Instead of grouping every 3 digits, they group the first 3, then every 2 digits afterwards (Lakhs and Crores).
+                    <br><em>Example:</em> <code>12,34,567.89</code>
+                </p>
+            </div>
+
+            <h2 class="section-title">Use Case Examples</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
+                        E-commerce Pricing
+                    </div>
+                    <p class="example-desc">
+                        If you are building an online store that sells globally, you cannot just display "$100". A customer in Europe expects "100 €". Using this tool, developers can test how prices look in different locales to ensure the UI handles text expansion and symbol placement correctly.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" /></svg></div>
+                        Social Media Dashboards
+                    </div>
+                    <p class="example-desc">
+                        Displaying "1,456,789 Followers" takes up too much space on a mobile screen. Using the "Compact" setting, you can convert this to "1.5M". This "human-readable" format is standard for likes, views, and subscriber counts on platforms like YouTube and Instagram.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg></div>
+                        Data Science Cleaning
+                    </div>
+                    <p class="example-desc">
+                        Data scientists often receive CSV files where numbers are formatted as text with commas (e.g., "1,200"). Before analysis, these need to be stripped. Conversely, after analysis, they need to re-format raw integers back into readable strings for the final presentation.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">Why do some countries use dots instead of commas?</div>
+                    <div class="faq-answer">
+                        It is a historical convention. The UK and US adopted the dot (.) as the decimal separator, while many European countries adopted the comma (,). Toolear uses the browser's <code>Intl.NumberFormat</code> API to respect these regional differences automatically.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What is "Compact Notation"?</div>
+                    <div class="faq-answer">
+                        Compact notation is a way of writing large numbers using abbreviations. Instead of "1,000", it writes "1K". Instead of "1,000,000", it writes "1M". This is extremely useful for designing user interfaces where horizontal space is limited.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Does this support cryptocurrencies?</div>
+                    <div class="faq-answer">
+                        Yes. You can select "BTC" in the currency dropdown to format numbers as Bitcoin (e.g., ₿0.0045). For other cryptos, you can use the Decimal style and manually append the symbol, or rely on the locale's default currency formatting if supported by your browser.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is my financial data safe?</div>
+                    <div class="faq-answer">
+                        Absolutely. This tool runs entirely on the client-side (in your browser). We do not send your numbers to any server. You can safely paste salary figures, revenue data, or tax calculations without fear of data leakage.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        function formatNumber() {
+            const numInput = document.getElementById('inputNum').value;
+            const locale = document.getElementById('locale').value;
+            const style = document.getElementById('style').value;
+            const currency = document.getElementById('currency').value;
+            const decimals = parseInt(document.getElementById('decimals').value);
+            const output = document.getElementById('output');
+            const currencyBox = document.getElementById('currencyBox');
+
+            // Toggle Currency Box
+            if (style === 'currency') {
+                currencyBox.style.display = 'block';
+                // Adjust grid
+                document.querySelector('.settings-grid').style.gridTemplateColumns = 'repeat(2, 1fr)';
+            } else {
+                currencyBox.style.display = 'none';
+            }
+
+            if (numInput === '') {
+                output.innerText = '0';
+                return;
+            }
+
+            try {
+                const number = parseFloat(numInput);
+                const options = {
+                    style: style,
+                    minimumFractionDigits: decimals,
+                    maximumFractionDigits: decimals
+                };
+
+                if (style === 'currency') {
+                    options.currency = currency;
+                }
+                
+                if (style === 'compact') {
+                    // Compact usually ignores fraction digits unless specified
+                    options.notation = "compact";
+                    options.compactDisplay = "short";
+                }
+
+                const formatter = new Intl.NumberFormat(locale, options);
+                output.innerText = formatter.format(number);
+                output.style.color = "#fff";
+
+            } catch(e) {
+                output.innerText = "Error";
+                output.style.color = "#ef4444";
+            }
+        }
+
+        function copyResult() {
+            const output = document.getElementById('output');
+            const text = output.innerText;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.action-btn[onclick="copyResult()"]');
+                const originalText = btn.innerText;
+                btn.innerText = 'Copied!';
+                setTimeout(() => btn.innerText = originalText, 2000);
+            });
+        }
+
+        // Init
+        formatNumber();
+    </script>
+</body>
+</html>

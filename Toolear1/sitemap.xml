@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://toolear.space/</loc><priority>1.0</priority></url>
+  <url><loc>https://toolear.space/about.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolear.space/privacy.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolear.space/terms.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolear.space/faq.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolear.space/contact.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolear.space/advertising.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolear.space/cookie.html</loc><priority>0.8</priority></url>
+  <url><loc>https://toolear.space/dmca.html</loc><priority>0.8</priority></url>
+
+  <url><loc>https://toolear.space/json.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/pdf.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/image.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/base64.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/text-case.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/word-counter.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/url-encoder.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/csv-to-json.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/json-to-csv.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/code-minifier.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/text-diff.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/slug-generator.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/color-converter.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/gradient-generator.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/shadow-generator.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/image-to-base64.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/base64-to-image.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/image-resizer.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/password-generator.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/hash-generator.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/uuid-generator.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/timestamp-converter.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/number-formatter.html</loc><priority>0.9</priority></url>
+  <url><loc>https://toolear.space/json-validator.html</loc><priority>0.9</priority></url>
+</urlset>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Converter | HEX to RGB, HSL, CMYK | Toolear</title>
+    <meta name="description" content="Free online Color Converter. Translate colors between HEX, RGB, HSL, and CMYK formats instantly. Essential tool for web designers, developers, and print specialists.">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Toolear Color Converter",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the difference between RGB and CMYK?",
+          "acceptedAnswer": { "@type": "Answer", "text": "RGB (Red, Green, Blue) is an additive color model used for screens/digital displays. CMYK (Cyan, Magenta, Yellow, Key/Black) is a subtractive model used for physical printing. Colors often look duller in CMYK because ink cannot reproduce the brightness of a screen." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why use HSL instead of HEX?",
+          "acceptedAnswer": { "@type": "Answer", "text": "HSL (Hue, Saturation, Lightness) is more intuitive for humans. It allows you to modify a color (e.g., make it darker or less saturated) by simply changing numbers, whereas HEX codes require calculating hexadecimal math." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this support Alpha (Transparency)?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Currently, this tool focuses on solid colors (HEX 6-digit). If you need transparency, you would typically use RGBA or HSLA formats in CSS, adding an alpha value from 0 to 1 at the end." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is this accurate for print?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The CMYK conversion provided is a mathematical approximation. Professional printing requires ICC profiles and color calibration, as 'screen cyan' and 'ink cyan' are fundamentally different." }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* --- Content & Typography Styles --- */
+        .content-section { width: 100%; max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 2.5rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15); 
+        }
+        .intro-text { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 1.5rem; }
+        .intro-text strong { color: #e879f9; font-weight: 600; }
+        .intro-text h3 { color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .feature-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); transform: translateY(-3px); }
+        .feature-icon { 
+            width: 48px; height: 48px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .feature-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Steps List */
+        .steps-list { list-style: none; counter-reset: step-counter; margin-top: 1.5rem; }
+        .steps-list li { 
+            counter-increment: step-counter; position: relative; padding-left: 3.5rem; 
+            margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; 
+        }
+        .steps-list li::before { 
+            content: counter(step-counter); position: absolute; left: 0; top: 0; 
+            width: 40px; height: 40px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: #fff; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); 
+        }
+
+        /* Example Box */
+        .example-box { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1.5rem; margin-top: 1rem; transition: all 0.3s ease;
+        }
+        .example-box:hover { border-color: rgba(168, 85, 247, 0.3); background: rgba(255, 255, 255, 0.02); }
+        .example-title { 
+            font-size: 1.1rem; font-weight: 600; color: #e879f9; margin-bottom: 0.8rem; 
+            display: flex; align-items: center; gap: 0.8rem; 
+        }
+        .example-icon { 
+            width: 36px; height: 36px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .example-icon svg { width: 20px; height: 20px; color: #e879f9; }
+        .example-desc { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        /* FAQ */
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.8rem; margin-bottom: 1.2rem; transition: all 0.3s ease;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); }
+        .faq-question { 
+            font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem; 
+            display: flex; align-items: flex-start; gap: 0.8rem; 
+        }
+        .faq-question::before { 
+            content: "Q"; display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px; font-size: 0.9rem; font-weight: 700; flex-shrink: 0; 
+        }
+        .faq-answer { font-size: 1rem; color: #cbd5e1; line-height: 1.7; padding-left: 2.3rem; }
+
+        /* Tool Specific Styles */
+        .color-display {
+            position: relative; width: 150px; height: 150px; border-radius: 50%; 
+            overflow: hidden; border: 4px solid rgba(255,255,255,0.1); 
+            box-shadow: 0 0 30px rgba(168,85,247,0.3);
+            margin: 0 auto 2rem auto;
+            transition: box-shadow 0.3s ease;
+        }
+        .color-display:hover { box-shadow: 0 0 50px rgba(168,85,247,0.5); border-color: #fff; }
+        
+        .color-inputs-grid {
+            display: grid; gap: 15px; width: 100%;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        .input-group label {
+            display: block; color: #94a3b8; font-size: 0.8rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .input-group input {
+            width: 100%; padding: 1rem; padding-right: 50px;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; color: white; font-family: 'Monaco', monospace; font-size: 1rem;
+            outline: none; transition: border-color 0.3s;
+        }
+        .input-group input:focus { border-color: var(--primary-glow); }
+        
+        .copy-icon-btn {
+            position: absolute; right: 10px; bottom: 8px;
+            background: none; border: none; color: #94a3b8; cursor: pointer;
+            padding: 5px; transition: color 0.3s;
+        }
+        .copy-icon-btn:hover { color: #fff; }
+
+        /* Footer Fixed */
+        .site-footer {
+            margin-top: 6rem; padding-top: 3rem; padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>Color <span class="gradient-text">Converter</span></h1>
+        <p class="subtitle">Convert HEX colors to RGB, HSL, and CMYK formats instantly.</p>
+        
+        <div class="tool-workspace">
+            <div class="tool-panel" style="align-items:center; justify-content:center;">
+                <div class="color-display" id="colorDisplay">
+                    <input type="color" id="colorPicker" value="#a855f7" oninput="convertColor()" style="width:200%; height:200%; position:absolute; top:-50%; left:-50%; cursor:pointer; border:none; opacity:0;">
+                </div>
+                <p style="color:#aaa; font-size:0.9rem;">Click circle to pick color</p>
+            </div>
+            
+            <div class="tool-panel">
+                <div class="panel-header">Color Values</div>
+                <div class="color-inputs-grid">
+                    
+                    <div class="input-group">
+                        <label>HEX</label>
+                        <input id="hex" readonly value="#A855F7">
+                        <button class="copy-icon-btn" onclick="copyVal('hex')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        </button>
+                    </div>
+
+                    <div class="input-group">
+                        <label>RGB</label>
+                        <input id="rgb" readonly value="rgb(168, 85, 247)">
+                        <button class="copy-icon-btn" onclick="copyVal('rgb')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        </button>
+                    </div>
+
+                    <div class="input-group">
+                        <label>HSL</label>
+                        <input id="hsl" readonly value="hsl(271, 91%, 65%)">
+                        <button class="copy-icon-btn" onclick="copyVal('hsl')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        </button>
+                    </div>
+
+                    <div class="input-group">
+                        <label>CMYK</label>
+                        <input id="cmyk" readonly value="cmyk(32%, 66%, 0%, 3%)">
+                        <button class="copy-icon-btn" onclick="copyVal('cmyk')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    Color is the universal language of design, but computers speak many dialects of that language. A web developer needs <strong>HEX</strong> codes for CSS, a digital artist thinks in <strong>RGB</strong>, and a print specialist requires <strong>CMYK</strong>. Translating between these formats manually is tedious and prone to error.
+                </p>
+                <p class="intro-text">
+                    The <strong>Toolear Color Converter</strong> is your bridge between these worlds. It provides a simple visual interface to pick any color and instantly generates the corresponding code in all major formats. Whether you are tweaking a website theme, preparing a brochure for print, or just trying to match a specific brand color, this tool gives you the precise values you need.
+                </p>
+                <p class="intro-text">
+                    Accuracy and speed are key. Our tool calculates values using standard colorimetry formulas directly in your browser. This ensures that the conversion is mathematically correct and happens instantly, without reloading the page or sending data to a server.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg></div>
+                        <h4>HEX & RGB</h4>
+                        <p>Perfect for web development (CSS/HTML). Get the standard 6-digit hex code or rgb() functional notation.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg></div>
+                        <h4>HSL Support</h4>
+                        <p>Hue, Saturation, Lightness. The intuitive format for designers who want to tweak colors logically.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2.4-9h6.8M7 17h1m4 0h1m-7 4h12a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg></div>
+                        <h4>Print Ready (CMYK)</h4>
+                        <p>Essential for graphic design. Convert your digital colors to printer-friendly Cyan, Magenta, Yellow, and Key.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" /></svg></div>
+                        <h4>Visual Picker</h4>
+                        <p>Click the color circle to open your system's native color picker for easy selection from the screen.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Understanding Color Models</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    Different industries use different mathematical models to describe color. Understanding these can help you avoid costly mistakes, like a logo looking bright on screen but muddy in print.
+                </p>
+                
+                <h3>RGB (Red, Green, Blue)</h3>
+                <p class="intro-text">
+                    RGB is an <strong>Additive Color Model</strong> used by screens (monitors, phones). It starts with black (no light) and adds colored light to create white. The values range from 0 to 255. 
+                    <br><em>Use for: Websites, Apps, Video, Social Media.</em>
+                </p>
+
+                <h3>CMYK (Cyan, Magenta, Yellow, Key/Black)</h3>
+                <p class="intro-text">
+                    CMYK is a <strong>Subtractive Color Model</strong> used for printing. It starts with white (paper) and adds ink to subtract brightness, creating black. Note that screens can display millions of colors (gamut) that printers simply cannot reproduce. This converter gives you the closest mathematical approximation.
+                    <br><em>Use for: Business cards, Flyers, T-shirts, Magazines.</em>
+                </p>
+
+                <h3>HEX (Hexadecimal)</h3>
+                <p class="intro-text">
+                    HEX is just a shorthand for RGB used in web coding. It represents the Red, Green, and Blue values using base-16 numbers (0-9 and A-F). Ideally suited for copy-pasting into CSS.
+                </p>
+            </div>
+
+            <h2 class="section-title">Use Case Examples</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        Web Development
+                    </div>
+                    <p class="example-desc">
+                        A developer receives a design mockup from a graphic designer. The designer specified colors in RGB (e.g., <code>59, 130, 246</code>), but the CSS requires HEX (<code>#3B82F6</code>). This tool provides the instant translation needed to code the stylesheet accurately.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg></div>
+                        Brand Consistency
+                    </div>
+                    <p class="example-desc">
+                        A brand manager needs to ensure the company logo looks the same on the website as it does on a printed banner. They take the HEX code from the website guide and convert it to CMYK values to send to the printing shop, minimizing color deviation.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg></div>
+                        Creating Color Palettes
+                    </div>
+                    <p class="example-desc">
+                        Designers often use HSL to create variations of a color. By keeping the Hue (H) constant and changing Saturation (S) or Lightness (L), they can generate perfect shades and tints for hover states or borders without guessing numbers.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">What is HSL?</div>
+                    <div class="faq-answer">
+                        HSL stands for Hue, Saturation, Lightness. Unlike RGB which mixes light, HSL describes color more intuitively. <strong>Hue</strong> is the pigment (0-360 degrees on color wheel), <strong>Saturation</strong> is the intensity (gray vs vibrant), and <strong>Lightness</strong> is how bright it is (black vs white).
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Why do print colors look duller?</div>
+                    <div class="faq-answer">
+                        This is the difference between RGB (light emitting) and CMYK (light absorbing). Your screen can display bright neon greens and deep blues because it emits light. Paper reflects light. Inks simply cannot achieve the same dynamic range as LEDs, so converted colors often look "flatter" or darker.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is HEX faster than RGB for websites?</div>
+                    <div class="faq-answer">
+                        Performance-wise, there is zero difference to the browser. It parses both instantly. HEX is often preferred because it is shorter (7 characters) and easier to copy-paste, while RGB allows for adding transparency (rgba).
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What are "Web Safe" colors?</div>
+                    <div class="faq-answer">
+                        In the 90s, monitors could only display 256 colors. "Web Safe" colors were a set of 216 colors guaranteed to look consistent everywhere. Today, with modern screens supporting millions of colors, this concept is obsolete. You can use any HEX code you want.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        function convertColor() {
+            const hexInput = document.getElementById('colorPicker').value;
+            document.getElementById('colorDisplay').style.backgroundColor = hexInput;
+            document.getElementById('colorDisplay').style.boxShadow = `0 0 30px ${hexInput}66`; // Add glow
+            
+            document.getElementById('hex').value = hexInput.toUpperCase();
+            
+            // RGB
+            const r = parseInt(hexInput.substr(1,2),16);
+            const g = parseInt(hexInput.substr(3,2),16);
+            const b = parseInt(hexInput.substr(5,2),16);
+            document.getElementById('rgb').value = `rgb(${r}, ${g}, ${b})`;
+
+            // HSL
+            let rNorm = r / 255, gNorm = g / 255, bNorm = b / 255;
+            let max = Math.max(rNorm, gNorm, bNorm), min = Math.min(rNorm, gNorm, bNorm);
+            let h, s, l = (max + min) / 2;
+
+            if (max === min) {
+                h = s = 0; // achromatic
+            } else {
+                let d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch(max) {
+                    case rNorm: h = (gNorm - bNorm) / d + (gNorm < bNorm ? 6 : 0); break;
+                    case gNorm: h = (bNorm - rNorm) / d + 2; break;
+                    case bNorm: h = (rNorm - gNorm) / d + 4; break;
+                }
+                h /= 6;
+            }
+            // Round and format
+            let hDeg = Math.round(h * 360);
+            let sPct = Math.round(s * 100);
+            let lPct = Math.round(l * 100);
+            document.getElementById('hsl').value = `hsl(${hDeg}, ${sPct}%, ${lPct}%)`;
+
+            // CMYK
+            let c, m, y, k;
+            if (r === 0 && g === 0 && b === 0) {
+                k = 1; c = 0; m = 0; y = 0;
+            } else {
+                c = 1 - rNorm;
+                m = 1 - gNorm;
+                y = 1 - bNorm;
+                k = Math.min(c, Math.min(m, y));
+                
+                c = (c - k) / (1 - k);
+                m = (m - k) / (1 - k);
+                y = (y - k) / (1 - k);
+            }
+            
+            document.getElementById('cmyk').value = `cmyk(${Math.round(c*100)}%, ${Math.round(m*100)}%, ${Math.round(y*100)}%, ${Math.round(k*100)}%)`;
+        }
+
+        function copyVal(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            navigator.clipboard.writeText(el.value);
+            // Optional visual feedback could be added here
+            el.style.borderColor = '#10b981';
+            setTimeout(() => el.style.borderColor = 'rgba(255,255,255,0.1)', 500);
+        }
+
+        // Init
+        convertColor();
+    </script>
+</body>
+</html>

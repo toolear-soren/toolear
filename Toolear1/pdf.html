@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF to Text | Toolear</title>
+    <meta name="description" content="Extract text from PDF documents instantly. Free online PDF to text converter with no file upload required. Convert PDFs to editable text format in your browser.">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+    <style>
+        /* Improved Tool Workspace Styles */
+        .tool-workspace {
+            position: relative;
+        }
+
+        .output-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .copy-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.3));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
+        }
+
+        .copy-btn.copied {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(5, 150, 105, 0.3));
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        .copy-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        #pdfOutput {
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .file-drop-area {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-drop-area::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.05), rgba(59, 130, 246, 0.05));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .file-drop-area:hover::before {
+            opacity: 1;
+        }
+
+        /* Additional styles for content sections */
+        .content-section {
+            width: 100%;
+            max-width: 900px;
+            margin: 4rem auto 0;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .content-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .content-card:hover {
+            border-color: rgba(168, 85, 247, 0.3);
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15);
+        }
+
+        .intro-text {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #cbd5e1;
+            margin-bottom: 1.5rem;
+        }
+
+        .intro-text strong {
+            color: #e879f9;
+            font-weight: 600;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(168, 85, 247, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+            color: #e879f9;
+        }
+
+        .feature-item h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .feature-item p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .steps-list {
+            list-style: none;
+            counter-reset: step-counter;
+            margin-top: 1.5rem;
+        }
+
+        .steps-list li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #cbd5e1;
+        }
+
+        .steps-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #fff;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+        }
+
+        .example-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .example-box:hover {
+            border-color: rgba(168, 85, 247, 0.3);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .example-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #e879f9;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .example-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .example-icon svg {
+            width: 20px;
+            height: 20px;
+            color: #e879f9;
+        }
+
+        .example-desc {
+            font-size: 0.95rem;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1.8rem;
+            margin-bottom: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(168, 85, 247, 0.3);
+        }
+
+        .faq-question {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+        }
+
+        .faq-question::before {
+            content: "Q";
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .faq-answer {
+            font-size: 1rem;
+            color: #cbd5e1;
+            line-height: 1.7;
+            padding-left: 2.3rem;
+        }
+
+        /* Footer Styles */
+        .site-footer {
+            margin-top: 6rem;
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            width: 100%;
+        }
+        .footer-nav {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+            text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .content-section {
+                padding: 0 1.5rem;
+            }
+
+            .content-card {
+                padding: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 1.6rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is my PDF file uploaded to a server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No, your PDF file never leaves your device. All processing happens locally in your browser using JavaScript. This ensures complete privacy and security for your sensitive documents."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What types of PDFs can I convert to text?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "This tool works with any standard PDF document that contains text layers. It can extract text from reports, contracts, articles, ebooks, forms, and more. However, scanned PDFs (images) require OCR technology, which this tool doesn't currently support."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I extract text from password-protected PDFs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No, password-protected or encrypted PDFs cannot be processed. You'll need to remove the password protection first using the original password before extracting text."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is there a file size limit for PDF conversion?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Since processing happens in your browser, the limit depends on your device's memory and processing power. Most modern devices can handle PDFs up to 50-100 MB without issues. Very large files may take longer to process."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What can I do with the extracted text?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Once text is extracted, you can copy it to your clipboard and paste it into any text editor, word processor, or other application. This is useful for editing content, repurposing information, translating text, or analyzing data from PDF documents."
+          }
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>PDF to <span class="gradient-text">Text</span></h1>
+        <p class="subtitle">Extract raw text from PDF documents locally in your browser.</p>
+
+        <div class="tool-workspace">
+            <div class="tool-panel">
+                <div class="panel-header">Upload PDF</div>
+                <label class="file-drop-area" id="dropArea">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="#a855f7"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                    <span id="fileName" style="margin-top:10px; color:#94a3b8">Drag & Drop PDF here</span>
+                    <input type="file" id="pdfInput" accept=".pdf" style="display:none">
+                </label>
+                <button class="action-btn" onclick="extractText()">Extract Text</button>
+                <div id="loading" style="display:none; color:#a855f7; margin-top:10px;">Processing PDF...</div>
+            </div>
+            
+            <div class="tool-panel">
+                <div class="panel-header">Extracted Content</div>
+                <textarea id="pdfOutput" readonly placeholder="Text content will appear here..."></textarea>
+                <div class="output-actions">
+                    <button class="copy-btn" id="copyBtn" onclick="copyToClipboard()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                        <span id="copyBtnText">Copy Text</span>
+                    </button>
+                </div>
+                <div style="margin-top:10px; color:#666; font-size:0.8rem;" id="pageCount"></div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    Need to <strong>extract text from PDF files</strong> quickly and securely? Our free PDF to Text converter is designed for professionals, students, and anyone who needs to transform PDF documents into editable text format. Whether you're working with research papers, business reports, legal contracts, or educational materials, this tool provides instant results without compromising your privacy.
+                </p>
+                
+                <p class="intro-text">
+                    Unlike traditional online converters that upload your files to remote servers, our <strong>browser-based PDF text extraction tool</strong> processes everything locally on your device. This means your sensitive documents never leave your computer, ensuring complete confidentiality and data security. From academic researchers extracting citations to business professionals repurposing content, this tool serves thousands of users who value both convenience and privacy.
+                </p>
+
+                <p class="intro-text">
+                    The extracted text maintains its structure with clear page separations, making it easy to navigate through multi-page documents. You can copy the entire output or select specific sections to paste into your preferred text editor, word processor, or content management system. This tool is particularly valuable for <strong>content creators, translators, data analysts, and accessibility professionals</strong> who need clean text output from PDF sources.
+                </p>
+
+                <p class="intro-text">
+                    Our PDF text extractor supports standard PDF documents with embedded text layers. It works seamlessly with documents created from word processors, spreadsheet applications, presentation software, and web browsers. The tool processes files of various sizes efficiently, delivering results in seconds while maintaining accuracy. Whether you're extracting a single page or processing a comprehensive report with hundreds of pages, the tool handles your documents with precision and speed.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                        <h4>100% Private</h4>
+                        <p>All processing happens locally. Your files never leave your browser.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <h4>Instant Results</h4>
+                        <p>Extract text from PDFs in seconds with no waiting or queues.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h4>Free Forever</h4>
+                        <p>No registration, no subscriptions, no hidden fees. Completely free.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <h4>Multi-Page Support</h4>
+                        <p>Process entire documents with automatic page separation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">How This Tool Works</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    Our PDF to Text converter leverages modern browser technology to provide fast, secure text extraction without requiring server uploads. Here's the complete process:
+                </p>
+                
+                <ol class="steps-list">
+                    <li><strong>Select Your PDF File:</strong> Click the upload area or drag and drop your PDF document directly into the browser. The file is loaded into your browser's memory without being sent anywhere.</li>
+                    
+                    <li><strong>Local Processing:</strong> When you click "Extract Text," the tool uses PDF.js (Mozilla's open-source PDF rendering library) to parse your document entirely within your browser.</li>
+                    
+                    <li><strong>Text Layer Extraction:</strong> The tool reads through each page of your PDF, identifying and extracting the embedded text content while maintaining the document structure.</li>
+                    
+                    <li><strong>Page-by-Page Output:</strong> Extracted text is organized with clear page markers (--- Page 1 ---, --- Page 2 ---, etc.), making it easy to navigate and reference specific sections.</li>
+                    
+                    <li><strong>Copy and Use:</strong> Once extraction is complete, you can copy the entire text output or select specific portions to paste into any application you need.</li>
+                </ol>
+
+                <p class="intro-text" style="margin-top: 2rem;">
+                    The entire process takes place in your browser using JavaScript, which means there's no data transmission, no server processing, and no risk of your documents being stored or accessed by third parties. This approach ensures maximum privacy while delivering professional-quality results.
+                </p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Use Case Examples</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                        </div>
+                        Academic Research & Citation
+                    </div>
+                    <p class="example-desc">
+                        Students and researchers can extract text from academic papers, journal articles, and research reports to gather quotes, citations, and references. This is particularly useful for literature reviews, where you need to pull specific passages from multiple PDF sources. The extracted text can be easily formatted and cited in your own research papers or thesis work.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        Business Document Processing
+                    </div>
+                    <p class="example-desc">
+                        Professionals can convert PDF reports, proposals, and contracts into editable text for repurposing content, creating presentations, or updating documentation. This is especially valuable when you receive client materials in PDF format but need to incorporate the information into your own documents, proposals, or internal reports without manual retyping.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                            </svg>
+                        </div>
+                        Content Translation & Localization
+                    </div>
+                    <p class="example-desc">
+                        Translators and localization specialists can extract text from PDF documents to process through translation tools or create multilingual versions. Rather than working within restrictive PDF editors, you can extract the full text, translate it efficiently, and then create new documents in the target language while preserving the original as reference.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">Is my PDF file uploaded to a server?</div>
+                    <div class="faq-answer">
+                        No, your PDF file never leaves your device. All processing happens locally in your browser using JavaScript. This ensures complete privacy and security for your sensitive documents. Your files remain on your computer throughout the entire extraction process.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">What types of PDFs can I convert to text?</div>
+                    <div class="faq-answer">
+                        This tool works with any standard PDF document that contains text layers. It can extract text from reports, contracts, articles, ebooks, forms, and more. However, scanned PDFs (images) require OCR technology, which this tool doesn't currently support. If your PDF is a scanned image, you'll need an OCR tool first.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Can I extract text from password-protected PDFs?</div>
+                    <div class="faq-answer">
+                        No, password-protected or encrypted PDFs cannot be processed. You'll need to remove the password protection first using the original password before extracting text. This security measure is in place to respect document protection and copyright.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Is there a file size limit for PDF conversion?</div>
+                    <div class="faq-answer">
+                        Since processing happens in your browser, the limit depends on your device's memory and processing power. Most modern devices can handle PDFs up to 50-100 MB without issues. Very large files may take longer to process, and extremely large documents might require more powerful hardware.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">What can I do with the extracted text?</div>
+                    <div class="faq-answer">
+                        Once text is extracted, you can copy it to your clipboard and paste it into any text editor, word processor, or other application. This is useful for editing content, repurposing information, translating text, or analyzing data from PDF documents. The text maintains page structure, making it easy to reference specific sections.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+
+    </main>
+    <script src="script.js"></script>
+    <script>
+        const dropArea = document.getElementById('dropArea');
+        const input = document.getElementById('pdfInput');
+        const fileNameSpan = document.getElementById('fileName');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(e => {
+            dropArea.addEventListener(e, ev => {ev.preventDefault(); ev.stopPropagation()}, false);
+            document.body.addEventListener(e, ev => {ev.preventDefault(); ev.stopPropagation()}, false);
+        });
+        ['dragenter', 'dragover'].forEach(e => dropArea.addEventListener(e, () => {dropArea.style.borderColor = '#a855f7'; dropArea.style.background = 'rgba(255,255,255,0.05)';}));
+        ['dragleave', 'drop'].forEach(e => dropArea.addEventListener(e, () => {dropArea.style.borderColor = ''; dropArea.style.background = '';}));
+
+        dropArea.addEventListener('drop', e => handleFiles(e.dataTransfer.files));
+        input.addEventListener('change', function() { handleFiles(this.files); });
+
+        function handleFiles(files) {
+            if(files[0] && files[0].type === "application/pdf") {
+                input.files = files; 
+                fileNameSpan.innerText = files[0].name;
+            } else {
+                alert("Please select a valid PDF file.");
+            }
+        }
+
+        async function extractText() {
+            const file = input.files[0];
+            const output = document.getElementById('pdfOutput');
+            const loading = document.getElementById('loading');
+            
+            if(!file) { alert('Please select a PDF file first!'); return; }
+            
+            loading.style.display = 'block';
+            output.value = "";
+            
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+                let fullText = "";
+                
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const textContent = await page.getTextContent();
+                    const pageText = textContent.items.map(item => item.str).join(" ");
+                    fullText += `--- Page ${i} ---\n${pageText}\n\n`;
+                }
+
+                output.value = fullText;
+                output.style.borderColor = '#10b981';
+                document.getElementById('pageCount').innerText = `Processed ${pdf.numPages} pages successfully.`;
+
+            } catch (error) {
+                output.value = "Error parsing PDF: " + error.message;
+                output.style.borderColor = '#ef4444';
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        function copyToClipboard() {
+            const output = document.getElementById('pdfOutput');
+            const copyBtn = document.getElementById('copyBtn');
+            const copyBtnText = document.getElementById('copyBtnText');
+            
+            if (!output.value) {
+                alert('No text to copy! Please extract text from a PDF first.');
+                return;
+            }
+            
+            output.select();
+            document.execCommand('copy');
+            
+            // Visual feedback
+            copyBtn.classList.add('copied');
+            copyBtnText.textContent = 'Copied!';
+            
+            // Reset after 2 seconds
+            setTimeout(() => {
+                copyBtn.classList.remove('copied');
+                copyBtnText.textContent = 'Copy Text';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

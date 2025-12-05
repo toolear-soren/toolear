@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Slug Generator | SEO Friendly Link Converter | Toolear</title>
+    <meta name="description" content="Free online URL Slug Generator. Convert titles and text into clean, SEO-friendly URL slugs. Automatically removes special characters and replaces spaces with hyphens.">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Toolear Slug Generator",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a URL Slug?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A slug is the part of a URL that identifies a specific page on a website in a human-readable form. For example, in 'toolear.space/slug-generator', the part 'slug-generator' is the slug." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why use hyphens instead of underscores?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Google treats hyphens (-) as word separators, but treats underscores (_) as joining characters. 'seo-tool' is read as 'seo tool', while 'seo_tool' is read as 'seotool'. For better ranking, always use hyphens." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this tool remove special characters?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Symbols like @, #, $, %, and punctuation are stripped out because they are unsafe in URLs or look messy. The tool keeps only alphanumeric characters and hyphens." }
+        },
+        {
+          "@type": "Question",
+          "name": "How long should a slug be?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Short and descriptive is best. Aim for 3-5 words that include your main keyword. Extremely long slugs can be cut off in search results and are harder for users to share." }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* --- Content & Typography Styles --- */
+        .content-section { width: 100%; max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 2.5rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15); 
+        }
+        .intro-text { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 1.5rem; }
+        .intro-text strong { color: #e879f9; font-weight: 600; }
+        .intro-text h3 { color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .feature-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); transform: translateY(-3px); }
+        .feature-icon { 
+            width: 48px; height: 48px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .feature-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Steps List */
+        .steps-list { list-style: none; counter-reset: step-counter; margin-top: 1.5rem; }
+        .steps-list li { 
+            counter-increment: step-counter; position: relative; padding-left: 3.5rem; 
+            margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; 
+        }
+        .steps-list li::before { 
+            content: counter(step-counter); position: absolute; left: 0; top: 0; 
+            width: 40px; height: 40px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: #fff; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); 
+        }
+
+        /* Example Box */
+        .example-box { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1.5rem; margin-top: 1rem; transition: all 0.3s ease;
+        }
+        .example-box:hover { border-color: rgba(168, 85, 247, 0.3); background: rgba(255, 255, 255, 0.02); }
+        .example-title { 
+            font-size: 1.1rem; font-weight: 600; color: #e879f9; margin-bottom: 0.8rem; 
+            display: flex; align-items: center; gap: 0.8rem; 
+        }
+        .example-icon { 
+            width: 36px; height: 36px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .example-icon svg { width: 20px; height: 20px; color: #e879f9; }
+        .example-desc { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        /* FAQ */
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.8rem; margin-bottom: 1.2rem; transition: all 0.3s ease;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); }
+        .faq-question { 
+            font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem; 
+            display: flex; align-items: flex-start; gap: 0.8rem; 
+        }
+        .faq-question::before { 
+            content: "Q"; display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px; font-size: 0.9rem; font-weight: 700; flex-shrink: 0; 
+        }
+        .faq-answer { font-size: 1rem; color: #cbd5e1; line-height: 1.7; padding-left: 2.3rem; }
+
+        /* Tool specific: Output Actions */
+        .output-actions { margin-top: 15px; display: flex; justify-content: flex-end; gap: 10px; }
+        .copy-btn {
+            padding: 0.6rem 1.2rem; border-radius: 12px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.4); color: white;
+            cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: all 0.3s ease; font-weight: 500;
+        }
+        .copy-btn:hover { background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.3)); }
+        .copy-btn svg { width: 18px; height: 18px; }
+
+        /* Footer Fixed */
+        .site-footer {
+            margin-top: 6rem; padding-top: 3rem; padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>Slug <span class="gradient-text">Generator</span></h1>
+        <p class="subtitle">Convert text into clean, SEO-friendly URL slugs.</p>
+        
+        <div class="tool-workspace">
+            <div class="tool-panel">
+                <div class="panel-header">Input Title or Text</div>
+                <textarea id="input" placeholder="Hello World! This is a Blog Post Title" oninput="makeSlug()"></textarea>
+            </div>
+            <div class="tool-panel">
+                <div class="panel-header">Clean URL Slug</div>
+                <textarea id="output" readonly placeholder="hello-world-this-is-a-blog-post-title" style="color:#3b82f6; font-weight:bold;"></textarea>
+                <div class="output-actions">
+                    <button class="copy-btn" onclick="copyResult()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        <span id="copyBtnText">Copy Slug</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    In the world of <strong>Search Engine Optimization (SEO)</strong>, the structure of your URL is just as important as the content on the page. A "slug" is the part of the URL that comes after the domain name (e.g., <code>toolear.space/<strong>slug-generator</strong></code>). It should be readable, concise, and descriptive.
+                </p>
+                <p class="intro-text">
+                    The <strong>Toolear Slug Generator</strong> is a specialized utility designed to instantly convert messy headlines into clean, web-ready links. It performs several critical actions: it removes special characters (like !, ?, @), converts all text to lowercase, and replaces spaces with hyphens.
+                </p>
+                <p class="intro-text">
+                    Why use a tool? Manually editing a long blog post title into a URL format is tedious and prone to errors. You might accidentally leave a space (which becomes the ugly <code>%20</code>) or forget to lowercase a letter (which can cause duplicate content issues on some servers). Our tool automates this process locally in your browser, ensuring perfect consistency every time.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg></div>
+                        <h4>Instant Conversion</h4>
+                        <p>Type your title, and the slug appears immediately. No buttons to press, no waiting.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></div>
+                        <h4>100% Private</h4>
+                        <p>Everything runs via JavaScript on your device. We do not track the titles or links you create.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></div>
+                        <h4>Clean Syntax</h4>
+                        <p>Automatically strips emojis, punctuation, and illegal characters that break URLs.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg></div>
+                        <h4>Google Friendly</h4>
+                        <p>Uses hyphens (-) instead of underscores (_) or spaces, following Google's official SEO recommendations.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">The Anatomy of a Perfect URL</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    Creating a slug isn't just about formatting; it's about strategy. Here are the rules for creating URLs that both users and search engines love:
+                </p>
+                
+                <h3>1. Keep it Lowercase</h3>
+                <p class="intro-text">
+                    While domain names are case-insensitive, the path (the slug) is not. On Linux servers, <code>Page.html</code> and <code>page.html</code> are different files. To avoid confusion and duplicate content issues, always use lowercase. Our tool handles this automatically.
+                </p>
+
+                <h3>2. Hyphens vs. Underscores</h3>
+                <p class="intro-text">
+                    This is the golden rule of technical SEO. Google treats a hyphen as a word separator (like a space). It treats an underscore as a word joiner.
+                    <br><strong>Correct:</strong> <code>seo-tool-guide</code> (Read as: "seo tool guide")
+                    <br><strong>Incorrect:</strong> <code>seo_tool_guide</code> (Read as: "seotoolguide")
+                    <br>By using hyphens, you ensure Google can index individual keywords in your URL.
+                </p>
+
+                <h3>3. Remove "Stop Words"</h3>
+                <p class="intro-text">
+                    Stop words are common words like "a", "the", "and", "or", "of". They add length to the URL without adding semantic value.
+                    <br><strong>Title:</strong> "The 10 Best Tools for SEO"
+                    <br><strong>Bad Slug:</strong> <code>the-10-best-tools-for-seo</code>
+                    <br><strong>Good Slug:</strong> <code>10-best-seo-tools</code>
+                    <br>Shorter URLs are easier to share, remember, and they look better in search snippets.
+                </p>
+            </div>
+
+            <h2 class="section-title">How It Works</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    Toolear converts your text using standard regular expressions (Regex). Here is the logic flow:
+                </p>
+                <ol class="steps-list">
+                    <li><strong>Normalize:</strong> The input string is converted to lowercase characters.</li>
+                    <li><strong>Sanitize:</strong> Any character that is NOT a letter, number, or space is removed. This strips out commas, quotes, emojis, and symbols.</li>
+                    <li><strong>Replace:</strong> Any sequence of spaces (or existing underscores) is replaced with a single hyphen.</li>
+                    <li><strong>Trim:</strong> Leading or trailing hyphens are removed to ensure the URL looks clean (e.g., no <code>-hello-world-</code>).</li>
+                </ol>
+            </div>
+
+            <h2 class="section-title">Use Case Examples</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></div>
+                        Blogging & CMS
+                    </div>
+                    <p class="example-desc">
+                        Whether you use WordPress, Ghost, or a custom CMS, defining the "permalink" is a key step before publishing. Pasting your article headline here gives you a ready-made slug to copy into your post settings.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg></div>
+                        E-commerce Products
+                    </div>
+                    <p class="example-desc">
+                        Online stores often have product names with specifications, like "Nike Air Max 90 - White/Black (2025)". A raw URL for this would be a disaster. The tool converts it to <code>nike-air-max-90-white-black-2025</code>, which is clean and readable.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        Naming Files
+                    </div>
+                    <p class="example-desc">
+                        Developers and designers use slugs for naming files (images, PDFs) before uploading them to a server. A file named <code>My Resume (Final).pdf</code> causes download issues. <code>my-resume-final.pdf</code> works everywhere.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">What is a URL Slug?</div>
+                    <div class="faq-answer">
+                        A slug is the unique identifying part of a web address, typically located at the very end of the URL. In the address <code>toolear.space/slug-generator</code>, the string <strong>slug-generator</strong> is the slug. It tells both users and search engines what the page is about.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Why use hyphens instead of underscores?</div>
+                    <div class="faq-answer">
+                        It's about how Google parses text. Google treats hyphens (-) as separators, meaning it sees "seo-tool" as two words: "seo" and "tool". It treats underscores (_) as joiners, so "seo_tool" is read as one unknown word "seotool". For maximum SEO benefit, always use hyphens.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Does this tool remove special characters?</div>
+                    <div class="faq-answer">
+                        Yes. Characters like @, #, $, %, &, and parentheses are removed because they either have special meanings in code (like # for anchors) or simply clutter the URL. We strictly allow only alphanumeric characters (a-z, 0-9) and hyphens.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How long should a slug be?</div>
+                    <div class="faq-answer">
+                        Short and punchy is best. Aim for 3 to 5 words. Include your primary keyword. Avoid "stop words" (a, the, on). Extremely long URLs can get truncated in search results and look suspicious to users.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        function makeSlug() {
+            const val = document.getElementById('input').value;
+            const slug = val.toLowerCase()
+                .trim()
+                .replace(/[^\w\s-]/g, '') // Remove non-word chars (except spaces and hyphens)
+                .replace(/[\s_-]+/g, '-') // Replace spaces and underscores with single hyphen
+                .replace(/^-+|-+$/g, ''); // Trim hyphens from start/end
+            document.getElementById('output').value = slug;
+        }
+
+        function copyResult() {
+            const output = document.getElementById('output');
+            const btnText = document.getElementById('copyBtnText');
+            
+            if(!output.value) { alert('Nothing to copy!'); return; }
+            
+            output.select();
+            document.execCommand('copy');
+            
+            // Visual feedback
+            btnText.innerText = 'Copied!';
+            setTimeout(() => {
+                btnText.innerText = 'Copy Slug';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

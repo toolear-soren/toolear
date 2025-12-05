@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Diff Checker | Compare Two Texts Online | Toolear</title>
+    <meta name="description" content="Free online Text Diff Checker. Compare two text files side-by-side to find differences, added lines, or deleted content. Essential for developers and writers.">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Toolear Text Diff Checker",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is the comparison case-sensitive?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. In digital data processing, 'Apple' and 'apple' are completely different values (different ASCII codes). Our tool detects case differences strictly to ensure code accuracy." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my text uploaded to a server?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Privacy is paramount. This tool runs entirely in your browser using JavaScript. Whether you are comparing confidential contracts or proprietary code, the data never leaves your device." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it work with code?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. It works with any plain text format, including HTML, CSS, JavaScript, Python, JSON, XML, or just regular paragraphs of text." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is there a character limit?",
+          "acceptedAnswer": { "@type": "Answer", "text": "There is no artificial limit imposed by the tool. However, comparing massive files (e.g., millions of lines) might slow down your browser simply due to memory constraints." }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* --- Content & Typography Styles --- */
+        .content-section { width: 100%; max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 2.5rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15); 
+        }
+        .intro-text { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 1.5rem; }
+        .intro-text strong { color: #e879f9; font-weight: 600; }
+        .intro-text h3 { color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .feature-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); transform: translateY(-3px); }
+        .feature-icon { 
+            width: 48px; height: 48px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .feature-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Steps List */
+        .steps-list { list-style: none; counter-reset: step-counter; margin-top: 1.5rem; }
+        .steps-list li { 
+            counter-increment: step-counter; position: relative; padding-left: 3.5rem; 
+            margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; 
+        }
+        .steps-list li::before { 
+            content: counter(step-counter); position: absolute; left: 0; top: 0; 
+            width: 40px; height: 40px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: #fff; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); 
+        }
+
+        /* Example Box */
+        .example-box { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1.5rem; margin-top: 1rem; transition: all 0.3s ease;
+        }
+        .example-box:hover { border-color: rgba(168, 85, 247, 0.3); background: rgba(255, 255, 255, 0.02); }
+        .example-title { 
+            font-size: 1.1rem; font-weight: 600; color: #e879f9; margin-bottom: 0.8rem; 
+            display: flex; align-items: center; gap: 0.8rem; 
+        }
+        .example-icon { 
+            width: 36px; height: 36px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .example-icon svg { width: 20px; height: 20px; color: #e879f9; }
+        .example-desc { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        /* FAQ */
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.8rem; margin-bottom: 1.2rem; transition: all 0.3s ease;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); }
+        .faq-question { 
+            font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem; 
+            display: flex; align-items: flex-start; gap: 0.8rem; 
+        }
+        .faq-question::before { 
+            content: "Q"; display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px; font-size: 0.9rem; font-weight: 700; flex-shrink: 0; 
+        }
+        .faq-answer { font-size: 1rem; color: #cbd5e1; line-height: 1.7; padding-left: 2.3rem; }
+
+        /* Footer Fixed */
+        .site-footer {
+            margin-top: 6rem; padding-top: 3rem; padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>Text Diff <span class="gradient-text">Checker</span></h1>
+        <p class="subtitle">Compare two texts to see if they match perfectly.</p>
+        
+        <div class="tool-workspace">
+            <div class="tool-panel">
+                <div class="panel-header">Original Text (Text 1)</div>
+                <textarea id="txt1" style="height:250px;" placeholder="Paste original version here..."></textarea>
+                
+                <div class="panel-header" style="margin-top:1.5rem;">Modified Text (Text 2)</div>
+                <textarea id="txt2" style="height:250px;" placeholder="Paste modified version here..."></textarea>
+                
+                <button class="action-btn" onclick="compare()">Compare Texts</button>
+            </div>
+            
+            <div class="tool-panel">
+                <div class="panel-header">Comparison Result</div>
+                <div id="result" style="padding:2rem; border-radius:12px; border:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.2); height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
+                    <div style="font-size:1.2rem; color:#94a3b8; margin-bottom:1rem;">Waiting for input...</div>
+                    <div style="font-size:0.9rem; color:#666;">Paste text in both fields and click Compare.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    Identifying the difference between two blocks of text is a task that the human brain performs poorly but computers handle perfectly. Whether you are a developer checking code revisions, a writer comparing drafts, or a student verifying a citation, spotting a single missing comma or a changed word in a large document can be frustrating and error-prone.
+                </p>
+                <p class="intro-text">
+                    The <strong>Toolear Text Diff Checker</strong> is designed to solve this specific problem. It performs a strict, character-by-character comparison of two text inputs. It instantly tells you if they are identical or if they differ, preventing costly mistakes caused by "change blindness."
+                </p>
+                <p class="intro-text">
+                    Security is a major concern when comparing sensitive documents like contracts or proprietary code. Many online diff tools upload your files to a server for processing. Toolear is different: it runs <strong>100% locally in your browser</strong>. Your text inputs are compared using JavaScript directly on your device and are never transmitted over the internet.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg></div>
+                        <h4>Strict Comparison</h4>
+                        <p>Detects every difference, including whitespace, tabs, and hidden characters that look the same but aren't.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></div>
+                        <h4>100% Private</h4>
+                        <p>Client-side processing ensures your confidential documents, legal drafts, and code snippets remain secure.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></div>
+                        <h4>Instant Results</h4>
+                        <p>No waiting for file uploads. The comparison logic executes in milliseconds, even for large blocks of text.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        <h4>Code Friendly</h4>
+                        <p>Works perfectly with code snippets (JSON, HTML, JS), preserving formatting to help you spot bugs.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Why Human Eyes Fail at Diffing</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    Psychologists refer to the phenomenon of missing visual changes as <strong>"Change Blindness"</strong>. When we read, our brains use heuristics (mental shortcuts) to process information quickly. We don't read every letter; we recognize word shapes and context.
+                </p>
+                <p class="intro-text">
+                    This is efficient for reading a book, but disastrous for debugging code or proofreading contracts. If you have two sentences: 
+                    <br><em>"The quick brown fox jumps over the lazy dog."</em>
+                    <br><em>"The quick brown fox jumps over the Iazy dog."</em>
+                    <br>Most people won't notice that the second "lazy" starts with an uppercase 'I' instead of a lowercase 'l'. A computer sees different ASCII codes (108 vs 73) and flags it immediately. Using a programmatic diff checker is the only way to guarantee 100% accuracy.
+                </p>
+            </div>
+
+            <h2 class="section-title">How It Works</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    The tool uses a straightforward string comparison algorithm. Here is the process:
+                </p>
+                <ol class="steps-list">
+                    <li><strong>Input Capture:</strong> You paste two strings into the input fields. The browser stores these as standard JavaScript string variables.</li>
+                    <li><strong>Normalization (Optional):</strong> The tool reads the raw data, preserving all spaces, tabs, and newlines. It does not auto-trim or format unless you specifically ask for it (future feature).</li>
+                    <li><strong>Binary Comparison:</strong> It compares the strings character by character. Even invisible characters like a "Zero Width Space" will cause a mismatch.</li>
+                    <li><strong>Result Rendering:</strong> If the strings match exactly, it returns a success message. If they differ, it alerts you, ensuring you know that the content is not identical.</li>
+                </ol>
+            </div>
+
+            <h2 class="section-title">Use Case Examples</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        Programming & Debugging
+                    </div>
+                    <p class="example-desc">
+                        A developer copies a code snippet from StackOverflow but it doesn't work. They suspect a typo. Comparing their version against the original highlights that they missed a semicolon or used a "curly quote" instead of a "straight quote"—errors that are notoriously hard to spot visually.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg></div>
+                        Legal & Contracts
+                    </div>
+                    <p class="example-desc">
+                        A lawyer sends a contract draft to a client. The client returns it signed, saying "no changes made." Before countersigning, the lawyer uses a diff checker to compare the returned text against the original draft. The tool instantly reveals a subtle change in a liability clause that would have otherwise gone unnoticed.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg></div>
+                        Content Revision
+                    </div>
+                    <p class="example-desc">
+                        A copywriter has two versions of an article and forgets which one is the final edit. By comparing them, they can see exactly what was changed (e.g., fixed typos, rephrased sentences) and ensure they publish the correct version.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">Is the comparison case-sensitive?</div>
+                    <div class="faq-answer">
+                        Yes. In the world of digital data, an uppercase "A" and a lowercase "a" are completely different characters with different binary codes. Our tool adheres to strict comparison rules to ensure data integrity, especially for code and passwords.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is my text uploaded to a server?</div>
+                    <div class="faq-answer">
+                        No. We believe in privacy by design. This tool runs entirely within your web browser. The text you paste is processed by your own computer's CPU using JavaScript. It is never sent to our servers, logged, or analyzed by third parties.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Does it work with formatted text (Word/PDF)?</div>
+                    <div class="faq-answer">
+                        This tool compares "plain text". If you copy text from Microsoft Word or a PDF, it will paste as plain text (losing bold, italic, and fonts). This is actually better for comparison, as it focuses purely on the content rather than the styling.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can I compare code files?</div>
+                    <div class="faq-answer">
+                        Absolutely. It is an excellent tool for comparing JSON objects, XML configurations, HTML snippets, or minified code. Since it respects exact syntax, it helps developers quickly validate if two configuration files are identical.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        function compare() {
+            const t1 = document.getElementById('txt1').value;
+            const t2 = document.getElementById('txt2').value;
+            const res = document.getElementById('result');
+            
+            // Empty check
+            if(!t1 && !t2) {
+                res.innerHTML = '<div style="font-size:1.2rem; color:#94a3b8;">Waiting for input...</div>';
+                res.style.borderColor = 'rgba(255,255,255,0.1)';
+                return;
+            }
+
+            if(t1 === t2) {
+                res.innerHTML = `
+                    <div style="font-size:3rem; margin-bottom:1rem;">✅</div>
+                    <div style="font-size:1.5rem; font-weight:bold; color:#10b981; margin-bottom:0.5rem;">Identical Match</div>
+                    <div style="color:#cbd5e1;">The two texts are exactly the same.</div>
+                `;
+                res.style.borderColor = '#10b981';
+                res.style.background = 'rgba(16, 185, 129, 0.1)';
+            } else {
+                // Simple length diff logic for extra info
+                const diffLen = Math.abs(t1.length - t2.length);
+                res.innerHTML = `
+                    <div style="font-size:3rem; margin-bottom:1rem;">❌</div>
+                    <div style="font-size:1.5rem; font-weight:bold; color:#ef4444; margin-bottom:0.5rem;">Texts are Different</div>
+                    <div style="color:#cbd5e1;">Length difference: ${diffLen} characters.</div>
+                `;
+                res.style.borderColor = '#ef4444';
+                res.style.background = 'rgba(239, 68, 68, 0.1)';
+            }
+        }
+    </script>
+</body>
+</html>

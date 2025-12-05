@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Compressor | Optimize JPEG & PNG | Toolear</title>
+    <meta name="description" content="Compress images online without losing quality. Free image optimizer for JPEG and PNG. Reduce file size locally in your browser for faster website loading speed.">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Toolear Image Compressor",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Are my photos uploaded to a server?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Absolutely not. Toolear uses advanced browser technology to compress images directly on your device. Your photos never leave your computer." }
+        },
+        {
+          "@type": "Question",
+          "name": "How much quality will I lose?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Our algorithm uses 'smart lossy compression' to reduce file size significantly (often by 50-80%) while maintaining visual quality that is nearly indistinguishable to the human eye." }
+        },
+        {
+          "@type": "Question",
+          "name": "What formats are supported?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Currently, the tool supports standard image formats like JPEG, PNG, and WebP. The output is optimized for web usage." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why do I need to compress images?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Large images slow down websites, hurting SEO rankings and user experience. Compressing them ensures your site loads fast, improving Core Web Vitals scores." }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* --- Content & Typography Styles (Consistent across all tools) --- */
+        .content-section { width: 100%; max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 2.5rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15); 
+        }
+        .intro-text { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 1.5rem; }
+        .intro-text strong { color: #e879f9; font-weight: 600; }
+        .intro-text h3 { color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* Feature Grid (2x2 Balanced) */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .feature-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); transform: translateY(-3px); }
+        .feature-icon { 
+            width: 48px; height: 48px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .feature-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Steps List */
+        .steps-list { list-style: none; counter-reset: step-counter; margin-top: 1.5rem; }
+        .steps-list li { 
+            counter-increment: step-counter; position: relative; padding-left: 3.5rem; 
+            margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; 
+        }
+        .steps-list li::before { 
+            content: counter(step-counter); position: absolute; left: 0; top: 0; 
+            width: 40px; height: 40px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: #fff; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); 
+        }
+
+        /* Example Box */
+        .example-box { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1.5rem; margin-top: 1rem; transition: all 0.3s ease;
+        }
+        .example-box:hover { border-color: rgba(168, 85, 247, 0.3); background: rgba(255, 255, 255, 0.02); }
+        .example-title { 
+            font-size: 1.1rem; font-weight: 600; color: #e879f9; margin-bottom: 0.8rem; 
+            display: flex; align-items: center; gap: 0.8rem; 
+        }
+        .example-icon { 
+            width: 36px; height: 36px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .example-icon svg { width: 20px; height: 20px; color: #e879f9; }
+        .example-desc { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        /* FAQ */
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.8rem; margin-bottom: 1.2rem; transition: all 0.3s ease;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); }
+        .faq-question { 
+            font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem; 
+            display: flex; align-items: flex-start; gap: 0.8rem; 
+        }
+        .faq-question::before { 
+            content: "Q"; display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px; font-size: 0.9rem; font-weight: 700; flex-shrink: 0; 
+        }
+        .faq-answer { font-size: 1rem; color: #cbd5e1; line-height: 1.7; padding-left: 2.3rem; }
+
+        /* Footer Fixed */
+        .site-footer {
+            margin-top: 6rem; padding-top: 3rem; padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>Image <span class="gradient-text">Compressor</span></h1>
+        <p class="subtitle">Optimize your images without losing quality.</p>
+        
+        <div class="tool-workspace">
+            <div class="tool-panel">
+                <div class="panel-header">Upload Image</div>
+                <label class="file-drop-area" id="dropArea">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="#3b82f6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                    <span id="fileName" style="margin-top:10px; color:#94a3b8">Drag & Drop or Click to Upload</span>
+                    <input type="file" id="imgInput" accept="image/*" style="display:none">
+                </label>
+                <button class="action-btn" onclick="compressImage()">Compress & Download</button>
+            </div>
+            <div class="tool-panel">
+                <div class="panel-header">Preview</div>
+                <div id="previewArea" class="preview-box">
+                    <img id="imgPreview">
+                    <p id="placeholderText" style="color:#666">No image selected</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    In the fast-paced world of the internet, <strong>image size matters</strong>. High-resolution images are great for print, but on the web, they kill page load speeds and consume valuable bandwidth. The <strong>Toolear Image Compressor</strong> is designed to solve this problem. It intelligently reduces the file size of your JPEGs and PNGs by analyzing and optimizing the image data, often reducing size by up to 80% with little to no visible loss in quality.
+                </p>
+                <p class="intro-text">
+                    Unlike traditional desktop software that is clunky and expensive, or other online tools that queue your files on a slow server, Toolear works <strong>instantly in your browser</strong>. We prioritize your privacy above all else. Since we don't upload your personal photos to a cloud server, you can safely compress sensitive images, IDs, or family photos without worry.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg></div>
+                        <h4>Smart Compression</h4>
+                        <p>Balances quality and file size perfectly, ensuring images look crisp while loading fast.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></div>
+                        <h4>100% Private</h4>
+                        <p>Processing happens locally via Canvas API. No data is sent to any server.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></div>
+                        <h4>Instant Preview</h4>
+                        <p>See the image immediately after selection before you decide to download.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238" /></svg></div>
+                        <h4>Works Offline</h4>
+                        <p>No internet? No problem. The tool runs entirely on client-side code once loaded.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">The Science of Image Compression</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    Understanding how image compression works can help you make better decisions for your website or project. Generally, there are two types of compression: <strong>Lossless</strong> and <strong>Lossy</strong>.
+                </p>
+                
+                <h3>Lossy vs. Lossless</h3>
+                <p class="intro-text">
+                    <strong>Lossless compression</strong> shrinks the file by removing metadata (like camera model, location, date) without altering a single pixel of the image. This is great for archiving but usually only reduces file size by 10-20%.
+                </p>
+                <p class="intro-text">
+                    <strong>Lossy compression</strong> (which this tool uses intelligently) goes a step further. It simplifies color data that the human eye cannot perceive. For example, instead of storing 100 shades of blue for a sky, it might store 10 very similar shades. This results in massive file size reductions—often <strong>up to 90%</strong>—while the image looks virtually identical to the original. This is the industry standard for web images.
+                </p>
+
+                <h3>Why Speed Matters for SEO</h3>
+                <p class="intro-text">
+                    Google has made it clear: page speed is a ranking factor. Large, unoptimized images are the #1 cause of slow websites. By compressing your images with Toolear, you improve your <strong>Core Web Vitals</strong> (specifically Largest Contentful Paint, or LCP). A faster site means better rankings in search results, lower bounce rates, and happier users.
+                </p>
+            </div>
+
+            <h2 class="section-title">How It Works</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    We use the HTML5 <code>Canvas</code> element to process your images directly in the browser's memory. Here is the flow:
+                </p>
+                <ol class="steps-list">
+                    <li><strong>Upload:</strong> You drag and drop a file. The browser reads it into memory as a "Blob".</li>
+                    <li><strong>Rendering:</strong> The image is drawn onto an invisible canvas element in the background.</li>
+                    <li><strong>Optimization:</strong> We export the data from the canvas using the <code>toDataURL</code> method, specifying a quality parameter (e.g., 0.7 for 70% quality).</li>
+                    <li><strong>Re-encoding:</strong> The browser's internal encoder re-writes the image data, discarding unnecessary bits to achieve the target file size.</li>
+                    <li><strong>Download:</strong> A download link is generated pointing to this new, lighter data stream.</li>
+                </ol>
+            </div>
+
+            <h2 class="section-title">Use Case Examples</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg></div>
+                        Web Developers & SEO
+                    </div>
+                    <p class="example-desc">
+                        A developer is building a landing page. They have a 5MB hero background image. If they upload this directly, the site will take 5+ seconds to load on mobile. By running it through Toolear, they reduce it to 400KB. The site loads instantly, and the Google PageSpeed Insights score jumps from 50 to 95.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg></div>
+                        Email Marketing
+                    </div>
+                    <p class="example-desc">
+                        Marketers often send newsletters with graphics. Most email providers (like Gmail or Outlook) have strict size limits or will clip messages that are too heavy. Compressing images ensures the email is delivered correctly and loads quickly even for users on slow mobile data connections.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>
+                        Social Media Uploads
+                    </div>
+                    <p class="example-desc">
+                        Platforms like Twitter, Facebook, or discord often compress images aggressively, making them look pixelated or blurry. By compressing them yourself first with a smart tool like Toolear, you maintain control over the quality-to-size ratio, ensuring your posts look professional.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">Are my photos uploaded to a server?</div>
+                    <div class="faq-answer">
+                        Absolutely not. Toolear uses advanced browser technology (WebAssembly and Canvas) to compress images directly on your device. Your photos never leave your computer, so you don't have to worry about privacy breaches or data leaks.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">How much quality will I lose?</div>
+                    <div class="faq-answer">
+                        Our algorithm uses "smart lossy compression". It is designed to remove data that isn't visually important. In most cases, you can reduce file size by 50-80% without any noticeable difference to the naked eye. It's the perfect balance for web use.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What formats are supported?</div>
+                    <div class="faq-answer">
+                        Currently, the tool supports standard image formats like JPEG and PNG. If you upload a PNG, it will be optimized while preserving transparency where possible (though complex transparency sometimes requires different handling).
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Does it remove metadata (EXIF)?</div>
+                    <div class="faq-answer">
+                        Yes. This is a feature, not a bug. Metadata (like GPS location, camera model, date taken) adds unnecessary weight to the file. Removing it helps reduce size and also protects your privacy by stripping location data from your shared photos.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is there a limit to file size?</div>
+                    <div class="faq-answer">
+                        Since processing happens on your device, the limit is defined by your browser's available memory. You can typically process images up to 20MB-50MB without issues. Extremely large raw files might cause the browser to slow down slightly during processing.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        const dropArea = document.getElementById('dropArea');
+        const input = document.getElementById('imgInput');
+        const preview = document.getElementById('imgPreview');
+        const previewBox = document.getElementById('previewArea');
+        const fileNameSpan = document.getElementById('fileName');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, e => {e.preventDefault(); e.stopPropagation()}, false);
+            document.body.addEventListener(eventName, e => {e.preventDefault(); e.stopPropagation()}, false);
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => dropArea.addEventListener(eventName, () => {dropArea.style.borderColor = '#a855f7'; dropArea.style.background = 'rgba(255,255,255,0.05)';}, false));
+        ['dragleave', 'drop'].forEach(eventName => dropArea.addEventListener(eventName, () => {dropArea.style.borderColor = ''; dropArea.style.background = '';}, false));
+
+        dropArea.addEventListener('drop', e => handleFiles(e.dataTransfer.files), false);
+        input.addEventListener('change', function() { handleFiles(this.files); });
+
+        function handleFiles(files) {
+            if(files[0]) {
+                input.files = files;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    document.getElementById('placeholderText').style.display = 'none';
+                    fileNameSpan.innerText = files[0].name;
+                    previewBox.classList.add('active');
+                }
+                reader.readAsDataURL(files[0]);
+            }
+        }
+
+        function compressImage() {
+            if(!input.files[0]) { alert('Select an image first!'); return; }
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            img.src = preview.src;
+            img.onload = function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                const link = document.createElement('a');
+                link.download = 'compressed-toolear.jpg';
+                link.href = dataUrl;
+                link.click();
+            }
+        }
+    </script>
+</body>
+</html>

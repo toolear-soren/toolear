@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 to Image Decoder | Convert String to File | Toolear</title>
+    <meta name="description" content="Free online Base64 to Image converter. Paste your Data URI string and instantly visualize it as a PNG, JPG, or GIF. Download the decoded image file securely in your browser.">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Toolear Base64 to Image",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I save the image?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Once the Base64 string is decoded and the preview appears, simply click the 'Download Image' button to save it to your computer as a PNG or JPG file." }
+        },
+        {
+          "@type": "Question",
+          "name": "Why is my image not showing?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The string must be a valid Data URI. It typically starts with 'data:image/png;base64,'. If your string is just the raw code without this prefix, you may need to add it manually or check if the string was corrupted during copy-paste." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the data sent to a server?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. The decoding happens locally using your browser's rendering engine. We do not upload or store your images or strings." }
+        },
+        {
+          "@type": "Question",
+          "name": "What formats are supported?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The tool supports any format your browser can display, including PNG, JPEG, GIF, WEBP, SVG, and BMP." }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* --- Content & Typography Styles --- */
+        .content-section { width: 100%; max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 2.5rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15); 
+        }
+        .intro-text { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 1.5rem; }
+        .intro-text strong { color: #e879f9; font-weight: 600; }
+        .intro-text h3 { color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .feature-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); transform: translateY(-3px); }
+        .feature-icon { 
+            width: 48px; height: 48px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .feature-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Steps List */
+        .steps-list { list-style: none; counter-reset: step-counter; margin-top: 1.5rem; }
+        .steps-list li { 
+            counter-increment: step-counter; position: relative; padding-left: 3.5rem; 
+            margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; 
+        }
+        .steps-list li::before { 
+            content: counter(step-counter); position: absolute; left: 0; top: 0; 
+            width: 40px; height: 40px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: #fff; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); 
+        }
+
+        /* Example Box */
+        .example-box { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1.5rem; margin-top: 1rem; transition: all 0.3s ease;
+        }
+        .example-box:hover { border-color: rgba(168, 85, 247, 0.3); background: rgba(255, 255, 255, 0.02); }
+        .example-title { 
+            font-size: 1.1rem; font-weight: 600; color: #e879f9; margin-bottom: 0.8rem; 
+            display: flex; align-items: center; gap: 0.8rem; 
+        }
+        .example-icon { 
+            width: 36px; height: 36px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .example-icon svg { width: 20px; height: 20px; color: #e879f9; }
+        .example-desc { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        /* FAQ */
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.8rem; margin-bottom: 1.2rem; transition: all 0.3s ease;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); }
+        .faq-question { 
+            font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem; 
+            display: flex; align-items: flex-start; gap: 0.8rem; 
+        }
+        .faq-question::before { 
+            content: "Q"; display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px; font-size: 0.9rem; font-weight: 700; flex-shrink: 0; 
+        }
+        .faq-answer { font-size: 1rem; color: #cbd5e1; line-height: 1.7; padding-left: 2.3rem; }
+
+        /* Tool Specific Styles */
+        .preview-img-container {
+            width: 100%; height: 350px; 
+            background: rgba(0,0,0,0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 1rem; overflow: hidden;
+            border: 1px dashed rgba(255,255,255,0.1);
+            position: relative;
+        }
+        .preview-img-container img { max-width: 100%; max-height: 100%; display: none; }
+        .preview-placeholder { color: #666; font-size: 0.9rem; }
+        
+        .output-actions { margin-top: 15px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        .copy-btn {
+            padding: 0.6rem 1.2rem; border-radius: 12px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.4); color: white;
+            cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: all 0.3s ease; font-weight: 500;
+        }
+        .copy-btn:hover { background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(59, 130, 246, 0.3)); }
+        .copy-btn svg { width: 18px; height: 18px; }
+        
+        .action-btn-secondary {
+            background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; transition: all 0.3s;
+        }
+        .action-btn-secondary:hover { background: rgba(255,255,255,0.2); }
+
+        /* Footer Fixed */
+        .site-footer {
+            margin-top: 6rem; padding-top: 3rem; padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>Base64 to <span class="gradient-text">Image</span></h1>
+        <p class="subtitle">Decode Base64 strings back to images and download them.</p>
+        
+        <div class="tool-workspace">
+            <div class="tool-panel">
+                <div class="panel-header">Input Base64 String</div>
+                <div style="display:flex; justify-content:flex-end; margin-bottom:10px; gap:10px;">
+                    <button class="action-btn-secondary" onclick="pasteClipboard()">Paste</button>
+                    <button class="action-btn-secondary" onclick="clearInput()">Clear</button>
+                </div>
+                <textarea id="input" placeholder="Paste your string here (e.g. data:image/png;base64,...)" spellcheck="false"></textarea>
+                <button class="action-btn" onclick="showImage()">Visualize Image</button>
+            </div>
+            
+            <div class="tool-panel">
+                <div class="panel-header">Image Preview</div>
+                <div class="preview-img-container" id="previewBox">
+                    <img id="preview">
+                    <p id="placeholder" class="preview-placeholder">Image will appear here</p>
+                </div>
+                
+                <div id="imageInfo" style="display:none; margin-bottom:1rem;">
+                    <div style="display:flex; justify-content:space-between; color:#cbd5e1; font-size:0.9rem; padding:10px; background:rgba(255,255,255,0.05); border-radius:8px;">
+                        <span id="dimensions">- x -</span>
+                        <span id="fileSize">- KB</span>
+                        <span id="mimeType">-</span>
+                    </div>
+                </div>
+
+                <div class="output-actions">
+                    <button class="copy-btn" id="downloadBtn" onclick="downloadImage()" style="width:100%; justify-content:center; display:none;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                        Download Image
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    Have you ever opened a code file and found a massive block of random-looking text starting with <code>data:image...</code>? That is a <strong>Base64 Encoded Image</strong>. It's a way of representing visual data (like a PNG or JPEG) as a text string, allowing it to be embedded directly into HTML, CSS, or JSON files without needing a separate file upload.
+                </p>
+                <p class="intro-text">
+                    The <strong>Toolear Base64 to Image Decoder</strong> is designed to reverse this process. It takes that long, confusing string and instantly renders it back into a viewable image. This is incredibly useful for developers debugging API responses, data analysts recovering images from databases, or anyone curious about what a specific Data URI contains.
+                </p>
+                <p class="intro-text">
+                    Unlike other tools that force you to save the file to view it, Toolear provides an instant preview directly in your browser. And because privacy is our priority, the decoding process happens <strong>100% client-side</strong>. Your potentially sensitive images (like ID scans or private photos stored in DBs) are processed by your own computer's memory and are never sent to our servers.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg></div>
+                        <h4>Instant Visualization</h4>
+                        <p>See the contents of any valid Data URI string immediately. Debug broken images or verify database entries in seconds.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></div>
+                        <h4>100% Private</h4>
+                        <p>The decoder runs in your browser using JavaScript. We never see, store, or transmit your images.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg></div>
+                        <h4>Save as File</h4>
+                        <p>One-click download button allows you to save the decoded image to your computer as a PNG, JPG, or GIF.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg></div>
+                        <h4>Detailed Info</h4>
+                        <p>Automatically calculates and displays the image dimensions (width x height) and file size upon decoding.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Understanding Data URIs</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    A <strong>Data URI</strong> (Uniform Resource Identifier) is a scheme that allows you to include data in-line in web pages as if they were external resources. The syntax is:
+                    <br><code>data:[<mediatype>][;base64],<data></code>
+                </p>
+                
+                <h3>The Structure</h3>
+                <p class="intro-text">
+                    <strong>1. Prefix:</strong> <code>data:image/png;base64,</code> tells the browser "This is an image, specifically a PNG, and it is encoded in Base64."
+                    <br><strong>2. Payload:</strong> The rest of the string is the actual image data converted into ASCII characters.
+                </p>
+
+                <h3>Why decode it?</h3>
+                <p class="intro-text">
+                    Sometimes you receive these strings in JSON responses from APIs, or you find them in a database dump. You cannot simply double-click a text string to open it in Photoshop. You need a decoder to interpret the Base64 alphabet back into binary pixel data so your computer can display it as a picture.
+                </p>
+            </div>
+
+            <h2 class="section-title">Use Case Examples</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        API Debugging
+                    </div>
+                    <p class="example-desc">
+                        Developers working with APIs (like a User Profile service) often receive the user's avatar as a Base64 string in the JSON response. If the avatar isn't loading in the app, the developer can paste the string here to verify if the image data itself is valid or corrupted.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg></div>
+                        Database Recovery
+                    </div>
+                    <p class="example-desc">
+                        Some databases (like MongoDB or older SQL setups) store images directly in columns as text strings. If you are migrating data or need to recover a specific file from a backup log, this tool allows you to convert that database text entry back into a downloadable file.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg></div>
+                        Email Signature Extraction
+                    </div>
+                    <p class="example-desc">
+                        To prevent images from being blocked by email clients, signatures often embed logos as Base64. If you have the HTML source of an email and want to extract the company logo to save it, simply copy the `src` attribute content and paste it here.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">How do I save the image?</div>
+                    <div class="faq-answer">
+                        It's easy. Once you paste the string and click "Visualize", a preview will appear on the right. Below the preview, a "Download Image" button will appear. Clicking it will prompt your browser to save the file (usually as image.png or image.jpg depending on the data).
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Why is my image not showing?</div>
+                    <div class="faq-answer">
+                        There are two common reasons. 1) The string might be incomplete. Base64 strings are very long; ensure you copied the <em>entire</em> string. 2) It might be missing the prefix. A valid Data URI must start with something like <code>data:image/jpeg;base64,</code>. If your string is just random letters, try adding that prefix.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is the data sent to a server?</div>
+                    <div class="faq-answer">
+                        No. Toolear prioritizes security. The decoding logic runs entirely within your web browser using the standard DOM rendering engine. Your private data never leaves your device.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What formats are supported?</div>
+                    <div class="faq-answer">
+                        Since we use the browser to display the image, we support whatever your browser supports. This typically includes PNG, JPEG, GIF, WEBP, SVG, and BMP. PDF files are not supported by this specific tool (they require a PDF viewer).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        async function pasteClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
+                document.getElementById('input').value = text;
+            } catch (err) {
+                alert('Failed to read clipboard');
+            }
+        }
+
+        function clearInput() {
+            document.getElementById('input').value = '';
+            document.getElementById('preview').style.display = 'none';
+            document.getElementById('placeholder').style.display = 'block';
+            document.getElementById('imageInfo').style.display = 'none';
+            document.getElementById('downloadBtn').style.display = 'none';
+        }
+
+        function showImage() {
+            const val = document.getElementById('input').value.trim();
+            const img = document.getElementById('preview');
+            const placeholder = document.getElementById('placeholder');
+            const infoBox = document.getElementById('imageInfo');
+            const downloadBtn = document.getElementById('downloadBtn');
+            
+            if(val === "") {
+                alert('Please paste a Base64 string first.');
+                return;
+            }
+
+            // Basic validation/fix
+            let src = val;
+            if (!val.startsWith('data:image')) {
+                // Try to guess or just warn
+                // Let's assume user might have pasted raw base64 without prefix
+                // Check if it looks like PNG header (iVBOR...)
+                if (val.startsWith('iVBOR')) {
+                    src = 'data:image/png;base64,' + val;
+                } else if (val.startsWith('/9j/')) {
+                    src = 'data:image/jpeg;base64,' + val;
+                } else if (val.startsWith('R0lGOD')) {
+                    src = 'data:image/gif;base64,' + val;
+                } else {
+                    // Try generic or alert
+                    if(!confirm("This string doesn't look like a standard Data URI (missing 'data:image...'). Try to render anyway?")) {
+                        return;
+                    }
+                    src = 'data:image/png;base64,' + val; // Default try
+                }
+            }
+
+            img.onload = function() {
+                placeholder.style.display = 'none';
+                img.style.display = 'block';
+                infoBox.style.display = 'block';
+                downloadBtn.style.display = 'flex';
+                
+                // Info
+                document.getElementById('dimensions').innerText = `${this.naturalWidth} x ${this.naturalHeight} px`;
+                
+                // Estimate size (Base64 length * 0.75)
+                const base64Len = val.indexOf(',') > -1 ? val.split(',')[1].length : val.length;
+                const sizeInBytes = Math.ceil(base64Len * 0.75);
+                const sizeInKb = (sizeInBytes / 1024).toFixed(2);
+                document.getElementById('fileSize').innerText = `${sizeInKb} KB`;
+                
+                // Mime
+                const mime = src.substring(src.indexOf(':')+1, src.indexOf(';'));
+                document.getElementById('mimeType').innerText = mime.toUpperCase().replace('IMAGE/','');
+            };
+
+            img.onerror = function() {
+                alert('Error: Could not render image. The string might be corrupted or invalid.');
+                clearInput();
+            };
+
+            img.src = src;
+        }
+
+        function downloadImage() {
+            const img = document.getElementById('preview');
+            if (!img.src) return;
+            
+            const link = document.createElement('a');
+            link.href = img.src;
+            
+            // Guess extension
+            let ext = 'png';
+            if (img.src.includes('image/jpeg')) ext = 'jpg';
+            if (img.src.includes('image/gif')) ext = 'gif';
+            if (img.src.includes('image/webp')) ext = 'webp';
+            if (img.src.includes('image/svg')) ext = 'svg';
+
+            link.download = `decoded-image.${ext}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>

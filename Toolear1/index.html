@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toolear | Free Online Tools for Developers & Creators</title>
+    <meta name="description" content="A suite of free, privacy-focused online tools. JSON formatters, image compressors, code minifiers, and converters running locally in your browser. Instant results, no ads.">
+    <link rel="stylesheet" href="style.css">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4392194449949571" crossorigin="anonymous"></script>
+
+    <style>
+        /* --- Footer Styles --- */
+        .site-footer {
+            margin-top: 8rem; padding-top: 3rem; padding-bottom: 3rem;
+            text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.05); width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+        }
+        .footer-copy { color: #475569; font-size: 0.85rem; }
+
+        /* --- Category Filters --- */
+        .category-filters {
+            display: flex; gap: 12px; margin-bottom: 3rem; flex-wrap: wrap; justify-content: center;
+        }
+        .category-btn {
+            padding: 0.7rem 1.5rem; border-radius: 20px;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; font-weight: 500;
+        }
+        .category-btn:hover {
+            background: rgba(255, 255, 255, 0.08); border-color: rgba(168, 85, 247, 0.3); color: #ffffff;
+        }
+        .category-btn.active {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border-color: rgba(168, 85, 247, 0.5); color: #ffffff;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+        }
+
+        /* --- Usage Badge --- */
+        .usage-badge {
+            position: absolute; top: 1rem; right: 1rem; padding: 0.4rem 0.8rem;
+            border-radius: 12px; background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3); font-size: 0.75rem;
+            color: #c4b5fd; font-weight: 600; backdrop-filter: blur(10px);
+        }
+
+        /* --- NEW LANDING SECTIONS --- */
+        .content-section { width: 100%; max-width: 1100px; margin: 8rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2.5rem; font-weight: 800; margin-bottom: 2.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+            letter-spacing: -1px;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 32px; padding: 4rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.4s ease;
+            position: relative; overflow: hidden;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.4); 
+            box-shadow: 0 12px 40px rgba(168, 85, 247, 0.2);
+            transform: translateY(-5px);
+        }
+        /* Subtle inner glow for cards */
+        .content-card::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 50% -20%, rgba(168, 85, 247, 0.1), transparent 70%);
+            pointer-events: none;
+        }
+
+        .intro-text { 
+            font-size: 1.15rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 2rem; 
+            text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;
+        }
+        .intro-text strong { color: #e879f9; font-weight: 700; }
+
+        /* Feature Grid (Why Choose Us) */
+        .feature-grid { 
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 3rem; 
+        }
+        /* Desktop breakpoint remains */
+        @media (max-width: 1024px) { .feature-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px; padding: 2.5rem 2rem; transition: all 0.3s ease; 
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            height: 100%;
+        }
+        .feature-item:hover { 
+            background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.4); 
+            transform: translateY(-5px); 
+        }
+        .feature-icon { 
+            width: 64px; height: 64px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.2);
+        }
+        .feature-icon svg { width: 32px; height: 32px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; color: #fff; }
+        .feature-item p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Use Case Grid (Built For) */
+        .use-case-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        
+        .use-case-box {
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px; padding: 2.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; height: 100%; text-align: left;
+        }
+        .use-case-box:hover { 
+            border-color: rgba(168, 85, 247, 0.4); background: rgba(255, 255, 255, 0.02); 
+            transform: translateY(-5px); 
+        }
+        .use-case-header { display: flex; align-items: center; gap: 16px; margin-bottom: 1.5rem; }
+        .use-case-icon { 
+            width: 56px; height: 56px; border-radius: 16px; 
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
+        }
+        .use-case-icon svg { width: 28px; height: 28px; }
+        .use-case-title { font-size: 1.3rem; font-weight: 800; color: #fff; }
+        .use-case-desc { font-size: 1rem; color: #94a3b8; line-height: 1.7; }
+
+        /* Closing */
+        .closing-section { text-align: center; padding-top: 2rem; }
+        .closing-text {
+            display: inline-block;
+            color: #a855f7; font-size: 1.1rem; font-weight: 600;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            border-radius: 50px;
+            background: rgba(168, 85, 247, 0.1);
+            letter-spacing: 1px;
+        }
+
+        /* =========================================
+           ИСПРАВЛЕНИЯ МОБИЛЬНОЙ ВЕРСИИ (Max-width 768px)
+           Не влияет на ПК версию
+           ========================================= */
+        @media (max-width: 768px) {
+            /* Глобальные отступы */
+            .content-section { 
+                margin: 4rem auto 0 !important; /* Уменьшен верхний отступ */
+                padding: 0 1.5rem !important; /* Боковые отступы чтобы текст не прилипал */
+            }
+            .content-card { 
+                padding: 2rem 1.5rem !important; /* Уменьшены внутренние отступы карточек */
+                border-radius: 24px !important;
+            }
+            .section-title { 
+                font-size: 1.75rem !important; /* Заголовки секций меньше */
+                margin-bottom: 1.5rem !important; 
+            }
+            
+            /* Главный заголовок */
+            h1 { font-size: 2.5rem !important; }
+            .subtitle { font-size: 1rem !important; padding: 0 1rem !important; }
+
+            /* Читаемость вводного текста */
+            .intro-text { font-size: 1rem !important; line-height: 1.6 !important; margin-bottom: 1.5rem !important; }
+
+            /* Сетка преимуществ (4 элемента) -> в 1 колонку */
+            .feature-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; margin-top: 2rem !important; }
+            .feature-item { padding: 2rem 1.5rem !important; }
+            /* ВАЖНО: Запрет на сплющивание иконок */
+            .feature-icon { flex-shrink: 0 !important; } 
+
+            /* Сетка "Built For" (3 элемента) -> в 1 колонку */
+            .use-case-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+            .use-case-box { padding: 2rem 1.5rem !important; }
+            /* ВАЖНО: Запрет на сплющивание иконок */
+            .use-case-icon { flex-shrink: 0 !important; }
+
+            /* Финальная плашка */
+            .closing-section { padding-top: 1.5rem !important; }
+            .closing-text { 
+                font-size: 0.95rem !important; 
+                padding: 0.7rem 1.2rem !important; 
+                width: 100%; max-width: 300px; /* Плашка шире на мобилках */
+            }
+
+            /* Отступы футера */
+            .site-footer { 
+                margin-top: 4rem !important; 
+                padding-top: 2rem !important; 
+                padding-bottom: 2rem !important; 
+            }
+            .footer-nav { gap: 20px !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div>
+    <div class="grid-bg"></div>
+    <div class="orb-container">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <main class="container">
+        <div class="logo-wrapper">
+            <div class="logo-glow-ring"></div>
+            <div class="logo-circle">
+                <span class="logo-text">T</span>
+            </div>
+            <div class="logo-sparkle"></div>
+        </div>
+
+        <h1 style="font-size: 3.5rem; margin-bottom: 1rem;">Free Tools for <span class="gradient-text">Modern Creators</span></h1>
+        <p class="subtitle" style="font-size: 1.2rem; max-width: 700px;">A curated suite of fast, privacy-focused utilities. No ads, no sign-ups, just instant results right in your browser.</p>
+
+        <div id="tools-anchor" class="search-container">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input type="text" class="search-input" placeholder="Search for a tool (e.g. 'pdf', 'color', 'json')...">
+        </div>
+
+        <div class="category-filters">
+            <button class="category-btn active" data-category="all">All Tools</button>
+            <button class="category-btn" data-category="text">Text</button>
+            <button class="category-btn" data-category="converter">Converters</button>
+            <button class="category-btn" data-category="image">Image</button>
+            <button class="category-btn" data-category="design">Design</button>
+            <button class="category-btn" data-category="security">Security</button>
+            <button class="category-btn" data-category="dev">Developer</button>
+        </div>
+
+        <div class="tools-grid">
+            
+            <a href="json.html" class="card" data-category="dev converter" data-animate>
+                <span class="usage-badge">10K+ uses</span>
+                <div class="icon-box"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                <h3>JSON Formatter</h3>
+                <p>Beautify, validate, and minify your JSON data instantly.</p>
+            </a>
+
+            <a href="pdf.html" class="card" data-category="converter" data-animate>
+                <span class="usage-badge">8K+ uses</span>
+                <div class="icon-box"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg></div>
+                <h3>PDF to Text</h3>
+                <p>Extract raw text content from PDF documents locally.</p>
+            </a>
+
+            <a href="image.html" class="card" data-category="image" data-animate>
+                <span class="usage-badge">15K+ uses</span>
+                <div class="icon-box"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg></div>
+                <h3>Image Compressor</h3>
+                <p>Reduce file size smartly while maintaining visual quality.</p>
+            </a>
+
+            <a href="base64.html" class="card" data-category="converter security" data-animate>
+                <span class="usage-badge">12K+ uses</span>
+                <div class="icon-box"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg></div>
+                <h3>Base64 Encoder</h3>
+                <p>Convert text and files to Base64 strings securely.</p>
+            </a>
+
+            <a href="text-case.html" class="card search-only hidden" data-category="text" data-animate>
+                <span class="usage-badge">6K+ uses</span>
+                <div class="icon-box">Tt</div>
+                <h3>Text Case Converter</h3><p>Change text to UPPERCASE, lowercase, or Capitalize.</p>
+            </a>
+            <a href="word-counter.html" class="card search-only hidden" data-category="text" data-animate>
+                <span class="usage-badge">9K+ uses</span>
+                <div class="icon-box">123</div>
+                <h3>Word Counter</h3><p>Count words, characters, and lines in real-time.</p>
+            </a>
+            <a href="url-encoder.html" class="card search-only hidden" data-category="converter" data-animate>
+                <span class="usage-badge">5K+ uses</span>
+                <div class="icon-box">Url</div>
+                <h3>URL Encoder</h3><p>Encode and decode URL strings safely.</p>
+            </a>
+            <a href="csv-to-json.html" class="card search-only hidden" data-category="converter dev" data-animate>
+                <span class="usage-badge">7K+ uses</span>
+                <div class="icon-box">{ }</div>
+                <h3>CSV to JSON</h3><p>Convert CSV table data to JSON objects.</p>
+            </a>
+            <a href="json-to-csv.html" class="card search-only hidden" data-category="converter dev" data-animate>
+                <span class="usage-badge">7K+ uses</span>
+                <div class="icon-box">Tab</div>
+                <h3>JSON to CSV</h3><p>Convert JSON objects back to CSV format.</p>
+            </a>
+            <a href="code-minifier.html" class="card search-only hidden" data-category="dev" data-animate>
+                <span class="usage-badge">4K+ uses</span>
+                <div class="icon-box">Min</div>
+                <h3>Code Minifier</h3><p>Minify HTML, CSS, and JS code.</p>
+            </a>
+            <a href="text-diff.html" class="card search-only hidden" data-category="text dev" data-animate>
+                <span class="usage-badge">3K+ uses</span>
+                <div class="icon-box">≠</div>
+                <h3>Text Diff Checker</h3><p>Compare two texts and highlight differences.</p>
+            </a>
+            <a href="slug-generator.html" class="card search-only hidden" data-category="text dev" data-animate>
+                <span class="usage-badge">5K+ uses</span>
+                <div class="icon-box">slug</div>
+                <h3>Slug Generator</h3><p>Generate SEO-friendly URL slugs.</p>
+            </a>
+
+            <a href="color-converter.html" class="card search-only hidden" data-category="design converter" data-animate>
+                <span class="usage-badge">8K+ uses</span>
+                <div class="icon-box">RGB</div>
+                <h3>Color Converter</h3><p>Convert HEX to RGB, HSL and CMYK.</p>
+            </a>
+            <a href="gradient-generator.html" class="card search-only hidden" data-category="design" data-animate>
+                <span class="usage-badge">11K+ uses</span>
+                <div class="icon-box">Grd</div>
+                <h3>Gradient Generator</h3><p>Create beautiful CSS gradients visually.</p>
+            </a>
+            <a href="shadow-generator.html" class="card search-only hidden" data-category="design" data-animate>
+                <span class="usage-badge">6K+ uses</span>
+                <div class="icon-box">Shd</div>
+                <h3>Box Shadow</h3><p>Generate CSS box-shadows visually.</p>
+            </a>
+
+            <a href="image-to-base64.html" class="card search-only hidden" data-category="image converter" data-animate>
+                <span class="usage-badge">9K+ uses</span>
+                <div class="icon-box">B64</div>
+                <h3>Image to Base64</h3><p>Convert images to Base64 strings.</p>
+            </a>
+            <a href="base64-to-image.html" class="card search-only hidden" data-category="image converter" data-animate>
+                <span class="usage-badge">7K+ uses</span>
+                <div class="icon-box">Img</div>
+                <h3>Base64 to Image</h3><p>Visualize Base64 strings as images.</p>
+            </a>
+            <a href="image-resizer.html" class="card search-only hidden" data-category="image" data-animate>
+                <span class="usage-badge">13K+ uses</span>
+                <div class="icon-box">Px</div>
+                <h3>Image Resizer</h3><p>Resize images to custom dimensions.</p>
+            </a>
+
+            <a href="password-generator.html" class="card search-only hidden" data-category="security" data-animate>
+                <span class="usage-badge">20K+ uses</span>
+                <div class="icon-box">***</div>
+                <h3>Password Generator</h3><p>Generate strong, secure random passwords.</p>
+            </a>
+            <a href="hash-generator.html" class="card search-only hidden" data-category="security dev" data-animate>
+                <span class="usage-badge">5K+ uses</span>
+                <div class="icon-box">#</div>
+                <h3>Hash Generator</h3><p>Create SHA-256 and MD5 hashes.</p>
+            </a>
+            <a href="uuid-generator.html" class="card search-only hidden" data-category="dev security" data-animate>
+                <span class="usage-badge">8K+ uses</span>
+                <div class="icon-box">ID</div>
+                <h3>UUID Generator</h3><p>Generate unique UUID v4 identifiers.</p>
+            </a>
+
+            <a href="timestamp-converter.html" class="card search-only hidden" data-category="converter dev" data-animate>
+                <span class="usage-badge">4K+ uses</span>
+                <div class="icon-box">Tm</div>
+                <h3>Unix Timestamp</h3><p>Convert dates to Unix timestamps and back.</p>
+            </a>
+            <a href="number-formatter.html" class="card search-only hidden" data-category="text" data-animate>
+                <span class="usage-badge">3K+ uses</span>
+                <div class="icon-box">1,0</div>
+                <h3>Number Formatter</h3><p>Format large numbers with commas.</p>
+            </a>
+            <a href="json-validator.html" class="card search-only hidden" data-category="dev" data-animate>
+                <span class="usage-badge">6K+ uses</span>
+                <div class="icon-box">OK</div>
+                <h3>JSON Validator</h3><p>Validate and fix your JSON data.</p>
+            </a>
+
+            <div class="no-results">No tools found matching your search.</div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">The Essential Toolkit for the Modern Web</h2>
+            <div class="content-card" style="text-align: center;">
+                <p class="intro-text">
+                    <strong>Toolear</strong> is a comprehensive suite of digital utilities designed to simplify your daily workflow. Whether you are a developer debugging API responses, a content creator resizing assets for social media, or a data analyst converting file formats, we provide a distraction-free environment where efficiency comes first.
+                </p>
+                <p class="intro-text" style="margin-bottom: 0;">
+                    We believe basic tools should be <strong>fast, free, and accessible</strong>. You don't need to install extensions, register for accounts, or navigate complex menus. Just open the tool, paste your data, and get the result instantly.
+                </p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Why Professionals Choose Toolear</h2>
+            <div class="content-card">
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></div>
+                        <h4>Privacy First</h4>
+                        <p>Your data is processed locally in your browser. Files and text never leave your device.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></div>
+                        <h4>Lightning Fast</h4>
+                        <p>Instant results without server round-trips, waiting queues, or loading screens.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        <h4>Dev Friendly</h4>
+                        <p>Clean, standards-compliant outputs for JSON, CSS, UUIDs, and more.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
+                        <h4>Always Free</h4>
+                        <p>No paywalls, subscriptions, or hidden limits. Accessible to everyone, forever.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">Built for Every Workflow</h2>
+            <div class="content-card">
+                <div class="use-case-grid">
+                    <div class="use-case-box">
+                        <div class="use-case-header">
+                            <div class="use-case-icon" style="border-color: rgba(168, 85, 247, 0.3); background: rgba(168, 85, 247, 0.1);">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#a855f7" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                            </div>
+                            <div class="use-case-title">Developers</div>
+                        </div>
+                        <p class="use-case-desc">Format and validate JSON, generate secure hashes and UUIDs, minify code, and convert data formats directly in your browser.</p>
+                    </div>
+
+                    <div class="use-case-box">
+                        <div class="use-case-header">
+                            <div class="use-case-icon" style="border-color: rgba(59, 130, 246, 0.3); background: rgba(59, 130, 246, 0.1);">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#3b82f6" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>
+                            </div>
+                            <div class="use-case-title">Designers</div>
+                        </div>
+                        <p class="use-case-desc">Generate perfect CSS gradients and box shadows, convert color codes, and compress images for faster web performance.</p>
+                    </div>
+
+                    <div class="use-case-box">
+                        <div class="use-case-header">
+                            <div class="use-case-icon" style="border-color: rgba(232, 121, 249, 0.3); background: rgba(232, 121, 249, 0.1);">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#e879f9" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                            </div>
+                            <div class="use-case-title">Creators</div>
+                        </div>
+                        <p class="use-case-desc">Check word counts, create SEO-friendly URL slugs, convert text case, and extract text from PDF documents for repurposing.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 class="section-title">The "No Junk" Philosophy</h2>
+            <div class="content-card" style="text-align: center;">
+                <p class="intro-text">
+                    The internet is filled with tools that are broken, confusing, or full of aggressive ads. Toolear is our response to that. We build utilities that do <strong>one thing perfectly</strong>.
+                </p>
+                <p class="intro-text" style="margin-bottom: 3rem;">
+                    We optimize for speed, usability, and privacy. If a tool can run offline in your browser, we build it that way. No bloat, no tracking, just results.
+                </p>
+                
+                <div class="closing-section">
+                    <span class="closing-text">Simple. Fast. Free. Forever.</span>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

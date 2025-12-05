@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Validator | Syntax Checker & Linter | Toolear</title>
+    <meta name="description" content="Free online JSON Validator. Check your JSON code for syntax errors, missing brackets, and bad formatting. Real-time debugging tool running locally in your browser.">
+    <link rel="stylesheet" href="style.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Toolear JSON Validator",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Why is my JSON invalid?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The most common reasons are: 1) Using single quotes instead of double quotes. 2) Leaving a trailing comma after the last item in a list. 3) Missing a closing brace } or bracket ]." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does this validate schema?",
+          "acceptedAnswer": { "@type": "Answer", "text": "This tool validates JSON *syntax* (is it readable code?), not *schema* (does it have the correct fields?). It ensures your data structure is technically correct so parsers won't crash." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my data safe?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Toolear performs validation using the JavaScript engine inside your browser. No code is sent to the cloud, making it safe for debugging sensitive config files." }
+        },
+        {
+          "@type": "Question",
+          "name": "Can JSON contain comments?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Standard RFC 8259 JSON does not support comments (// or /* */). Including them will cause a validation error. You must remove comments before using JSON in production." }
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* --- Content & Typography Styles --- */
+        .content-section { width: 100%; max-width: 900px; margin: 4rem auto 0; padding: 0 2rem; }
+        .section-title { 
+            font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 20%, #e879f9 50%, #60a5fa 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center;
+        }
+        .content-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 24px; padding: 2.5rem; margin-bottom: 3rem;
+            backdrop-filter: blur(20px); transition: all 0.3s ease;
+        }
+        .content-card:hover { 
+            border-color: rgba(168, 85, 247, 0.3); 
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.15); 
+        }
+        .intro-text { font-size: 1.05rem; line-height: 1.8; color: #cbd5e1; margin-bottom: 1.5rem; }
+        .intro-text strong { color: #e879f9; font-weight: 600; }
+        .intro-text h3 { color: #fff; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* Feature Grid */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .feature-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.5rem; transition: all 0.3s ease;
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .feature-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); transform: translateY(-3px); }
+        .feature-icon { 
+            width: 48px; height: 48px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+        }
+        .feature-icon svg { width: 24px; height: 24px; color: #e879f9; }
+        .feature-item h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
+        .feature-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* Steps List */
+        .steps-list { list-style: none; counter-reset: step-counter; margin-top: 1.5rem; }
+        .steps-list li { 
+            counter-increment: step-counter; position: relative; padding-left: 3.5rem; 
+            margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.7; color: #cbd5e1; 
+        }
+        .steps-list li::before { 
+            content: counter(step-counter); position: absolute; left: 0; top: 0; 
+            width: 40px; height: 40px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: #fff; font-size: 1.1rem; 
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3); 
+        }
+
+        /* Example Box */
+        .example-box { 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 1.5rem; margin-top: 1rem; transition: all 0.3s ease;
+        }
+        .example-box:hover { border-color: rgba(168, 85, 247, 0.3); background: rgba(255, 255, 255, 0.02); }
+        .example-title { 
+            font-size: 1.1rem; font-weight: 600; color: #e879f9; margin-bottom: 0.8rem; 
+            display: flex; align-items: center; gap: 0.8rem; 
+        }
+        .example-icon { 
+            width: 36px; height: 36px; 
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .example-icon svg { width: 20px; height: 20px; color: #e879f9; }
+        .example-desc { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+        /* FAQ */
+        .faq-item { 
+            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 1.8rem; margin-bottom: 1.2rem; transition: all 0.3s ease;
+        }
+        .faq-item:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(168, 85, 247, 0.3); }
+        .faq-question { 
+            font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.8rem; 
+            display: flex; align-items: flex-start; gap: 0.8rem; 
+        }
+        .faq-question::before { 
+            content: "Q"; display: inline-flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; 
+            background: linear-gradient(135deg, var(--primary-glow), var(--blue-glow));
+            border-radius: 8px; font-size: 0.9rem; font-weight: 700; flex-shrink: 0; 
+        }
+        .faq-answer { font-size: 1rem; color: #cbd5e1; line-height: 1.7; padding-left: 2.3rem; }
+
+        /* Tool Specific Styles */
+        .validation-status {
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 1.5rem;
+            display: none; /* Hidden by default */
+            text-align: center;
+        }
+        .status-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+        .status-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .status-desc { color: #cbd5e1; font-family: 'Monaco', monospace; font-size: 0.9rem; word-break: break-word; }
+
+        /* Footer Fixed */
+        .site-footer {
+            margin-top: 6rem; padding-top: 3rem; padding-bottom: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center; width: 100%;
+        }
+        .footer-nav {
+            display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .footer-nav a {
+            color: #94a3b8; text-decoration: none; font-size: 0.95rem; transition: all 0.3s ease;
+        }
+        .footer-nav a:hover {
+            color: #ffffff; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); text-decoration: none;
+        }
+        .footer-copy {
+            color: #475569; font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg"></div><div class="grid-bg"></div><div class="orb-container"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+    
+    <main class="container">
+        <a href="index.html" class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>Back to Tools</a>
+        
+        <h1>JSON <span class="gradient-text">Validator</span></h1>
+        <p class="subtitle">Check if your JSON is valid or contains syntax errors.</p>
+        
+        <div class="tool-workspace">
+            <div class="tool-panel" style="grid-column: 1 / -1;">
+                <div class="panel-header">Input JSON Code</div>
+                <textarea id="input" placeholder="Paste your JSON here to validate..." style="height: 300px;"></textarea>
+                
+                <div style="display:flex; gap:15px; margin-top:1rem;">
+                    <button class="action-btn" onclick="validate()">Validate JSON</button>
+                    <button class="action-btn" onclick="document.getElementById('input').value=''" style="background:rgba(255,255,255,0.1);">Clear</button>
+                </div>
+
+                <div id="status" class="validation-status">
+                    </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="content-card">
+                <p class="intro-text">
+                    JSON (JavaScript Object Notation) is the backbone of modern data exchange. It is used by virtually every API, configuration file, and database system today. However, JSON is notoriously <strong>strict</strong>. A single missing comma, an unclosed bracket, or a misplaced quote can bring down an entire application.
+                </p>
+                <p class="intro-text">
+                    The <strong>Toolear JSON Validator</strong> is your first line of defense against broken code. It is not just a formatter; it is a diagnostic tool. It scans your code character by character to ensure it complies with the RFC 8259 standard. If there is an error, it doesn't just say "Invalid"; it tries to tell you <em>what</em> went wrong.
+                </p>
+                <p class="intro-text">
+                    We built this tool with <strong>privacy</strong> in mind. Unlike server-side validators that require you to upload your potentially sensitive data (like API keys or user records) to a third-party cloud, Toolear runs <strong>100% locally</strong>. The validation logic executes within your own browser's JavaScript engine.
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
+                        <h4>Instant Feedback</h4>
+                        <p>Get immediate Yes/No results on your code's validity with clear visual indicators.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></div>
+                        <h4>100% Private</h4>
+                        <p>Your code never leaves your browser. Safe for validating configs with secrets.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg></div>
+                        <h4>Error Detection</h4>
+                        <p> Catches common mistakes like trailing commas, single quotes, and bad escaping.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        <h4>Strict Standards</h4>
+                        <p>Adheres to the official JSON standard, ensuring your code works across all platforms.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Top 5 Common JSON Errors</h2>
+            <div class="content-card">
+                <p class="intro-text">
+                    Even experienced developers make mistakes. Here are the most frequent issues our validator catches:
+                </p>
+                
+                <h3>1. Trailing Commas</h3>
+                <p class="intro-text">
+                    In JavaScript objects, you can leave a comma after the last property. In JSON, this is a syntax error.
+                    <br><em>Bad:</em> <code>{ "id": 1, }</code>
+                    <br><em>Good:</em> <code>{ "id": 1 }</code>
+                </p>
+
+                <h3>2. Single Quotes</h3>
+                <p class="intro-text">
+                    JSON requires <strong>double quotes</strong> for all keys and string values. Single quotes are not allowed.
+                    <br><em>Bad:</em> <code>{ 'name': 'John' }</code>
+                    <br><em>Good:</em> <code>{ "name": "John" }</code>
+                </p>
+
+                <h3>3. Missing Quotes on Keys</h3>
+                <p class="intro-text">
+                    Unlike JavaScript, JSON keys must always be quoted strings.
+                    <br><em>Bad:</em> <code>{ id: 123 }</code>
+                    <br><em>Good:</em> <code>{ "id": 123 }</code>
+                </p>
+
+                <h3>4. Comments</h3>
+                <p class="intro-text">
+                    Standard JSON does not support comments. If you try to add <code>// comments</code> or <code>/* ... */</code>, the parser will fail.
+                </p>
+                
+                <h3>5. Undefined or Functions</h3>
+                <p class="intro-text">
+                    JSON is a data format, not a programming language. It cannot store functions, <code>undefined</code>, or circular references. It only supports Strings, Numbers, Booleans, Arrays, Objects, and Null.
+                </p>
+            </div>
+
+            <h2 class="section-title">Use Case Examples</h2>
+            <div class="content-card">
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg></div>
+                        API Debugging
+                    </div>
+                    <p class="example-desc">
+                        You are building a mobile app and the backend API is returning an error 500. You paste the request body into the validator and realize you missed a closing brace on a nested object. Fixing it takes seconds.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg></div>
+                        Config Files (VS Code, ESLint)
+                    </div>
+                    <p class="example-desc">
+                        You edit your `.eslintrc` file and suddenly your editor stops working. The error message is vague. Pasting the config into Toolear highlights that you used a single quote instead of a double quote on line 45.
+                    </p>
+                </div>
+
+                <div class="example-box">
+                    <div class="example-title">
+                        <div class="example-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg></div>
+                        Data Migration
+                    </div>
+                    <p class="example-desc">
+                        Before importing a massive JSON dataset into MongoDB, you run a quick check on a sample. The validator warns you about trailing commas, preventing a failed import job that could have taken hours to restart.
+                    </p>
+                </div>
+            </div>
+
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="content-card">
+                <div class="faq-item">
+                    <div class="faq-question">Is there a file size limit?</div>
+                    <div class="faq-answer">
+                        Since the tool runs in your browser, the limit depends on your computer's RAM. Generally, you can validate files up to 10MB-50MB easily. Extremely large files (100MB+) might cause the browser tab to freeze temporarily.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Does this validate schema?</div>
+                    <div class="faq-answer">
+                        No. This tool validates <strong>syntax</strong> (is it readable code?). It does not validate <strong>schema</strong> (does it have the correct fields, like "email" or "age"?). For schema validation, you would need a JSON Schema validator.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can I fix errors automatically?</div>
+                    <div class="faq-answer">
+                        This tool is a "Checker". It points out errors but does not rewrite your code to fix them (as that could be risky with data). However, our "JSON Formatter" tool can sometimes auto-fix minor issues like whitespace.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is JSON case-sensitive?</div>
+                    <div class="faq-answer">
+                        Yes. <code>"Value"</code> and <code>"value"</code> are completely different strings. Similarly, boolean values must be lowercase: <code>true</code> and <code>false</code>. Using <code>True</code> (Python style) will cause a syntax error.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-footer">
+            <div class="footer-nav">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="faq.html">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                &copy; 2025 Toolear. All rights reserved.
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        function validate() {
+            const val = document.getElementById('input').value.trim();
+            const status = document.getElementById('status');
+            
+            if(!val) {
+                status.style.display = 'none';
+                return;
+            }
+
+            status.style.display = 'block';
+            
+            try {
+                JSON.parse(val);
+                // SUCCESS
+                status.style.background = 'rgba(16, 185, 129, 0.1)'; // Green bg
+                status.style.border = '1px solid #10b981';
+                status.innerHTML = `
+                    <span class="status-icon">✅</span>
+                    <div class="status-title" style="color:#10b981">Valid JSON</div>
+                    <div class="status-desc">The syntax is correct and RFC 8259 compliant.</div>
+                `;
+            } catch(e) {
+                // ERROR
+                status.style.background = 'rgba(239, 68, 68, 0.1)'; // Red bg
+                status.style.border = '1px solid #ef4444';
+                status.innerHTML = `
+                    <span class="status-icon">❌</span>
+                    <div class="status-title" style="color:#ef4444">Invalid JSON</div>
+                    <div class="status-desc">${e.message}</div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
